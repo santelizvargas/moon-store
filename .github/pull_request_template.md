@@ -1,9 +1,3 @@
-### **Title**
->
-> MS-00: Ticket title
-
----
-
 ### **Description**
 >
 > Explain what the PR does and why it’s needed.
@@ -14,6 +8,7 @@
 
 - [ ] Bug fix
 - [ ] New feature
+- [ ] Repository settings
 - [ ] Documentation updated
 
 ---
