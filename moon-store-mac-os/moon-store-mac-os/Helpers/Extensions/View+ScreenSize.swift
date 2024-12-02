@@ -8,15 +8,19 @@
 import SwiftUI
 
 private enum Constants {
-    static let minWidth: CGFloat = 600
-    static let minHeight: CGFloat = 400
+    static let minWidth: CGFloat = 700
+    static let minHeight: CGFloat = 600
 }
 
 extension View {
-    func minScreenSize() -> some View {
+    func screenSize() -> some View {
         frame(
             minWidth: Constants.minWidth,
             minHeight: Constants.minHeight
+        )
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
         )
     }
 }
