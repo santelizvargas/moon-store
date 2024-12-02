@@ -59,7 +59,7 @@
     "bufferutil": "^4.0.8"
   },
   "authors": [
-    "Brandon Santeliz"
+    "Bryan Luna"
   ],
   "husky": {
     "hooks": {
@@ -67,6 +67,6 @@
     }
   },
   "prisma": {
-    "schema": "./src/apps/core/prisma/schema.prisma"
+    "schema": "./src/apps/core/prisma"
   }
 }
