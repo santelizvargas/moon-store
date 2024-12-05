@@ -14,10 +14,10 @@ struct LoginView: View {
     var body: some View {
         VStack {
             VStack(spacing: Constants.Container.spacing) {
-                Text("Log in with your work email")
+                Text("Inicia sesión con tu correo de trabajo")
                     .font(.title2.bold())
                 
-                Text("Use your work email to log in to your team workspace.")
+                Text("Usa tu correo de trabajo para iniciar sesión en el espacio de trabajo de tu equipo.")
                     .font(.title3)
                     .foregroundStyle(.gray)
                 
@@ -50,32 +50,32 @@ struct LoginView: View {
     private var loginForm: some View {
         VStack(spacing: Constants.formSpacing) {
             MSTextField(
-                title: "Email",
-                placeholder: "yourname@company.com",
+                title: "Correo electrónico",
+                placeholder: "tunombre@empresa.com",
                 text: $email
             )
             
             MSTextField(
-                title: "Password",
-                placeholder: "Enter your password",
+                title: "Contraseña",
+                placeholder: "Ingresa tu contraseña",
                 text: $password,
                 isSecure: true
             )
             .overlay(alignment: .topTrailing) {
-                Button("Forgot password?") { }
+                Button("¿Olvidaste tu contraseña?") { }
                     .buttonStyle(.plain)
                     .foregroundStyle(.msPrimary)
             }
             
-            PrimaryButton("Log In") { }
+            PrimaryButton("Iniciar sesión") { }
         }
     }
     
     private var signUpButton: some View {
         HStack(spacing: Constants.signUpSpacing) {
-            Text("Don’t have an account yet?")
+            Text("¿Aún no tienes una cuenta?")
             
-            Button("Sign Up") { }
+            Button("Regístrate") { }
                 .buttonStyle(.plain)
                 .foregroundStyle(.blue)
         }
