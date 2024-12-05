@@ -29,16 +29,12 @@ struct Sidebar: View {
             }
             .listStyle(.sidebar)
             
-            Button { } label: {
-                Label("Cerrar Sesión", systemImage: "person.badge.minus")
-            }
-            .buttonStyle(.plain)
-            .frame(maxWidth: .infinity, minHeight: 30)
-            .foregroundStyle(.msWhite)
-            .background(.red, in: .rect(cornerRadius: 8))
-            .padding()
+            logoutButton
         }
+        .background(.msLightGray)
     }
+    
+    // MARK: - View Components
     
     private func sidebarItem(for screen: Screen) -> some View {
         Button {
@@ -49,9 +45,30 @@ struct Sidebar: View {
             Label(screen.id, systemImage: screen.iconName)
         }
         .buttonStyle(.plain)
-        .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
-        .padding(.horizontal, 5)
+        .frame(maxWidth: .infinity, minHeight: Constants.buttonSize, alignment: .leading)
+        .padding(.horizontal, Constants.horizontalPadding)
         .foregroundStyle(screenSelection == screen ? .msWhite : .msDarkBlue)
-        .background(screenSelection == screen ? .msPrimary : .clear, in: .rect(cornerRadius: 8))
+        .background(screenSelection == screen ? .msPrimary : .clear, in: .rect(cornerRadius: Constants.buttonRadius))
+    }
+    
+    private var logoutButton: some View {
+        Button { } label: {
+            Label("Cerrar Sesión", systemImage: "person.badge.minus")
+        }
+        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, minHeight: Constants.buttonSize)
+        .foregroundStyle(.msWhite)
+        .background(.red, in: .rect(cornerRadius: Constants.buttonRadius))
+        .padding()
+    }
+}
+
+// MARK: - View Constants
+
+extension Sidebar {
+    private enum Constants {
+        static let buttonRadius: CGFloat = 8
+        static let buttonSize: CGFloat = 30
+        static let horizontalPadding: CGFloat = 5
     }
 }
