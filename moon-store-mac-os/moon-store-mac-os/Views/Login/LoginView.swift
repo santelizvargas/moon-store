@@ -20,6 +20,7 @@ struct LoginView: View {
                 Text("Usa tu correo de trabajo para iniciar sesión en el espacio de trabajo de tu equipo.")
                     .font(.title3)
                     .foregroundStyle(.gray)
+                    .multilineTextAlignment(.center)
                 
                 Divider()
                 
