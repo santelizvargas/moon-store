@@ -14,7 +14,9 @@ struct MainView: View {
         NavigationSplitView {
             sidebarContent
         } detail: {
-            detailContent.minScreenSize()
+            detailContent
+                .screenSize()
+                .background(.msLightGray)
         }
     }
     
