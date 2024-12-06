@@ -30,7 +30,7 @@ enum MSPath {
     case restoreDatabase
     case listDatabase
     
-    var endPoint: String {
+    var endpoint: String {
         var path: String {
             switch self {
                 case .products: "products"
