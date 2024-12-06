@@ -17,7 +17,6 @@ actor BaseNetworkService {
         var components = URLComponents()
         components.scheme = Constants.scheme
         components.host = Constants.baseUrl
-        components.port = 443
         return components
     }()
     
@@ -30,12 +29,12 @@ actor BaseNetworkService {
     func getData(path: MSPath) async throws -> Data {
         components.path = path.endpoint
         
-        guard let url = URL(string: "https://rickandmortyapi.com/api") else {
+        guard let url = components.url else {
             throw NSError(domain: "Invalid request", code: 0)
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
+        urlRequest.httpMethod = HttpMethod.GET.rawValue
         
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
