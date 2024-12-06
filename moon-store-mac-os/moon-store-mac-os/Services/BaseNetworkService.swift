@@ -34,8 +34,12 @@ actor BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = HttpMethod.GET.rawValue
+        urlRequest.httpMethod = "GET"
         
+        return try await request(urlRequest: urlRequest)
+    }
+    
+    func request(urlRequest: URLRequest) async throws -> Data {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
             return data

@@ -7,13 +7,6 @@
 
 import Foundation
 
-enum HttpMethod: String {
-    case POST
-    case GET
-    case PUT
-    case DELETE
-}
-
 enum MSPath {
     case users
     case login
