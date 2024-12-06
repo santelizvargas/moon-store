@@ -39,6 +39,24 @@ actor BaseNetworkService {
         return try await request(urlRequest: urlRequest)
     }
     
+    func postData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+        components.path = path.endpoint
+        components.queryItems = makeQueryItems(parameters: parameters)
+        
+        guard let url = components.url else {
+            throw NSError(domain: "Invalid request", code: 0)
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        
+        let json = try? JSONSerialization.data(withJSONObject: parameters)
+        urlRequest.httpBody = json
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        return try await request(urlRequest: urlRequest)
+    }
+    
     func request(urlRequest: URLRequest) async throws -> Data {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
