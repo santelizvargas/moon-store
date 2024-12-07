@@ -30,7 +30,7 @@ actor BaseNetworkService {
         components.path = path.endpoint
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid request", code: 0)
+            throw NSError(domain: "Invalid url", code: 0)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -44,7 +44,7 @@ actor BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid request", code: 0)
+            throw NSError(domain: "Invalid url", code: 0)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -53,6 +53,20 @@ actor BaseNetworkService {
         let json = try? JSONSerialization.data(withJSONObject: parameters)
         urlRequest.httpBody = json
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        return try await request(urlRequest: urlRequest)
+    }
+    
+    func deleteData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+        components.path = path.endpoint
+        components.queryItems = makeQueryItems(parameters: parameters)
+        
+        guard let url = components.url else {
+            throw NSError(domain: "Invalid url", code: 0)
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
         
         return try await request(urlRequest: urlRequest)
     }
