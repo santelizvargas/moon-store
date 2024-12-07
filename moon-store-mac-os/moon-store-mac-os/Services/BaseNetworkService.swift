@@ -71,6 +71,20 @@ actor BaseNetworkService {
         return try await request(urlRequest: urlRequest)
     }
     
+    func putData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+        components.path = path.endpoint
+        components.queryItems = makeQueryItems(parameters: parameters)
+        
+        guard let url = components.url else {
+            throw NSError(domain: "Invalid url", code: 0)
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "PUT"
+        
+        return try await request(urlRequest: urlRequest)
+    }
+    
     func request(urlRequest: URLRequest) async throws -> Data {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
