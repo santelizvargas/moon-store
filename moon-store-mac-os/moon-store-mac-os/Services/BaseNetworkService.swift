@@ -12,9 +12,13 @@ import Foundation
 private enum Constants {
     static let scheme: String = "https"
     static let baseUrl: String = "moon-store-production.up.railway.app"
+    static let GET: String = "GET"
+    static let POST: String = "POST"
+    static let DELETE: String = "DELETE"
+    static let PUT: String = "PUT"
 }
 
-actor BaseNetworkService {
+class BaseNetworkService {
     private var components: URLComponents = {
         var components = URLComponents()
         components.scheme = Constants.scheme
@@ -38,7 +42,7 @@ actor BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
+        urlRequest.httpMethod = Constants.GET
         
         return try await request(urlRequest: urlRequest)
     }
@@ -54,13 +58,19 @@ actor BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
+        urlRequest.httpMethod = Constants.POST
         
-        let json = try? JSONSerialization.data(withJSONObject: parameters)
-        urlRequest.httpBody = json
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+            let json = try JSONSerialization.data(withJSONObject: parameters)
+            urlRequest.httpBody = json
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            return try await request(urlRequest: urlRequest)
+        } catch {
+            throw NSError(domain: "Error posting data: \(error.localizedDescription)", code: 500)
+        }
         
-        return try await request(urlRequest: urlRequest)
+        
     }
     
     // MARK: - HTTP POST Multipart
@@ -78,7 +88,7 @@ actor BaseNetworkService {
         let boundary = "Boundary-\(UUID().uuidString)"
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
+        urlRequest.httpMethod = Constants.POST
         urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         var data = Data()
@@ -115,7 +125,7 @@ actor BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "DELETE"
+        urlRequest.httpMethod = Constants.DELETE
         
         return try await request(urlRequest: urlRequest)
     }
@@ -131,7 +141,7 @@ actor BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "PUT"
+        urlRequest.httpMethod = Constants.PUT
         
         return try await request(urlRequest: urlRequest)
     }
