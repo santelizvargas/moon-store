@@ -22,11 +22,7 @@ struct MainView: View {
     
     @ViewBuilder
     private var detailContent: some View {
-        Button(screenSelection.rawValue) {
-            _Concurrency.Task {
-                try await BaseNetworkService().getData(path: .productCount)
-            }
-        }
+        Text(screenSelection.rawValue)
     }
 }
 
