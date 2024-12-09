@@ -5,18 +5,29 @@
 //  Created by Diana Zeledon on 4/12/24.
 //
 
-import Foundation
+import AppKit
 
-class AlertManager: ObservableObject {
+final class AlertManager: ObservableObject {
     @Published var isPresented: Bool = false
-    @Published var alertType: AlertType? = nil
     
     func showAlert(type: AlertType) {
-        alertType = type
         isPresented = true
+        alertConstruction(type)
     }
     
-    func hideAlert() {
+    private func alertConstruction(_ alertType: AlertType) {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = alertType.title
+        alert.informativeText = alertType.message
+
+        if let icon = alertType.icon {
+            alert.icon = icon
+        }
+        
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+        
         isPresented = false
     }
 }
