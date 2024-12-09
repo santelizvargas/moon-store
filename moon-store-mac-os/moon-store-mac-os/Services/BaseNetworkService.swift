@@ -38,7 +38,7 @@ class BaseNetworkService {
         components.path = path.endpoint
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid url", code: 0)
+            throw MSError.badUrl
         }
         
         var urlRequest = URLRequest(url: url)
@@ -54,7 +54,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid url", code: 0)
+            throw MSError.badUrl
         }
         
         var urlRequest = URLRequest(url: url)
@@ -82,7 +82,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid url", code: 0)
+            throw MSError.badUrl
         }
         
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -121,7 +121,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid url", code: 0)
+            throw MSError.badUrl
         }
         
         var urlRequest = URLRequest(url: url)
@@ -137,7 +137,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw NSError(domain: "Invalid url", code: 0)
+            throw MSError.badUrl
         }
         
         var urlRequest = URLRequest(url: url)

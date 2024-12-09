@@ -1,5 +1,5 @@
 //
-//  HTTPMethod.swift
+//  MSPath.swift
 //  moon-store-mac-os
 //
 //  Created by Jose Luna on 12/3/24.
