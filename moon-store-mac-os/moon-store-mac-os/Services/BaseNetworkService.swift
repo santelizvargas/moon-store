@@ -34,7 +34,7 @@ class BaseNetworkService {
     
     // MARK: - HTTP GET
     
-    func getData(path: MSPath) async throws -> Data {
+    func getData(for path: MSPath) async throws -> Data {
         components.path = path.endpoint
         
         guard let url = components.url else {
@@ -49,7 +49,7 @@ class BaseNetworkService {
     
     // MARK: - HTTP POST
     
-    func postData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+    func postData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
         
@@ -75,8 +75,8 @@ class BaseNetworkService {
     
     // MARK: - HTTP POST Multipart
     
-    func postMultipartData(path: MSPath,
-                           parameters: [String: Any],
+    func postMultipartData(for path: MSPath,
+                           with parameters: [String: Any],
                            dataSet: [Data]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
@@ -116,7 +116,7 @@ class BaseNetworkService {
     
     // MARK: - HTTP DELETE
     
-    func deleteData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+    func deleteData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
         
@@ -132,7 +132,7 @@ class BaseNetworkService {
     
     // MARK: - HTTP UPDATE
     
-    func putData(path: MSPath, parameters: [String: Any]) async throws -> Data {
+    func putData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
         
