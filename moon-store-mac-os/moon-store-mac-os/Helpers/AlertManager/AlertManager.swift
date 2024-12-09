@@ -7,7 +7,7 @@
 
 import AppKit
 
-final class AlertManager: ObservableObject {
+final class AlertPresenter: ObservableObject {
     @Published var isPresented: Bool = false
     
     func showAlert(type: AlertType) {
@@ -15,13 +15,13 @@ final class AlertManager: ObservableObject {
         alertConstruction(type)
     }
     
-    private func alertConstruction(_ alertType: AlertType) {
+    private func alertConstruction(_ type: AlertType) {
         let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.messageText = alertType.title
-        alert.informativeText = alertType.message
+        alert.alertStyle = type.alertType
+        alert.messageText = type.title
+        alert.informativeText = type.message
 
-        if let icon = alertType.icon {
+        if let icon = type.icon {
             alert.icon = icon
         }
         

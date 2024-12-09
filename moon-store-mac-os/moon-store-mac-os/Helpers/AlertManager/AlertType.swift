@@ -33,4 +33,12 @@ enum AlertType {
             case .info: NSImage(named: NSImage.infoName)
         }
     }
+    
+    var alertType: NSAlert.Style {
+        switch self {
+            case .error: .critical
+            case .warning: .warning
+            case .info: .informational
+        }
+    }
 }
