@@ -7,6 +7,8 @@
 
 import Foundation
 
+// TODO: - Error handling
+
 private enum Constants {
     static let scheme: String = "https"
     static let baseUrl: String = "moon-store-production.up.railway.app"
@@ -26,6 +28,8 @@ actor BaseNetworkService {
         }
     }
     
+    // MARK: - HTTP GET
+    
     func getData(path: MSPath) async throws -> Data {
         components.path = path.endpoint
         
@@ -38,6 +42,8 @@ actor BaseNetworkService {
         
         return try await request(urlRequest: urlRequest)
     }
+    
+    // MARK: - HTTP POST
     
     func postData(path: MSPath, parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
@@ -57,6 +63,8 @@ actor BaseNetworkService {
         return try await request(urlRequest: urlRequest)
     }
     
+    // MARK: - HTTP POST Multipart
+    
     func postMultipartData(path: MSPath,
                            parameters: [String: Any],
                            dataSet: [Data]) async throws -> Data {
@@ -73,7 +81,7 @@ actor BaseNetworkService {
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        var data: Data = .init()
+        var data = Data()
         
         for (key, value) in parameters {
             data.appendString("--\(boundary)\r\n")
@@ -96,6 +104,8 @@ actor BaseNetworkService {
         return try await request(urlRequest: urlRequest)
     }
     
+    // MARK: - HTTP DELETE
+    
     func deleteData(path: MSPath, parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
@@ -109,6 +119,8 @@ actor BaseNetworkService {
         
         return try await request(urlRequest: urlRequest)
     }
+    
+    // MARK: - HTTP UPDATE
     
     func putData(path: MSPath, parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
