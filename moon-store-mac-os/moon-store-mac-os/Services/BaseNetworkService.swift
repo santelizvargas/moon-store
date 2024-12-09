@@ -57,6 +57,45 @@ actor BaseNetworkService {
         return try await request(urlRequest: urlRequest)
     }
     
+    func postMultipartData(path: MSPath,
+                           parameters: [String: Any],
+                           dataSet: [Data]) async throws -> Data {
+        components.path = path.endpoint
+        components.queryItems = makeQueryItems(parameters: parameters)
+        
+        guard let url = components.url else {
+            throw NSError(domain: "Invalid url", code: 0)
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var data: Data = .init()
+        
+        for (key, value) in parameters {
+            data.appendString("--\(boundary)\r\n")
+            data.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            data.appendString("\(value)\r\n")
+        }
+        
+        for value in dataSet {
+            data.appendString("--\(boundary)\r\n")
+            data.appendString("Content-Disposition: form-data; name=\"images\"; filename=\"image-\(boundary).jpg\"\r\n")
+            data.appendString("Content-Type: image/jpeg\r\n\r\n")
+            data.append(value)
+            data.appendString("\r\n")
+        }
+        
+        data.appendString("--\(boundary)--\r\n")
+        
+        urlRequest.httpBody = data
+        
+        return try await request(urlRequest: urlRequest)
+    }
+    
     func deleteData(path: MSPath, parameters: [String: Any]) async throws -> Data {
         components.path = path.endpoint
         components.queryItems = makeQueryItems(parameters: parameters)
