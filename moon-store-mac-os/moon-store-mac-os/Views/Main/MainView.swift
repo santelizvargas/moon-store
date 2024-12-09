@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var screenSelection: Screen = .first
+    @State private var screenSelection: Screen = .charts
     
     var body: some View {
         NavigationSplitView {
-            sidebarContent
+            Sidebar(screenSelection: $screenSelection)
         } detail: {
             detailContent
                 .screenSize()
@@ -20,24 +20,9 @@ struct MainView: View {
         }
     }
     
-    // MARK: - Components
-    
-    private var sidebarContent: some View {
-        List(Screen.allCases, selection: $screenSelection) { screen in
-            NavigationLink(value: screen) {
-                Text(screen.title)
-            }
-        }
-        .listStyle(.sidebar)
-    }
-    
     @ViewBuilder
     private var detailContent: some View {
-        switch screenSelection {
-            case .first: Text("First View")
-            case .second: Text("Second View")
-            case .third: Text("Third View")
-        }
+        Text(screenSelection.rawValue)
     }
 }
 
