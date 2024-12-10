@@ -15,8 +15,8 @@ enum AlertType {
     var title: String {
         switch self {
         case .error: "Error"
-        case .warning: "Warning"
-        case .info: "Info"
+        case .warning: "Advertencia"
+        case .info: "Información"
         }
     }
 
