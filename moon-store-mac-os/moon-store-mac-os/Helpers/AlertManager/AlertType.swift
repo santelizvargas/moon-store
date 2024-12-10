@@ -8,9 +8,9 @@
 import AppKit
 
 enum AlertType {
-    case error(String)
-    case warning(String)
-    case info(String)
+    case error
+    case warning
+    case info
 
     var title: String {
         switch self {
@@ -20,25 +20,11 @@ enum AlertType {
         }
     }
 
-    var message: String {
+    var icon: String {
         switch self {
-        case .error(let message), .warning(let message), .info(let message): message
-        }
-    }
-
-    var icon: NSImage? {
-        switch self {
-            case .error: NSImage(resource: .error)
-            case .warning: NSImage(named: NSImage.cautionName)
-            case .info: NSImage(named: NSImage.infoName)
-        }
-    }
-    
-    var alertType: NSAlert.Style {
-        switch self {
-            case .error: .critical
-            case .warning: .warning
-            case .info: .informational
+            case .error: "error"
+            case .warning: NSImage.cautionName
+            case .info: NSImage.infoName
         }
     }
 }

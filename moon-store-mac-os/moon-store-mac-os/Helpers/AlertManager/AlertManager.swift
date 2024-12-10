@@ -10,21 +10,17 @@ import AppKit
 final class AlertPresenter: ObservableObject {
     @Published var isPresented: Bool = false
     
-    func showAlert(type: AlertType) {
+    func showAlert(type: AlertType, alertMessage: String) {
         isPresented = true
-        alertConstruction(type)
+        alertConstruction(type: type, message: alertMessage)
     }
     
-    private func alertConstruction(_ type: AlertType) {
+    private func alertConstruction(type: AlertType, message: String) {
         let alert = NSAlert()
-        alert.alertStyle = type.alertType
         alert.messageText = type.title
-        alert.informativeText = type.message
-
-        if let icon = type.icon {
-            alert.icon = icon
-        }
+        alert.informativeText = message
         
+        alert.icon = NSImage(named: type.icon)
         alert.addButton(withTitle: "OK")
         alert.runModal()
         
