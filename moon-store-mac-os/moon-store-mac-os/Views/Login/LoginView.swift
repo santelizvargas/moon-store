@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject private var appRouter: AppRouter
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -68,7 +69,9 @@ struct LoginView: View {
                     .foregroundStyle(.msPrimary)
             }
             
-            PrimaryButton("Iniciar sesión") { }
+            PrimaryButton("Iniciar sesión") {
+                appRouter.push(.main)
+            }
         }
     }
     

@@ -18,6 +18,9 @@ struct MainView: View {
                 .screenSize()
                 .background(.msLightGray)
         }
+        .toolbarBackground(.hidden)
+        .navigationBarBackButtonHidden()
+        .toolbar(removing: .title)
     }
     
     @ViewBuilder

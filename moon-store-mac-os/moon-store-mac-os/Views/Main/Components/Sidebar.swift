@@ -28,6 +28,7 @@ struct Sidebar: View {
                 }
             }
             .listStyle(.sidebar)
+            .foregroundStyle(.msDarkBlue)
             
             logoutButton
         }
