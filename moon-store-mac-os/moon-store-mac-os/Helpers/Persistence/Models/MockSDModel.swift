@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-final class MockSDModel: Identifiable, PersistentModel {
+final class MockSDModel: Identifiable {
     var id: String
     var name: String
     
