@@ -16,7 +16,6 @@ struct moon_store_mac_osApp: App {
             NavigationStack(path: $appRouter.navigationPath) {
                 appRouter.assosiatedView
                     .preferredColorScheme(.light)
-                    .environmentObject(appRouter)
                     .navigationDestination(for: AppTransition.self) { route in
                         appRouter.build(for: route)
                     }

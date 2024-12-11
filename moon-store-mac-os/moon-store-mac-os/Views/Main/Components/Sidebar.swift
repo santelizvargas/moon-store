@@ -9,9 +9,11 @@ import SwiftUI
 
 struct Sidebar: View {
     @Binding private var screenSelection: Screen
+    let logoutAction: () -> Void
     
-    init(screenSelection: Binding<Screen>) {
+    init(screenSelection: Binding<Screen>, logoutAction: @escaping () -> Void) {
         _screenSelection = screenSelection
+        self.logoutAction = logoutAction
     }
     
     var body: some View {
@@ -53,7 +55,9 @@ struct Sidebar: View {
     }
     
     private var logoutButton: some View {
-        Button { } label: {
+        Button {
+            logoutAction()
+        } label: {
             Label("Cerrar Sesión", systemImage: "person.badge.minus")
         }
         .buttonStyle(.plain)

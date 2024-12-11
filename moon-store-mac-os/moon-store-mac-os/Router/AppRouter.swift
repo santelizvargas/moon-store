@@ -20,14 +20,15 @@ final class AppRouter: ObservableObject {
     }
     
     func pop() {
+        guard !navigationPath.isEmpty else { return }
         navigationPath.removeLast()
     }
     
     @ViewBuilder
     func build(for route: AppTransition) -> some View {
         switch route {
-            case .login: LoginView()
-            case .main: MainView()
+            case .login: LoginView(router: self)
+            case .main: MainView(router: self)
         }
     }
 }

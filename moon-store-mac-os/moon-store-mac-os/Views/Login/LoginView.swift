@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject private var appRouter: AppRouter
     @State private var email: String = ""
     @State private var password: String = ""
+    @ObservedObject private var router: AppRouter
+    
+    init(router: AppRouter) {
+        self.router = router
+    }
     
     var body: some View {
         VStack {
@@ -70,7 +74,7 @@ struct LoginView: View {
             }
             
             PrimaryButton("Iniciar sesión") {
-                appRouter.push(.main)
+                router.push(.main)
             }
         }
     }
