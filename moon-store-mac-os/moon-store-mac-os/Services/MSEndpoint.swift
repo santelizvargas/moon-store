@@ -24,27 +24,27 @@ enum MSEndpoint {
     case listDatabase
     
     var path: String {
-        "\(prefixV1)\(endpoint)/"
+        "\(prefixV1)\(endpoint)"
     }
     
-    var prefixV1: String { "/api/v1/" }
+    var prefixV1: String { "/api/v1" }
     
     var endpoint: String {
         switch self {
-            case .products: "products"
-            case .productCount: "products/count"
-            case .users: "auth"
-            case .login: "auth/login"
-            case .updatePassword: "auth/password"
-            case .register: "auth/register"
-            case .usersChart: "auth/chart"
-            case .enableUser: "auth/enable"
-            case .disableUser: "auth/disable"
-            case .roles: "rbac/roles"
-            case .invoices: "invoices"
-            case .backupDatabase: "database/backup"
-            case .restoreDatabase: "database/restore"
-            case .listDatabase: "database/list"
+            case .products: "/products"
+            case .productCount: "/products/count"
+            case .users: "/auth"
+            case .login: "/auth/login"
+            case .updatePassword: "/auth/password"
+            case .register: "/auth/register"
+            case .usersChart: "/auth/chart"
+            case .enableUser: "/auth/enable"
+            case .disableUser: "/auth/disable"
+            case .roles: "/rbac/roles"
+            case .invoices: "/invoices"
+            case .backupDatabase: "/database/backup"
+            case .restoreDatabase: "/database/restore"
+            case .listDatabase: "/database/list"
         }
     }
 }
