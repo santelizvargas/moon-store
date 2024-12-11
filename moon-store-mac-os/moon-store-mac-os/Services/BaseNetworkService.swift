@@ -93,20 +93,20 @@ class BaseNetworkService {
         var data = Data()
         
         for (key, value) in parameters {
-            data.appendString("--\(boundary)\r\n")
-            data.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-            data.appendString("\(value)\r\n")
+            data.appendStringIfNeeded("--\(boundary)\r\n")
+            data.appendStringIfNeeded("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            data.appendStringIfNeeded("\(value)\r\n")
         }
         
         for value in dataSet {
-            data.appendString("--\(boundary)\r\n")
-            data.appendString("Content-Disposition: form-data; name=\"images\"; filename=\"image-\(boundary).jpg\"\r\n")
-            data.appendString("Content-Type: image/jpeg\r\n\r\n")
+            data.appendStringIfNeeded("--\(boundary)\r\n")
+            data.appendStringIfNeeded("Content-Disposition: form-data; name=\"images\"; filename=\"image-\(boundary).jpg\"\r\n")
+            data.appendStringIfNeeded("Content-Type: image/jpeg\r\n\r\n")
             data.append(value)
-            data.appendString("\r\n")
+            data.appendStringIfNeeded("\r\n")
         }
         
-        data.appendString("--\(boundary)--\r\n")
+        data.appendStringIfNeeded("--\(boundary)--\r\n")
         
         urlRequest.httpBody = data
         
