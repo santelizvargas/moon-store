@@ -12,10 +12,10 @@ import Foundation
 private enum Constants {
     static let scheme: String = "https"
     static let baseUrl: String = "moon-store-production.up.railway.app"
-    static let GET: String = "GET"
-    static let POST: String = "POST"
-    static let DELETE: String = "DELETE"
-    static let PUT: String = "PUT"
+    static let getHttpMethod: String = "GET"
+    static let postHttpMethod: String = "POST"
+    static let deleteHttpMethod: String = "DELETE"
+    static let putHttpMethod: String = "PUT"
 }
 
 class BaseNetworkService {
@@ -34,23 +34,24 @@ class BaseNetworkService {
     
     // MARK: - HTTP GET
     
-    func getData(for path: MSPath) async throws -> Data {
-        components.path = path.endpoint
+    func getData(for path: String) async throws -> Data {
+        components.path = path
         
         guard let url = components.url else {
             throw MSError.badUrl
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = Constants.GET
+        urlRequest.httpMethod = Constants.getHttpMethod
         
         return try await request(urlRequest: urlRequest)
     }
     
     // MARK: - HTTP POST
     
-    func postData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
-        components.path = path.endpoint
+    func postData(for path: String,
+                  with parameters: [String: Any]) async throws -> Data {
+        components.path = path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -58,7 +59,7 @@ class BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = Constants.POST
+        urlRequest.httpMethod = Constants.postHttpMethod
         
         do {
             let json = try JSONSerialization.data(withJSONObject: parameters)
@@ -69,16 +70,14 @@ class BaseNetworkService {
         } catch {
             throw NSError(domain: "Error posting data: \(error.localizedDescription)", code: 500)
         }
-        
-        
     }
     
     // MARK: - HTTP POST Multipart
     
-    func postMultipartData(for path: MSPath,
+    func postMultipartData(for path: String,
                            with parameters: [String: Any],
                            dataSet: [Data]) async throws -> Data {
-        components.path = path.endpoint
+        components.path = path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -88,7 +87,7 @@ class BaseNetworkService {
         let boundary = "Boundary-\(UUID().uuidString)"
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = Constants.POST
+        urlRequest.httpMethod = Constants.postHttpMethod
         urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         var data = Data()
@@ -116,8 +115,9 @@ class BaseNetworkService {
     
     // MARK: - HTTP DELETE
     
-    func deleteData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
-        components.path = path.endpoint
+    func deleteData(for path: String,
+                    with parameters: [String: Any]) async throws -> Data {
+        components.path = path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -125,15 +125,16 @@ class BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = Constants.DELETE
+        urlRequest.httpMethod = Constants.deleteHttpMethod
         
         return try await request(urlRequest: urlRequest)
     }
     
     // MARK: - HTTP UPDATE
     
-    func putData(for path: MSPath, with parameters: [String: Any]) async throws -> Data {
-        components.path = path.endpoint
+    func putData(for path: String,
+                 with parameters: [String: Any]) async throws -> Data {
+        components.path = path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -141,14 +142,18 @@ class BaseNetworkService {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = Constants.PUT
+        urlRequest.httpMethod = Constants.putHttpMethod
         
         return try await request(urlRequest: urlRequest)
     }
     
     func request(urlRequest: URLRequest) async throws -> Data {
         do {
-            let (data, _) = try await URLSession.shared.data(for: urlRequest)
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            
+            guard let response = response as? HTTPURLResponse,
+               200...299 ~= response.statusCode
+            else { throw MSError.badHttpRequest }
             return data
         } catch {
             throw error

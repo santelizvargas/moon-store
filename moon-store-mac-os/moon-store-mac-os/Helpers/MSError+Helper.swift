@@ -9,17 +9,13 @@ import Foundation
 
 enum MSError: Error {
     case badUrl
-    case badGetRequest
-    case badPostRequest
-    case badPutRequest
+    case badHttpRequest
     case networkConnection
     
     var localizedDescription: String {
         switch self {
             case .badUrl: "Invalid URL"
-            case .badGetRequest: "Bad get request"
-            case .badPostRequest: "Bad post request"
-            case .badPutRequest: "Bad put request"
+            case .badHttpRequest: "Bad http request"
             case .networkConnection: "Network connection"
         }
     }
