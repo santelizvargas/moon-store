@@ -10,7 +10,7 @@ import Foundation
 extension Data {
     mutating func appendStringIfNeeded(_ string: String) {
         guard let data = string.data(using: .utf8) else {
-            debugPrint("Could not convert \(string) to UTF8")
+            _ = MSErrorHelper(referenceClass: nil).handle(error: .badData)
             return
         }
         append(data)

@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: - Error handling
-
 private enum Constants {
     static let scheme: String = "https"
     static let baseUrl: String = "moon-store-production.up.railway.app"
@@ -19,6 +17,10 @@ private enum Constants {
 }
 
 class BaseNetworkService {
+    private lazy var errorHelper: MSErrorHelper = {
+        .init(referenceClass: self)
+    }()
+    
     private var components: URLComponents = {
         var components = URLComponents()
         components.scheme = Constants.scheme
@@ -38,7 +40,7 @@ class BaseNetworkService {
         components.path = path
         
         guard let url = components.url else {
-            throw MSError.badUrl
+            throw errorHelper.handle(error: .badUrl)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -55,7 +57,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw MSError.badUrl
+            throw errorHelper.handle(error: .badUrl)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -68,7 +70,7 @@ class BaseNetworkService {
             
             return try await request(urlRequest: urlRequest)
         } catch {
-            throw NSError(domain: "Error posting data: \(error.localizedDescription)", code: 500)
+            throw errorHelper.handle(error: .encodingError)
         }
     }
     
@@ -81,7 +83,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw MSError.badUrl
+            throw errorHelper.handle(error: .badUrl)
         }
         
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -121,7 +123,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw MSError.badUrl
+            throw errorHelper.handle(error: .badUrl)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -138,7 +140,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw MSError.badUrl
+            throw errorHelper.handle(error: .badUrl)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -153,7 +155,7 @@ class BaseNetworkService {
             
             guard let response = response as? HTTPURLResponse,
                200...299 ~= response.statusCode
-            else { throw MSError.badHttpRequest }
+            else { throw errorHelper.handle(error: .badHttpRequest) }
             return data
         } catch {
             throw error
