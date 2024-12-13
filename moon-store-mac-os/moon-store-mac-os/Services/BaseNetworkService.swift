@@ -17,8 +17,8 @@ private enum Constants {
 }
 
 class BaseNetworkService {
-    private lazy var errorHelper: MSErrorHelper = {
-        .init(referenceClass: self)
+    private lazy var errorHelper: MSErrorManager = {
+        .init(reference: "BaseNetworkService")
     }()
     
     private var components: URLComponents = {

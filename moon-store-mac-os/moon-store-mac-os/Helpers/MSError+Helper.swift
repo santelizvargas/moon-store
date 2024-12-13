@@ -10,22 +10,22 @@ import SwiftUI
 
 enum MSError: Int {
     
-    /// Https
+    // Https
     case badUrl
     case badHttpRequest
     case networkConnection
     
-    /// Storage
+    // Storage
     case notSaved
     case notFound
     case badData
     case badKey
     
-    /// Authentication
+    // Authentication
     case badCredentials
     case userNotFound
     
-    /// Codable
+    // Codable
     case encodingError
     case decodingError
 
@@ -50,36 +50,30 @@ enum MSError: Int {
         case .badKey: "Invalid key for data retrieval"
         case .badCredentials: "Incorrect user credentials provided"
         case .userNotFound: "User not found in the database"
-        case .encodingError: "Encoding error ocurred"
-        case .decodingError: "Decoding error ocurred"
+        case .encodingError: "Encoding error occurred"
+        case .decodingError: "Decoding error occurred"
         }
     }
 }
 
 // MARK: - MSError helper
 
-final class MSErrorHelper {
-    private var referenceClass: AnyObject?
+final class MSErrorManager {
     
-    private lazy var classDescription: String = {
-        guard let referenceClass else { return "No references" }
-        return String(describing: referenceClass)
-    }()
+    private let reference: String
     
     /// Initializes an error handler with a reference to the calling object for better error tracking.
     ///
     /// - Parameter referenceClass: A reference to the calling object, typically used to provide context
     /// for logging and debugging where the error originated from in the system.
-    init(referenceClass: AnyObject?) {
-        self.referenceClass = referenceClass
+    init(reference: String = "No references") {
+        self.reference = reference
     }
-    
-    deinit { referenceClass = nil }
     
     // MARK: - Handler
     
     func handle(error: MSError) -> Error {
-        debugPrint("❌❌❌ Debug: \(error.debugDescription). Caller: \(classDescription) ❌❌❌")
+        debugPrint("❌❌❌ Debug: \(error.debugDescription). Caller: \(reference) ❌❌❌")
         return NSError(domain: error.friendlyMessage, code: error.rawValue)
     }
 }
