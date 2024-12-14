@@ -17,9 +17,6 @@ private enum Constants {
 }
 
 class BaseNetworkService {
-    private lazy var errorHelper: MSErrorManager = {
-        .init(reference: "BaseNetworkService")
-    }()
     
     private var components: URLComponents = {
         var components = URLComponents()
@@ -40,7 +37,7 @@ class BaseNetworkService {
         components.path = path
         
         guard let url = components.url else {
-            throw errorHelper.handle(error: .badUrl)
+            throw MSError.badURL
         }
         
         var urlRequest = URLRequest(url: url)
@@ -57,7 +54,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw errorHelper.handle(error: .badUrl)
+            throw MSError.badURL
         }
         
         var urlRequest = URLRequest(url: url)
@@ -70,7 +67,7 @@ class BaseNetworkService {
             
             return try await request(urlRequest: urlRequest)
         } catch {
-            throw errorHelper.handle(error: .encodingError)
+            throw MSError.encodingError
         }
     }
     
@@ -83,7 +80,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw errorHelper.handle(error: .badUrl)
+            throw MSError.badURL
         }
         
         let boundary = "Boundary-\(UUID().uuidString)"
@@ -123,7 +120,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw errorHelper.handle(error: .badUrl)
+            throw MSError.badURL
         }
         
         var urlRequest = URLRequest(url: url)
@@ -140,7 +137,7 @@ class BaseNetworkService {
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
-            throw errorHelper.handle(error: .badUrl)
+            throw MSError.badURL
         }
         
         var urlRequest = URLRequest(url: url)
@@ -155,7 +152,7 @@ class BaseNetworkService {
             
             guard let response = response as? HTTPURLResponse,
                200...299 ~= response.statusCode
-            else { throw errorHelper.handle(error: .badHttpRequest) }
+            else { throw MSError.badHttpRequest }
             return data
         } catch {
             throw error

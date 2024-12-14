@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import SwiftUI
 
-enum MSError: Int {
+enum MSError: Error {
     
     // Https
-    case badUrl
+    case badURL
     case badHttpRequest
     case networkConnection
     
@@ -41,7 +40,7 @@ enum MSError: Int {
     
     var debugDescription: String {
         switch self {
-        case .badUrl: "Invalid URL format"
+        case .badURL: "Invalid URL format"
         case .badHttpRequest: "HTTP request failed due to malformed request"
         case .networkConnection: "Network connection error"
         case .notSaved: "Data could not be saved to storage"
@@ -53,27 +52,5 @@ enum MSError: Int {
         case .encodingError: "Encoding error occurred"
         case .decodingError: "Decoding error occurred"
         }
-    }
-}
-
-// MARK: - MSError helper
-
-final class MSErrorManager {
-    
-    private let reference: String
-    
-    /// Initializes an error handler with a reference to the calling object for better error tracking.
-    ///
-    /// - Parameter referenceClass: A reference to the calling object, typically used to provide context
-    /// for logging and debugging where the error originated from in the system.
-    init(reference: String = "No references") {
-        self.reference = reference
-    }
-    
-    // MARK: - Handler
-    
-    func handle(error: MSError) -> Error {
-        debugPrint("❌❌❌ Debug: \(error.debugDescription). Caller: \(reference) ❌❌❌")
-        return NSError(domain: error.friendlyMessage, code: error.rawValue)
     }
 }
