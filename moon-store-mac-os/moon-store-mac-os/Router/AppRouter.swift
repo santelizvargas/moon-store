@@ -10,7 +10,7 @@ import SwiftUI
 final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
     
-    lazy var assosiatedView: some View = {
+    lazy var associatedView: some View = {
         let route: AppTransition = authenticationRepository.isLoggedUser
         ? .main
         : .login
