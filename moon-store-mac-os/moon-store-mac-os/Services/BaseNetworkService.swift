@@ -51,7 +51,7 @@ class BaseNetworkService {
     func postData(for path: String,
                   with parameters: [String: Any]) async throws -> Data {
         components.path = path
-        components.queryItems = makeQueryItems(parameters: parameters)
+        components.queryItems = nil
         
         guard let url = components.url else {
             throw MSError.badURL

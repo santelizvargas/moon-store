@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email: String = ""
-    @State private var password: String = ""
     @ObservedObject private var router: AppRouter
+    @ObservedObject private var viewModel: AuthenticationViewModel = .init()
     
     init(router: AppRouter) {
         self.router = router
@@ -49,6 +48,11 @@ struct LoginView: View {
         }
         .screenSize()
         .background(.msLightGray)
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+            }
+        }
     }
     
     // MARK: - View Components
@@ -58,13 +62,13 @@ struct LoginView: View {
             MSTextField(
                 title: "Correo electrónico",
                 placeholder: "tunombre@empresa.com",
-                text: $email
+                text: $viewModel.email
             )
             
             MSTextField(
                 title: "Contraseña",
                 placeholder: "Ingresa tu contraseña",
-                text: $password,
+                text: $viewModel.password,
                 isSecure: true
             )
             .overlay(alignment: .topTrailing) {
@@ -74,7 +78,10 @@ struct LoginView: View {
             }
             
             PrimaryButton("Iniciar sesión") {
-                router.push(.main)
+                viewModel.login()
+            }
+            .onReceive(viewModel.$loginSuccess) { success in
+                if success { router.push(.main) }
             }
         }
     }

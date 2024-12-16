@@ -20,17 +20,17 @@ final class AuthenticationRepository: BaseNetworkService {
     
     // MARK: - Methods
     
-    func login(username: String,
+    func login(email: String,
                password: String) async throws {
         guard !isLoggedUser else { return }
         
         let parameters: [String: Any] = [
-            "username": username,
+            "email": email,
             "password": password
         ]
         
         do {
-            let response = try await postData(for: MSEndpoint.login.endpoint,
+            let response = try await postData(for: MSEndpoint.login.path,
                                               with: parameters)
             let loginResponse = try decoder.decode(LoginResponse.self, from: response)
             storeUser(loginResponse.data)
