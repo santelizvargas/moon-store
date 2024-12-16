@@ -18,7 +18,7 @@ final class UserSwiftDataModel {
     var address: String
     var roles: [RoleSwiftDataModel]
     var createdAt: String
-    var updatedAt: String
+    var updatedAt: String?
     var deletedAt: String?
     
     init(id: Int,
@@ -30,7 +30,7 @@ final class UserSwiftDataModel {
          address: String,
          roles: [RoleSwiftDataModel],
          createdAt: String,
-         updatedAt: String,
+         updatedAt: String? = nil,
          deletedAt: String? = nil) {
         self.id = id
         self.firstName = firstName

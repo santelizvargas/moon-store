@@ -21,7 +21,7 @@ struct UserModel: Decodable {
     let address: String
     var roles: [RoleModel]
     let createdAt: String
-    let updatedAt: String
+    let updatedAt: String?
     let deletedAt: String?
     
     func copyWith(firstName: String? = nil,
