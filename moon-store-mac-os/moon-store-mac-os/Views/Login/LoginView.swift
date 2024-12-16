@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @ObservedObject private var router: AppRouter
-    @ObservedObject private var viewModel: AuthenticationViewModel = .init()
+    @ObservedObject private var viewModel: LoginViewModel = .init()
     
     init(router: AppRouter) {
         self.router = router
