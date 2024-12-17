@@ -21,14 +21,20 @@ private enum Constants {
     enum ProductRow {
         static let horizontalPadding: CGFloat = 5
         static let padding: CGFloat = 6
-        static let spacing: CGFloat = 15
+        static let spacing: CGFloat = 10
         static let pensilIcon: String = "pencil"
         static let trashIcon: String = "trash"
         static let optionTitle: String = "Abastecer"
+        static let iconSize: CGFloat = 20
+        static let hStackSpacing: CGFloat = -10
+        static let lineLimit: Int = 1
+        static let opacity: CGFloat = 0.2
+        static let evenNumber: Int = 2
     }
 }
 
 private enum ProductTableTitle: String, CaseIterable {
+    case productIcon
     case product
     case category
     case inStock
@@ -42,6 +48,7 @@ private enum ProductTableTitle: String, CaseIterable {
             case .inStock: "En Stock"
             case .price: "Precio"
             case .options: ""
+            case .productIcon: ""
         }
     }
 }
@@ -99,28 +106,30 @@ struct ProductListView: View {
     // MARK: - Table View
     
     private var productTableView: some View {
-        VStack {
+        VStack(spacing: .zero) {
             headerTableView
                 .background(.msWhite)
-                        
+            
             ScrollView(showsIndicators: false) {
-                Grid {
-                    ForEach(ProductoMockData.mockProductos) { product in
-                        productRowView(
-                            productName: product.name,
-                            category: product.category,
-                            numberInStrock: product.inStock,
-                            price: product.price
-                        )
-                        .padding(.vertical)
-                        .padding(.horizontal, Constants.ProductRow.horizontalPadding)
-                        
-                        Divider()
+                Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
+                    ForEach(Array(ProductoMockData.mockProductos.enumerated()), id: \.element.id) { index, product in
+                        HStack(spacing: Constants.ProductRow.hStackSpacing) {
+                            productRowView(
+                                productName: product.name,
+                                category: product.category,
+                                numberInStrock: product.inStock,
+                                price: product.price
+                            )
+                            .padding(.vertical)
+                        }
+                        .background(index % Constants.ProductRow.evenNumber == .zero
+                                    ? .msLightGray
+                                    : .msWhite)
                     }
                 }
             }
         }
-        .background{
+        .overlay {
             RoundedRectangle(cornerRadius: Constants.cornerRadius)
                 .stroke(.msGray)
         }
@@ -132,11 +141,13 @@ struct ProductListView: View {
     private var headerTableView: some View {
         Grid {
             GridRow {
-                
                 ForEach(ProductTableTitle.allCases, id: \.self) { title in
                     Text(title.title)
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity,
+                               alignment: title == .product ? .leading : .center)
                         .foregroundStyle(.black)
+                        .font(.body)
+                        .bold()
                 }
             }
             .padding(.vertical)
@@ -145,44 +156,64 @@ struct ProductListView: View {
     
     // MARK: - Table Row View
     
-    private func productRowView(productName: String, category: String, numberInStrock: Int, price: String) -> some View {
+    private func productRowView(productName: String, category: CategoryType, numberInStrock: Int, price: String) -> some View {
         GridRow {
-            HStack {
-                Image(systemName: Constants.personIcon)
-                    .resizable()
-                    .frame(width: Constants.iconSize, height: Constants.iconSize)
-                    .padding(.horizontal)
-                
-                Text(productName)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundStyle(.black)
-            }
+            Image(systemName: Constants.personIcon)
+                .resizable()
+                .frame(width: Constants.iconSize,
+                       height: Constants.iconSize)
+                .padding(.horizontal)
+            
+            Text(productName)
+                .frame(maxWidth: .infinity,
+                       alignment: .leading)
+                .foregroundStyle(.black)
+                .lineLimit(Constants.ProductRow.lineLimit)
             
             Group {
-                Text(category)
+                Text(category.rawValue)
                     .padding(Constants.ProductRow.padding)
-                    .background(.green, in: .capsule)
+                    .foregroundStyle(category.color)
+                    .background(category.color.opacity(Constants.ProductRow.opacity),
+                                in: .capsule)
                 
                 Text(numberInStrock.description)
+                    .foregroundStyle(.msDarkGray)
+                    .frame(alignment: .center)
                 
                 Text(price)
+                    .foregroundStyle(.msDarkGray)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .foregroundStyle(.black)
+            .frame(maxWidth: .infinity)
             
-            HStack(spacing: Constants.ProductRow.spacing) {
-                Text(Constants.ProductRow.optionTitle)
-                    .foregroundStyle(.blue)
-                    .underline()
-                
-                Image(systemName: Constants.ProductRow.pensilIcon)
-                    .foregroundStyle(.gray)
-                
-                Image(systemName: Constants.ProductRow.trashIcon)
-                    .foregroundStyle(.red)
-            }
+            opctionsView
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    // MARK: - Product options view
+    
+    private var opctionsView: some View {
+        HStack(spacing: Constants.ProductRow.spacing) {
+            Text(Constants.ProductRow.optionTitle)
+                .frame(maxWidth: .infinity,
+                       alignment: .leading)
+                .foregroundStyle(.blue)
+                .underline()
+            
+            Image(.edit)
+                .resizable()
+                .frame(width: Constants.ProductRow.iconSize,
+                       height: Constants.ProductRow.iconSize)
+                .foregroundStyle(.msGray)
+            
+            Image(systemName: Constants.ProductRow.trashIcon)
+                .resizable()
+                .frame(width: Constants.ProductRow.iconSize,
+                       height: Constants.ProductRow.iconSize)
+                .foregroundStyle(.red)
+        }
+        .padding(.trailing)
     }
 }
 
