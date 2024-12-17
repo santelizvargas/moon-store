@@ -11,6 +11,11 @@ final class MainViewViewModel: ObservableObject {
     private let authenticationRepository: AuthenticationRepository = .init()
     
     func logout() {
-        authenticationRepository.logout()
+        do {
+            try authenticationRepository.logout()
+        } catch {
+            guard let error = error as? MSError else { return }
+            AlertPresenter().showAlert(type: .error, alertMessage: error.friendlyMessage)
+        }
     }
 }

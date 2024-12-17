@@ -16,7 +16,8 @@ final class RoleSwiftDataModel {
     var updatedAt: String?
     var deletedAt: String?
     
-    init(id: Int, name: String,
+    init(id: Int,
+         name: String,
          desc: String,
          createdAt: String? = nil,
          updatedAt: String? = nil,

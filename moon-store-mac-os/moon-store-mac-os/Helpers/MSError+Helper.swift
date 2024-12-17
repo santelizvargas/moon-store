@@ -17,6 +17,7 @@ enum MSError: Error {
     // Storage
     case notSaved
     case notFound
+    case notDeleted
     case badData
     case badKey
     
@@ -45,6 +46,7 @@ enum MSError: Error {
         case .networkConnection: "Network connection error"
         case .notSaved: "Data could not be saved to storage"
         case .notFound: "Data not found in storage"
+        case .notDeleted: "Data not deleted in storage"
         case .badData: "Corrupt or malformed data"
         case .badKey: "Invalid key for data retrieval"
         case .badCredentials: "Incorrect user credentials provided"

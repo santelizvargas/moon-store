@@ -26,7 +26,7 @@ final class DataManager<Model: PersistentModel> {
             let descriptor = FetchDescriptor(predicate: predicate)
             return try context.fetch(descriptor)
         } catch {
-            throw SwiftDataError.fetchModels
+            throw MSError.notFound
         }
     }
     
@@ -34,11 +34,19 @@ final class DataManager<Model: PersistentModel> {
         do {
             try context.delete(model: Model.self)
         } catch {
-            throw SwiftDataError.removeModel
+            throw MSError.notDeleted
         }
     }
     
     func remove(model: Model) {
         context.delete(model)
+    }
+    
+    func storeChanges() throws {
+        do {
+            try context.save()
+        } catch {
+            throw MSError.notSaved
+        }
     }
 }

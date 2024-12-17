@@ -33,19 +33,21 @@ final class AuthenticationRepository: BaseNetworkService {
             let response = try await postData(for: MSEndpoint.login.path,
                                               with: parameters)
             let loginResponse = try decoder.decode(LoginResponse.self, from: response)
-            storeUser(loginResponse.data)
+            try storeUser(loginResponse.data)
         } catch {
             throw MSError.badCredentials
         }
     }
     
-    func logout() {
+    func logout() throws {
         guard let loggedUser else { return }
         store.remove(model: UserSwiftDataModel.factory(from: loggedUser))
+        return try store.storeChanges()
     }
     
-    private func storeUser(_ user: UserModel) {
+    private func storeUser(_ user: UserModel) throws {
         let model = UserSwiftDataModel.factory(from: user)
         store.save(model: model)
+        return try store.storeChanges()
     }
 }
