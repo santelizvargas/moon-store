@@ -11,7 +11,7 @@ private enum Constants {
     static let searchTextFieldHeight: CGFloat = 40
     static let cornerRadius: CGFloat = 10
     static let padding: CGFloat = 5
-    static let searchWidht: CGFloat = 300
+    static let searchWidth: CGFloat = 300
     static let cancelTitle: String = "Cancelar"
     static let placeholderText: String = "Buscar..."
     static let searchIcon: String = "magnifyingglass"
@@ -52,7 +52,7 @@ struct SearchView: View {
                 cancelButton
             }
         }
-        .frame(width: Constants.searchWidht)
+        .frame(width: Constants.searchWidth)
     }
 
     // MARK: - Clear Button

@@ -5,7 +5,6 @@
 //  Created by Diana Zeledon on 13/12/24.
 //
 
-import Foundation
 import SwiftUI
 
 struct ProductoMockData: Identifiable {
@@ -24,17 +23,19 @@ enum CategoryType: String, CaseIterable {
     case verduras = "Verduras"
     case otros = "Otros"
     
-    // Color asociado a cada categoría
+    // Color associated with each category
     var color: Color {
         switch self {
-        case .frutas: return .green
-        case .lacteos: return .blue
-        case .panaderia: return .orange
-        case .verduras: return .red
-        case .otros: return .gray
+        case .frutas: .green
+        case .lacteos: .blue
+        case .panaderia: .orange
+        case .verduras: .red
+        case .otros: .gray
         }
     }
 }
+
+// MARK: - Mock Product List
 
 extension ProductoMockData {
     static let mockProductos: [ProductoMockData] = [

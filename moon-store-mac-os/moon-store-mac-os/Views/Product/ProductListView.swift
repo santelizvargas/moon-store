@@ -47,8 +47,7 @@ private enum ProductTableTitle: String, CaseIterable {
             case .category: "Categoría"
             case .inStock: "En Stock"
             case .price: "Precio"
-            case .options: ""
-            case .productIcon: ""
+            case .options, .productIcon: ""
         }
     }
 }
@@ -73,10 +72,8 @@ struct ProductListView: View {
                 }
                 .buttonStyle(.plain)
                 .padding(Constants.cornerRadius)
-                .background {
-                    RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                        .fill(.msPrimary)
-                }
+                .background(.msPrimary,
+                            in: .rect(cornerRadius: Constants.cornerRadius))
             }
             .padding(.bottom)
             
