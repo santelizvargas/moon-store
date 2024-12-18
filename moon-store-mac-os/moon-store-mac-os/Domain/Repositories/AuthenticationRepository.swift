@@ -34,15 +34,20 @@ final class AuthenticationRepository: BaseNetworkService {
                                               with: parameters)
             let loginResponse = try decoder.decode(LoginResponse.self, from: response)
             try storeUser(loginResponse.data)
-        } catch {
-            throw MSError.badCredentials
+        } catch let error as MSError {
+            throw error
         }
     }
     
     func logout() throws {
         guard let _ = loggedUser else { return }
-        try? store.removeAll()
-        return try store.storeChanges()
+        
+        do {
+            try store.removeAll()
+            try store.storeChanges()
+        } catch let error as MSError {
+            throw error
+        }
     }
     
     private func storeUser(_ user: UserModel) throws {

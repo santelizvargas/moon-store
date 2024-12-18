@@ -21,6 +21,11 @@ final class LoginViewModel: ObservableObject {
             defer {
                 isLoading = false
                 loginSuccess = authenticationRepository.isLoggedUser
+                
+                if loginSuccess {
+                    email = ""
+                    password = ""
+                }
             }
             do {
                 try await authenticationRepository.login(email: email,
