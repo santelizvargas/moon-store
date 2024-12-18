@@ -51,7 +51,6 @@ final class UserModel: Decodable {
         self.updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.deletedAt = try container.decodeIfPresent(String.self, forKey: .deletedAt)
     }
-
     
     init(id: Int,
          firstName: String,
