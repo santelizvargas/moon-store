@@ -24,7 +24,10 @@ final class AppRouter: ObservableObject {
     }
     
     func pop() {
-        guard !navigationPath.isEmpty else { return }
+        guard !navigationPath.isEmpty else {
+            push(.login)
+            return
+        }
         navigationPath.removeLast()
     }
     
