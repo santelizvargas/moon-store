@@ -42,7 +42,7 @@ final class DataManager<Model: PersistentModel> {
         context.delete(model)
     }
     
-    func storeChanges() throws {
+    func saveChanges() throws {
         do {
             try context.save()
         } catch {

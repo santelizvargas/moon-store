@@ -22,10 +22,7 @@ final class LoginViewModel: ObservableObject {
                 isLoading = false
                 loginSuccess = authenticationRepository.isLoggedUser
                 
-                if loginSuccess {
-                    email = ""
-                    password = ""
-                }
+                if loginSuccess { resetTextFields() }
             }
             do {
                 try await authenticationRepository.login(email: email,
@@ -35,5 +32,10 @@ final class LoginViewModel: ObservableObject {
                                            alertMessage: error.friendlyMessage)
             }
         }
+    }
+    
+    private func resetTextFields() {
+        email = ""
+        password = ""
     }
 }

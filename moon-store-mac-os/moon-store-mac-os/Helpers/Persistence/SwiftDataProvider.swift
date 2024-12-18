@@ -24,8 +24,8 @@ final class SwiftDataProvider {
         ModelContext(container)
     }()
     
-    private let schema = Schema([UserSwiftDataModel.self,
-                                 RoleSwiftDataModel.self])
+    private let schema = Schema([UserModel.self,
+                                 RoleModel.self])
     
     private init() { }
 }
