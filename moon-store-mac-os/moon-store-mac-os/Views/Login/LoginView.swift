@@ -20,6 +20,7 @@ struct LoginView: View {
             VStack(spacing: Constants.Container.spacing) {
                 Text("Inicia sesión con tu correo de trabajo")
                     .font(.title2.bold())
+                    .foregroundStyle(.black)
                 
                 Text("Usa tu correo de trabajo para iniciar sesión en el espacio de trabajo de tu equipo.")
                     .font(.title3)
@@ -64,6 +65,7 @@ struct LoginView: View {
                 placeholder: "tunombre@empresa.com",
                 text: $viewModel.email
             )
+            .foregroundStyle(.black)
             
             MSTextField(
                 title: "Contraseña",
@@ -71,6 +73,7 @@ struct LoginView: View {
                 text: $viewModel.password,
                 isSecure: true
             )
+            .foregroundStyle(.black)
             .overlay(alignment: .topTrailing) {
                 Button("¿Olvidaste tu contraseña?") { }
                     .buttonStyle(.plain)
@@ -89,6 +92,7 @@ struct LoginView: View {
     private var signUpButton: some View {
         HStack(spacing: Constants.signUpSpacing) {
             Text("¿Aún no tienes una cuenta?")
+                .foregroundStyle(.black)
             
             Button("Regístrate") { }
                 .buttonStyle(.plain)
