@@ -21,6 +21,32 @@ final class UserModel: Decodable {
     var updatedAt: String?
     var deletedAt: String?
     
+    init(id: Int,
+         firstName: String,
+         lastName: String,
+         email: String,
+         identification: String,
+         phone: String,
+         address: String,
+         roles: [RoleModel],
+         createdAt: String,
+         updatedAt: String? = nil,
+         deletedAt: String? = nil) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.identification = identification
+        self.phone = phone
+        self.address = address
+        self.roles = roles
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+    }
+    
+    // MARK: - Decoder
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case firstName
@@ -49,29 +75,5 @@ final class UserModel: Decodable {
         self.createdAt = try container.decode(String.self, forKey: .createdAt)
         self.updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.deletedAt = try container.decodeIfPresent(String.self, forKey: .deletedAt)
-    }
-    
-    init(id: Int,
-         firstName: String,
-         lastName: String,
-         email: String,
-         identification: String,
-         phone: String,
-         address: String,
-         roles: [RoleModel],
-         createdAt: String,
-         updatedAt: String? = nil,
-         deletedAt: String? = nil) {
-        self.id = id
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.identification = identification
-        self.phone = phone
-        self.address = address
-        self.roles = roles
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
     }
 }

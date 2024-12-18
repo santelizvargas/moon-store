@@ -8,15 +8,22 @@
 import Foundation
 
 final class AuthenticationRepository: BaseNetworkService {
-    var loggedUser: UserModel? {
-        guard let storedUser = try? store.fetch().first else { return nil }
-        return storedUser
-    }
+    private let decoder: JSONDecoder = .init()
+    private let userStore: DataManager<UserModel> = .init()
     
     var isLoggedUser: Bool { loggedUser != nil }
     
-    private let decoder: JSONDecoder = .init()
-    private let store: DataManager<UserModel> = .init()
+    var loggedUser: UserModel? {
+        let user: UserModel?
+        
+        do {
+            user = try userStore.fetch().first
+        } catch {
+            debugPrint("Error: User not found \(error.localizedDescription) redirect to login")
+        }
+        
+        return user
+    }
     
     // MARK: - Methods
     
@@ -43,8 +50,8 @@ final class AuthenticationRepository: BaseNetworkService {
         guard loggedUser != nil else { return }
         
         do {
-            try store.removeAll()
-            try store.saveChanges()
+            try userStore.removeAll()
+            try userStore.saveChanges()
         } catch let error as MSError {
             throw error
         }
@@ -52,6 +59,6 @@ final class AuthenticationRepository: BaseNetworkService {
     
     private func storeUser(_ user: UserModel) throws {
         store.save(model: user)
-        return try store.saveChanges()
+        return try userStore.saveChanges()
     }
 }

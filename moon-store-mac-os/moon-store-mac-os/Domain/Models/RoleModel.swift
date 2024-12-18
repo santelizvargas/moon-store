@@ -16,6 +16,22 @@ final class RoleModel: Decodable {
     var updatedAt: String?
     var deletedAt: String?
     
+    init(id: Int,
+         name: String,
+         desc: String,
+         createdAt: String? = nil,
+         updatedAt: String? = nil,
+         deletedAt: String? = nil) {
+        self.id = id
+        self.name = name
+        self.desc = desc
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+    }
+    
+    // MARK: - Decoder
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -33,19 +49,5 @@ final class RoleModel: Decodable {
         createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
         updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
         deletedAt = try container.decodeIfPresent(String.self, forKey: .deletedAt)
-    }
-    
-    init(id: Int,
-         name: String,
-         desc: String,
-         createdAt: String? = nil,
-         updatedAt: String? = nil,
-         deletedAt: String? = nil) {
-        self.id = id
-        self.name = name
-        self.desc = desc
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
     }
 }
