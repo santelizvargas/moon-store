@@ -35,6 +35,9 @@ struct MainView: View {
     
     @ViewBuilder
     private var detailContent: some View {
-        Text(screenSelection.rawValue)
+        switch screenSelection {
+            case .products: ProductListView()
+            default: Text(screenSelection.rawValue)
+        }
     }
 }
