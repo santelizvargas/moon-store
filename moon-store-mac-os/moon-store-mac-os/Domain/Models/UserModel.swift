@@ -34,7 +34,6 @@ final class UserModel: Decodable {
         case updatedAt
         case deletedAt
     }
-
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
