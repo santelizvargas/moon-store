@@ -8,21 +8,19 @@
 import Foundation
 
 final class AuthenticationRepository: BaseNetworkService {
-    private let decoder: JSONDecoder = .init()
     private let userStore: DataManager<UserModel> = .init()
+    private let decoder: JSONDecoder = .init()
     
     var isLoggedUser: Bool { loggedUser != nil }
     
     var loggedUser: UserModel? {
-        let user: UserModel?
-        
         do {
-            user = try userStore.fetch().first
+            let users = try userStore.fetch()
+            return users.first
         } catch {
             debugPrint("Error: User not found \(error.localizedDescription) redirect to login")
+            return nil
         }
-        
-        return user
     }
     
     // MARK: - Methods
