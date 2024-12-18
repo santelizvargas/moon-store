@@ -40,8 +40,8 @@ final class AuthenticationRepository: BaseNetworkService {
     }
     
     func logout() throws {
-        guard let loggedUser else { return }
-        store.remove(model: UserSwiftDataModel.factory(from: loggedUser))
+        guard let _ = loggedUser else { return }
+        try? store.removeAll()
         return try store.storeChanges()
     }
     
