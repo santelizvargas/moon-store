@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email: String = ""
-    @State private var password: String = ""
     @ObservedObject private var router: AppRouter
+    @ObservedObject private var viewModel: LoginViewModel = .init()
     
     init(router: AppRouter) {
         self.router = router
@@ -21,6 +20,7 @@ struct LoginView: View {
             VStack(spacing: Constants.Container.spacing) {
                 Text("Inicia sesión con tu correo de trabajo")
                     .font(.title2.bold())
+                    .foregroundStyle(.black)
                 
                 Text("Usa tu correo de trabajo para iniciar sesión en el espacio de trabajo de tu equipo.")
                     .font(.title3)
@@ -49,6 +49,11 @@ struct LoginView: View {
         }
         .screenSize()
         .background(.msLightGray)
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+            }
+        }
     }
     
     // MARK: - View Components
@@ -58,15 +63,17 @@ struct LoginView: View {
             MSTextField(
                 title: "Correo electrónico",
                 placeholder: "tunombre@empresa.com",
-                text: $email
+                text: $viewModel.email
             )
+            .foregroundStyle(.black)
             
             MSTextField(
                 title: "Contraseña",
                 placeholder: "Ingresa tu contraseña",
-                text: $password,
+                text: $viewModel.password,
                 isSecure: true
             )
+            .foregroundStyle(.black)
             .overlay(alignment: .topTrailing) {
                 Button("¿Olvidaste tu contraseña?") { }
                     .buttonStyle(.plain)
@@ -74,7 +81,10 @@ struct LoginView: View {
             }
             
             PrimaryButton("Iniciar sesión") {
-                router.push(.main)
+                viewModel.login()
+            }
+            .onReceive(viewModel.$loginSuccess) { success in
+                if success { router.push(.main) }
             }
         }
     }
@@ -82,6 +92,7 @@ struct LoginView: View {
     private var signUpButton: some View {
         HStack(spacing: Constants.signUpSpacing) {
             Text("¿Aún no tienes una cuenta?")
+                .foregroundStyle(.black)
             
             Button("Regístrate") { }
                 .buttonStyle(.plain)

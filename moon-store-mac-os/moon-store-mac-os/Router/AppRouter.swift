@@ -10,17 +10,24 @@ import SwiftUI
 final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
     
-    lazy var assosiatedView: some View = {
-        let route: AppTransition = LoginManager.isUserLogged ? .main : .login
+    lazy var associatedView: some View = {
+        let route: AppTransition = authenticationRepository.isLoggedUser
+        ? .main
+        : .login
         return build(for: route)
     }()
+    
+    private let authenticationRepository: AuthenticationRepository = .init()
     
     func push(_ path: AppTransition) {
         navigationPath.append(path)
     }
     
     func pop() {
-        guard !navigationPath.isEmpty else { return }
+        guard !navigationPath.isEmpty else {
+            push(.login)
+            return
+        }
         navigationPath.removeLast()
     }
     

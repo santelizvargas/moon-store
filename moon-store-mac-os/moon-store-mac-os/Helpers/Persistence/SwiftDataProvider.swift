@@ -24,7 +24,8 @@ final class SwiftDataProvider {
         ModelContext(container)
     }()
     
-    private let schema = Schema([MockSDModel.self])
+    private let schema = Schema([UserModel.self,
+                                 RoleModel.self])
     
     private init() { }
 }
