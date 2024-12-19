@@ -9,17 +9,12 @@ import SwiftUI
 
 @main
 struct moon_store_mac_osApp: App {
-    @StateObject private var appRouter: AppRouter = .init()
+    @StateObject private var router: AppRouter = .init()
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $appRouter.navigationPath) {
-                appRouter.associatedView
-                    .preferredColorScheme(.light)
-                    .navigationDestination(for: AppTransition.self) { route in
-                        appRouter.build(for: route)
-                    }
-            }
+            InitialView()
+                .environmentObject(router)
         }
     }
 }
