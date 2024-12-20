@@ -8,21 +8,12 @@
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject private var router: AppRouter
     @State private var screenSelection: Screen = .charts
-    @ObservedObject private var router: AppRouter
-    @ObservedObject private var viewModel: MainViewViewModel = .init()
-    
-    init(router: AppRouter) {
-        self.router = router
-    }
     
     var body: some View {
         NavigationSplitView {
-            Sidebar(
-                screenSelection: $screenSelection) {
-                    viewModel.logout()
-                    router.pop()
-                }
+            Sidebar(screenSelection: $screenSelection)
         } detail: {
             detailContent
                 .screenSize()

@@ -34,8 +34,8 @@ final class AppRouter: ObservableObject {
     @ViewBuilder
     func build(for route: AppTransition) -> some View {
         switch route {
-            case .login: LoginView(router: self)
-            case .main: MainView(router: self)
+            case .login: LoginView()
+            case .main: MainView()
         }
     }
 }

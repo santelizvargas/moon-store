@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject private var router: AppRouter
+    @EnvironmentObject private var router: AppRouter
     @ObservedObject private var viewModel: LoginViewModel = .init()
-    
-    init(router: AppRouter) {
-        self.router = router
-    }
     
     var body: some View {
         VStack {

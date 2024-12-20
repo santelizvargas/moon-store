@@ -56,7 +56,7 @@ final class AuthenticationRepository: BaseNetworkService {
     }
     
     private func storeUser(_ user: UserModel) throws {
-        store.save(model: user)
+        userStore.save(model: user)
         return try userStore.saveChanges()
     }
 }
