@@ -13,7 +13,6 @@ struct InitialView: View {
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
             router.associatedView
-                .preferredColorScheme(.light)
                 .navigationDestination(for: AppTransition.self) { route in
                     router.build(for: route)
                 }
