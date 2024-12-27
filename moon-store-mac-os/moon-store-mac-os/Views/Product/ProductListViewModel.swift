@@ -27,8 +27,6 @@ final class ProductListViewModel: ObservableObject {
     }
     
     func getProducts() {
-        resetValues()
-        
         isLoading = true
         
         Task { @MainActor in
@@ -44,19 +42,11 @@ final class ProductListViewModel: ObservableObject {
         }
     }
     
-    private func resetValues() {
-        products = []
-        productList = []
-        productsFiltered = []
-        searchText = ""
-    }
-    
     private func searchTextDidChange() {
         let searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         isSearchInProgress = searchText != ""
-        
         productsFiltered = products.filter { product in
-            product.name.lowercased().contains(searchText.lowercased())
+            product.name.localizedStandardContains(searchText)
         }
         
         productList = isSearchInProgress

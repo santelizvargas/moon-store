@@ -16,12 +16,14 @@ final class ProductRepository: BaseNetworkService {
     
     func getProducts() async throws -> [ProductModel] {
         do {
-            let result = try await getData(for: MSEndpoint.products.path)
-            let productResponse = try decoder.decode(ProductResponse.self, from: result)
+            let data = try await getData(for: MSEndpoint.products)
+            let response = try decoder.decode(ProductResponse.self, from: data)
             
-            if productResponse.data.isEmpty { throw MSError.noData }
+            if response.data.isEmpty {
+                throw MSError.noData
+            }
             
-            return productResponse.data
+            return response.data
         } catch let error as MSError {
             throw error
         }

@@ -48,11 +48,7 @@ private enum ProductTableTitle: String, CaseIterable {
 }
 
 struct ProductListView: View {
-    @ObservedObject private var viewModel: ProductListViewModel
-
-    init(viewModel: ProductListViewModel = .init()) {
-        self.viewModel = viewModel
-    }
+    @StateObject private var viewModel: ProductListViewModel = .init()
 
     var body: some View {
         VStack {
@@ -90,7 +86,7 @@ struct ProductListView: View {
         HStack {
             Text("Lista de Productos")
                 .font(.title)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .leadingInfinity()
 
             Image(systemName: Constants.personIcon)
                 .resizable()
@@ -165,10 +161,7 @@ struct ProductListView: View {
                 .padding(.horizontal)
 
             Text(product.name)
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
+                .leadingInfinity()
                 .foregroundStyle(.black)
                 .lineLimit(Constants.ProductRow.lineLimit)
 
@@ -199,10 +192,7 @@ struct ProductListView: View {
     private var optionsView: some View {
         HStack(spacing: Constants.ProductRow.spacing) {
             Text(Constants.ProductRow.optionTitle)
-                .frame(
-                    maxWidth: .infinity,
-                    alignment: .leading
-                )
+                .leadingInfinity()
                 .foregroundStyle(.blue)
                 .underline()
 
