@@ -29,7 +29,7 @@ final class LoginViewModel: ObservableObject {
                                                          password: password)
             } catch let error as MSError {
                 AlertPresenter.showAlert(type: .error,
-                                           alertMessage: error.friendlyMessage)
+                                         alertMessage: error.friendlyMessage)
             }
         }
     }

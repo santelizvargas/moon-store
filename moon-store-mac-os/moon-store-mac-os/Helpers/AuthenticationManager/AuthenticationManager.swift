@@ -30,11 +30,8 @@ final class AuthenticationManager {
             return msError.friendlyMessage
         }()
         
-        // TODO: - Use Static Function for Show an Alert
-        AlertPresenter.showAlert(
-            type: .error,
-            alertMessage: userFriendlyMessage
-        )
+        AlertPresenter.showAlert(type: .error,
+                                 alertMessage: userFriendlyMessage)
         debugPrint("Error occurred: \(error.localizedDescription)")
     }
 }
