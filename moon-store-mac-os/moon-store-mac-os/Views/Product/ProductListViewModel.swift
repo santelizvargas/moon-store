@@ -46,7 +46,7 @@ final class ProductListViewModel: ObservableObject {
         let searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         isSearchInProgress = searchText != ""
         productsFiltered = products.filter { product in
-            product.name.localizedStandardContains(searchText)
+            product.name.localizedCaseInsensitiveContains(searchText)
         }
         
         productList = isSearchInProgress
