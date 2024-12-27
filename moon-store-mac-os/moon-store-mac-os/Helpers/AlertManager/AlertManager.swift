@@ -7,15 +7,17 @@
 
 import AppKit
 
-final class AlertPresenter: ObservableObject {
-    @Published var isPresented: Bool = false
+final class AlertPresenter {
+    private static var isPresented: Bool = false
     
-    func showAlert(type: AlertType, alertMessage: String) {
+    private init() { }
+    
+    static func showAlert(type: AlertType, alertMessage: String) {
         isPresented = true
         alertConstruction(type: type, message: alertMessage)
     }
     
-    private func alertConstruction(type: AlertType, message: String) {
+    private static func alertConstruction(type: AlertType, message: String) {
         let alert = NSAlert()
         alert.messageText = type.title
         alert.informativeText = message

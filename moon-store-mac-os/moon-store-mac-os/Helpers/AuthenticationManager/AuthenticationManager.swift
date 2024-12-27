@@ -31,7 +31,7 @@ final class AuthenticationManager {
         }()
         
         // TODO: - Use Static Function for Show an Alert
-        AlertPresenter().showAlert(
+        AlertPresenter.showAlert(
             type: .error,
             alertMessage: userFriendlyMessage
         )
