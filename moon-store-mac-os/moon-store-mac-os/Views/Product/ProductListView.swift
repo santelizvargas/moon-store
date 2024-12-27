@@ -48,7 +48,6 @@ private enum ProductTableTitle: String, CaseIterable {
 }
 
 struct ProductListView: View {
-    @State private var searchValue: String = ""
     @ObservedObject private var viewModel: ProductListViewModel
 
     init(viewModel: ProductListViewModel = .init()) {
@@ -60,7 +59,7 @@ struct ProductListView: View {
             headerView
 
             HStack {
-                SearchView(searchText: $searchValue)
+                SearchView(searchText: $viewModel.searchText)
 
                 Spacer()
 
@@ -109,10 +108,9 @@ struct ProductListView: View {
 
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(viewModel.products.indices, id: \.self) { index in
-                        let product = viewModel.products[index]
+                    ForEach(viewModel.productList.indices, id: \.self) { index in
                         HStack {
-                            productRowView(product)
+                            productRowView(viewModel.productList[index])
                                 .padding(.vertical)
                         }
                         .background(
