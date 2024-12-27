@@ -36,7 +36,7 @@ final class ProductListViewModel: ObservableObject {
                 products = try await productRepository.getProducts()
                 productList = products
             } catch let error as MSError {
-                AlertPresenter().showAlert(type: .error,
+                AlertPresenter.showAlert(type: .error,
                                            alertMessage: error.friendlyMessage)
             }
         }
