@@ -7,23 +7,17 @@
 
 import AppKit
 
-final class AlertPresenter: ObservableObject {
-    @Published var isPresented: Bool = false
+final class AlertPresenter {
     
-    func showAlert(type: AlertType, alertMessage: String) {
-        isPresented = true
-        alertConstruction(type: type, message: alertMessage)
-    }
+    private init() { }
     
-    private func alertConstruction(type: AlertType, message: String) {
+    static func showAlert(type: AlertType, alertMessage: String) {
         let alert = NSAlert()
         alert.messageText = type.title
-        alert.informativeText = message
+        alert.informativeText = alertMessage
         
         alert.icon = NSImage(named: type.icon)
         alert.addButton(withTitle: "OK")
         alert.runModal()
-        
-        isPresented = false
     }
 }
