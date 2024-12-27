@@ -5,6 +5,8 @@
 //  Created by Jose Luna on 12/23/24.
 //
 
+import SwiftUI
+
 enum ProductCategory: String, Decodable {
     case laptop
     case phone
@@ -18,9 +20,17 @@ enum ProductCategory: String, Decodable {
     case networking
     
     var title: String { rawValue.capitalized }
+    
+    var color: Color {
+        switch self {
+            case .laptop, .phone, .pc: .msPrimary
+            case .audio, .printer, .battery: .msOrange
+            case .wearable, .home, .peripheral, .networking: .msGreen
+        }
+    }
 }
 
-struct ProductModel: Decodable {
+struct ProductModel: Decodable, Hashable, Identifiable {
     let id: Int
     let name: String
     let description: String
@@ -28,6 +38,7 @@ struct ProductModel: Decodable {
     let salePrice: Double
     let purchasePrice: Double
     let category: ProductCategory
+    let images: [String]
     let createdAt: String
     let updatedAt: String
     let deletedAt: String?

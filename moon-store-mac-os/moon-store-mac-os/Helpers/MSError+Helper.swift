@@ -28,6 +28,9 @@ enum MSError: Error {
     // Codable
     case encodingError
     case decodingError
+    
+    // Other
+    case noData
 
     var friendlyMessage: String {
         switch self {
@@ -35,6 +38,7 @@ enum MSError: Error {
         case .networkConnection: "Por favor, verifica tu conexión a internet e inténtalo de nuevo."
         case .badCredentials, .userNotFound:
                 "Las credenciales son incorrectas. Por favor, inténtalo de nuevo."
+        case .noData: "No hay datos disponibles, Por favor intenta más tarde."
         default: "Algo salió mal. Por favor, intenta más tarde."
         }
     }
@@ -53,6 +57,7 @@ enum MSError: Error {
         case .userNotFound: "User not found in the database"
         case .encodingError: "Encoding error occurred"
         case .decodingError: "Decoding error occurred"
+        case .noData: "No data available"
         }
     }
 }
