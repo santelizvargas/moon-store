@@ -28,7 +28,7 @@ final class LoginViewModel: ObservableObject {
                 try await authenticationRepository.login(email: email,
                                                          password: password)
             } catch let error as MSError {
-                AlertPresenter().showAlert(type: .error,
+                AlertPresenter.showAlert(type: .error,
                                            alertMessage: error.friendlyMessage)
             }
         }
