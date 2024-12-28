@@ -15,6 +15,12 @@ final class ProductListViewModel: ObservableObject {
         didSet { searchTextDidChange() }
     }
     
+    var shouldShowEmptyView: Bool {
+        productList.isEmpty &&
+        !isLoading &&
+        !isSearchInProgress
+    }
+    
     private let productRepository: ProductRepository
     
     private var isSearchInProgress: Bool = false

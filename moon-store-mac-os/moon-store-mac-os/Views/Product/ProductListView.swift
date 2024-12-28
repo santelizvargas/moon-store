@@ -110,8 +110,7 @@ struct ProductListView: View {
 
             if viewModel.isLoading { ProgressView() }
             
-            if viewModel.productList.isEmpty,
-                !viewModel.isLoading {
+            if viewModel.shouldShowEmptyView {
                 MSEmptyListView {
                     viewModel.getProducts()
                 }
