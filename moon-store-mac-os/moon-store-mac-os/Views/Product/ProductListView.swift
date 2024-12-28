@@ -38,11 +38,11 @@ private enum ProductTableTitle: String, CaseIterable {
 
     var title: String {
         switch self {
-        case .product: "Producto"
-        case .category: "Categoría"
-        case .inStock: "En Stock"
-        case .price: "Precio"
-        case .options, .productIcon: ""
+            case .product: "Producto"
+            case .category: "Categoría"
+            case .inStock: "En Stock"
+            case .price: "Precio"
+            case .options, .productIcon: ""
         }
     }
 }
@@ -102,32 +102,43 @@ struct ProductListView: View {
         VStack(spacing: .zero) {
             headerTableView
 
-            ScrollView(showsIndicators: false) {
-                Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(viewModel.productList.indices, id: \.self) { index in
-                        HStack {
-                            productRowView(viewModel.productList[index])
-                                .padding(.vertical)
-                        }
-                        .background(
-                            index % Constants.ProductRow.pairNumber == .zero
-                            ? .msLightGray
-                            : .msWhite
-                        )
-                    }
-                }
-            }
+            productList
         }
         .overlay {
             RoundedRectangle(cornerRadius: Constants.cornerRadius)
                 .stroke(.msGray)
 
             if viewModel.isLoading { ProgressView() }
+            
+            if viewModel.productList.isEmpty,
+                !viewModel.isLoading {
+                MSEmptyListView {
+                    viewModel.getProducts()
+                }
+            }
         }
         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
     }
 
     // MARK: - Header Table View
+    
+    private var productList: some View {
+        ScrollView(showsIndicators: false) {
+            Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
+                ForEach(viewModel.productList.indices, id: \.self) { index in
+                    HStack {
+                        productRowView(viewModel.productList[index])
+                            .padding(.vertical)
+                    }
+                    .background(
+                        index % Constants.ProductRow.pairNumber == .zero
+                        ? .msLightGray
+                        : .msWhite
+                    )
+                }
+            }
+        }
+    }
 
     private var headerTableView: some View {
         Grid {
