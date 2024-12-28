@@ -35,7 +35,7 @@ final class AuthenticationRepository: BaseNetworkService {
         ]
         
         do {
-            let response = try await postData(for: MSEndpoint.login,
+            let response = try await postData(for: .login,
                                               with: parameters)
             let loginResponse = try decoder.decode(LoginResponseModel.self, from: response)
             try storeUser(loginResponse.data)

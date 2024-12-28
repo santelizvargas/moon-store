@@ -9,6 +9,6 @@ import SwiftUI
 
 extension View {
     func leadingInfinity() -> some View {
-        self.frame(maxWidth: .infinity, alignment: .leading)
+        frame(maxWidth: .infinity, alignment: .leading)
     }
 }

@@ -26,6 +26,7 @@ enum ProductCategory: String, Decodable {
             case .laptop, .phone, .pc: .msPrimary
             case .audio, .printer, .battery: .msOrange
             case .wearable, .home, .peripheral, .networking: .msGreen
+            @unknown default: .msDarkGray
         }
     }
 }
