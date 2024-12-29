@@ -47,7 +47,7 @@ struct LoginView: View {
         .background(.msLightGray)
         .overlay {
             if viewModel.isLoading {
-                ProgressView()
+                MSSpinner()
             }
         }
     }

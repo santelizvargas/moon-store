@@ -12,44 +12,32 @@ private enum Constants {
     static let strokeLineWidth: CGFloat = 10
     static let colors: [Color] = [.clear, .msPrimary]
     static let spinnerSize: CGFloat = 50
-    static let animationDuration: CGFloat = 1.5
+    static let animationDuration: CGFloat = 1
     static let rotationDegrees: CGFloat = 360
 }
 
 struct MSSpinner: View {
-    @Binding private var isShowing: Bool
     @State private var rotation: Double = .zero
     
-    init(isShowing: Binding<Bool>) {
-        _isShowing = isShowing
-    }
-    
     var body: some View {
-        if isShowing {
-            ZStack {
-                Color.msPrimary.opacity(Constants.backgroundOpacity)
-                    .ignoresSafeArea()
-                
-                Circle()
-                    .stroke(
-                        AngularGradient(gradient: Gradient(colors: Constants.colors),
-                                        center: .center),
-                        style: StrokeStyle(lineWidth: Constants.strokeLineWidth)
-                    )
-                    .frame(width: Constants.spinnerSize,
-                           height: Constants.spinnerSize)
-                    .rotationEffect(.degrees(rotation))
-                    .onAppear {
-                        withAnimation(
-                            .linear(duration: Constants.animationDuration)
-                            .repeatForever(autoreverses: false)
-                        ) { rotation = Constants.rotationDegrees }
-                    }
+        Circle()
+            .stroke(
+                AngularGradient(gradient: Gradient(colors: Constants.colors),
+                                center: .center),
+                style: StrokeStyle(lineWidth: Constants.strokeLineWidth)
+            )
+            .frame(width: Constants.spinnerSize,
+                   height: Constants.spinnerSize)
+            .rotationEffect(.degrees(rotation))
+            .onAppear {
+                withAnimation(
+                    .linear(duration: Constants.animationDuration)
+                    .repeatForever(autoreverses: false)
+                ) { rotation = Constants.rotationDegrees }
             }
-        }
     }
 }
 
 #Preview {
-    MSSpinner(isShowing: .constant(true))
+    MSSpinner()
 }
