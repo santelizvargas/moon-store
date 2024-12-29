@@ -8,8 +8,8 @@
 import Foundation
 
 final class LoginViewModel: ObservableObject {
-    @Published var email: String = "admin@gmail.com"
-    @Published var password: String = "user1234"
+    @Published var email: String = ""
+    @Published var password: String = ""
     @Published var isLoading: Bool = false
     @Published var loginSuccess: Bool = false
     
