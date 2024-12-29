@@ -30,7 +30,6 @@ final class AuthenticationManager {
             return msError.friendlyMessage
         }()
         
-        // TODO: - Use Static Function for Show an Alert
         AlertPresenter.showAlert(
             type: .error,
             alertMessage: userFriendlyMessage

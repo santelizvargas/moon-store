@@ -6,5 +6,6 @@
 //
 
 enum AppTransition: Hashable {
-  case login, main
+    case login
+    case main(UserModel)
 }

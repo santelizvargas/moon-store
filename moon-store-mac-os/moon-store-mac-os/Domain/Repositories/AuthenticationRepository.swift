@@ -9,9 +9,6 @@ import Foundation
 
 final class AuthenticationRepository: BaseNetworkService {
     private let userStore: DataManager<UserModel> = .init()
-    private let decoder: JSONDecoder = .init()
-    
-    var isLoggedUser: Bool { loggedUser != nil }
     
     var loggedUser: UserModel? {
         do {
@@ -25,21 +22,21 @@ final class AuthenticationRepository: BaseNetworkService {
     
     // MARK: - Methods
     
-    func login(email: String,
-               password: String) async throws {
-        guard !isLoggedUser else { return }
-        
+    func login(email: String, password: String) async throws {
         let parameters: [String: Any] = [
             "email": email,
             "password": password
         ]
         
         do {
-            let response = try await postData(for: MSEndpoint.login.path,
+            let data = try await postData(for: MSEndpoint.login.path,
                                               with: parameters)
-            let loginResponse = try decoder.decode(LoginResponseModel.self, from: response)
-            try storeUser(loginResponse.data)
-        } catch let error as MSError {
+            let decodedObject = try JSONDecoder().decode(
+                LoginResponseModel.self,
+                from: data
+            )
+            try userStore.save(model: decodedObject.user)
+        } catch {
             throw error
         }
     }
@@ -49,14 +46,8 @@ final class AuthenticationRepository: BaseNetworkService {
         
         do {
             try userStore.removeAll()
-            try userStore.saveChanges()
-        } catch let error as MSError {
+        } catch {
             throw error
         }
-    }
-    
-    private func storeUser(_ user: UserModel) throws {
-        userStore.save(model: user)
-        return try userStore.saveChanges()
     }
 }

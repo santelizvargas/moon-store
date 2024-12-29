@@ -20,7 +20,7 @@ final class LoginViewModel: ObservableObject {
         Task { @MainActor in
             defer {
                 isLoading = false
-                loginSuccess = authenticationRepository.isLoggedUser
+                loginSuccess = authenticationRepository.loggedUser != nil
                 
                 if loginSuccess { resetTextFields() }
             }
