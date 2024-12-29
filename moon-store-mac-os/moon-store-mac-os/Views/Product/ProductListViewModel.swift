@@ -8,11 +8,12 @@
 import Foundation
 
 final class ProductListViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
     @Published var productList: [ProductModel] = []
-    
+    @Published var isLoading: Bool = false
     @Published var searchText: String = "" {
-        didSet { searchTextDidChange() }
+        didSet {
+            filterProducts()
+        }
     }
     
     var shouldShowEmptyView: Bool {
@@ -21,14 +22,14 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
-    private let productRepository: ProductRepository
+    private let networkManager: NetworkManager = .init()
+    private let decoder: JSONDecoder = .init()
     
     private var isSearchInProgress: Bool = false
     private var products: [ProductModel] = []
     private var productsFiltered: [ProductModel] = []
     
-    init(productRepository: ProductRepository = .init()) {
-        self.productRepository = productRepository
+    init () {
         getProducts()
     }
     
@@ -39,17 +40,17 @@ final class ProductListViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                products = try await productRepository.getProducts()
+                let data = try await networkManager.getData(for: .products)
+                let response = try decoder.decode(ProductResponse.self, from: data)
+                products = response.data
                 productList = products
-            } catch let error as MSError {
-                AlertPresenter.showAlert(type: .error,
-                                         alertMessage: error.friendlyMessage)
+            } catch {
+                AlertPresenter.showAlert(with: error)
             }
         }
     }
     
-    private func searchTextDidChange() {
-        let searchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    private func filterProducts() {
         isSearchInProgress = searchText != ""
         productsFiltered = products.filter { product in
             product.name.localizedCaseInsensitiveContains(searchText)

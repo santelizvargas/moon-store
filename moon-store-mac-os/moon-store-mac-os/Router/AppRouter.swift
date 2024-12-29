@@ -11,13 +11,13 @@ final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
     
     lazy var associatedView: some View = {
-        let route: AppTransition = authenticationRepository.isLoggedUser
+        let route: AppTransition = loginViewModel.isLoggedUser
         ? .main
         : .login
         return build(for: route)
     }()
     
-    private let authenticationRepository: AuthenticationRepository = .init()
+    private let loginViewModel: LoginViewModel = .init()
     
     func push(_ path: AppTransition) {
         navigationPath.append(path)

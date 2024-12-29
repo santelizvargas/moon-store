@@ -1,5 +1,5 @@
 //
-//  BaseNetworkService.swift
+//  NetworkManager.swift
 //  moon-store-mac-os
 //
 //  Created by Jose Luna on 12/3/24.
@@ -16,8 +16,7 @@ private enum Constants {
     static let putHttpMethod: String = "PUT"
 }
 
-class BaseNetworkService {
-    
+final class NetworkManager {
     private var components: URLComponents = {
         var components = URLComponents()
         components.scheme = Constants.scheme
