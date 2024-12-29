@@ -57,7 +57,7 @@ struct Sidebar: View {
     private var logoutButton: some View {
         Button {
             authManager.logout()
-            router.pop()
+            router.popToRoot()
         } label: {
             Label("Cerrar Sesión", systemImage: "person.badge.minus")
         }

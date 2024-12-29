@@ -17,8 +17,13 @@ final class DataManager<Model: PersistentModel> {
     
     // MARK: - Methods
 
-    func save(model: Model) {
+    func save(model: Model) throws {
         context.insert(model)
+        do {
+            try context.save()
+        } catch {
+            throw MSError.notSaved
+        }
     }
     
     func fetch(predicate: Predicate<Model> = .true) throws -> [Model] {
@@ -40,13 +45,5 @@ final class DataManager<Model: PersistentModel> {
     
     func remove(model: Model) {
         context.delete(model)
-    }
-    
-    func saveChanges() throws {
-        do {
-            try context.save()
-        } catch {
-            throw MSError.notSaved
-        }
     }
 }

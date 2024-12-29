@@ -8,8 +8,8 @@
 import Foundation
 
 final class LoginViewModel: ObservableObject {
-    @Published var email: String = ""
-    @Published var password: String = ""
+    @Published var email: String = "admin@gmail.com"
+    @Published var password: String = "user1234"
     @Published var isLoading: Bool = false
     @Published var loginSuccess: Bool = false
     
@@ -20,7 +20,7 @@ final class LoginViewModel: ObservableObject {
         Task { @MainActor in
             defer {
                 isLoading = false
-                loginSuccess = authenticationRepository.isLoggedUser
+                loginSuccess = authenticationRepository.loggedUser != nil
                 
                 if loginSuccess { resetTextFields() }
             }
