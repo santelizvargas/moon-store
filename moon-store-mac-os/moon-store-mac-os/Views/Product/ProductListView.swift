@@ -57,7 +57,10 @@ struct ProductListView: View {
     
     var body: some View {
         VStack {
-            headerView
+            HeaderView(
+                title: Constants.headerTitle,
+                icon: Constants.personIcon
+            )
             
             HStack {
                 SearchView(searchText: $searchValue)
@@ -82,22 +85,6 @@ struct ProductListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.horizontal)
         .background(.msLightGray)
-    }
-    
-    // MARK: - Header View
-    
-    private var headerView: some View {
-        HStack {
-            Text(Constants.headerTitle)
-                .font(.title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(systemName: Constants.personIcon)
-                .resizable()
-                .frame(width: Constants.iconSize, height: Constants.iconSize)
-        }
-        .padding(.vertical)
-        .foregroundStyle(.black)
     }
     
     // MARK: - Table View

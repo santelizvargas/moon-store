@@ -28,6 +28,7 @@ struct MainView: View {
     private var detailContent: some View {
         switch screenSelection {
             case .products: ProductListView()
+            case .users: UserListView()
             default: Text(screenSelection.rawValue)
         }
     }
