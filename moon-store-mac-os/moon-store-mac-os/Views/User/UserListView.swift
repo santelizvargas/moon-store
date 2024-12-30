@@ -23,15 +23,13 @@ struct UserListView: View {
                     .font(.title3)
                     .bold()
                 
-                Button {
+                Button(localizedString(.inviteUser),
+                       systemImage: UserConstants.Button.plusIcon) {
                     showModal.toggle()
-                } label: {
-                    Label(localizedString(.inviteUser),
-                          systemImage: UserConstants.Button.plusIcon)
-                    .foregroundStyle(.msWhite)
                 }
                 .buttonStyle(.plain)
                 .padding(UserConstants.padding)
+                .foregroundStyle(.msWhite)
                 .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
             }
             
@@ -77,7 +75,7 @@ struct UserListView: View {
     private var headerTableView: some View {
         Grid {
             GridRow {
-                ForEach(UserTableHeader.allCases, id: \.self) { title in
+                ForEach(UserTableHeader.allCases) { title in
                     Text(title.title)
                         .frame(maxWidth: .infinity,
                                alignment: title == .role ? .center : .leading)

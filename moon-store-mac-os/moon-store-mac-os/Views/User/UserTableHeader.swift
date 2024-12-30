@@ -5,7 +5,7 @@
 //  Created by Diana Zeledon on 30/12/24.
 //
 
-enum UserTableHeader: CaseIterable {
+enum UserTableHeader: CaseIterable, Identifiable {
     case icon, user, email, role, date, option
     
     var title: String {
@@ -17,4 +17,6 @@ enum UserTableHeader: CaseIterable {
             default: ""
         }
     }
+    
+    var id: UserTableHeader { self }
 }
