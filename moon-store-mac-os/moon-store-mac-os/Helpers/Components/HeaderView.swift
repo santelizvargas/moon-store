@@ -12,8 +12,8 @@ private enum Constants {
 }
 
 struct HeaderView: View {
-    private var title: String
-    private var icon: String
+    private let title: String
+    private let icon: String
     
     init(title: String, icon: String) {
         self.title = title

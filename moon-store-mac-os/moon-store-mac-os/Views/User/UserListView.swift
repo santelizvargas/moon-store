@@ -7,90 +7,40 @@
 
 import SwiftUI
 
-private enum Constants {
-    static let cornerRadius: CGFloat = 10
-    static let iconSize: CGFloat = 30
-    static let personIcon: String = "person.crop.circle.fill"
-    static let headerTitle: String = "Vista General"
-    static let userTitle: String = "Usuarios agregados"
-    static let padding: CGFloat = 10
-    static let textFieldHeight: CGFloat = 40
-    
-    enum Button {
-        static let title: String = "Invitar usuarios"
-        static let plusIcon: String = "paperplane.fill"
-    }
-    
-    enum UserRow {
-        static let spacing: CGFloat = 10
-        static let editTitle: String = "Edit"
-        static let trashIcon: String = "trash"
-        static let iconSize: CGFloat = 20
-        static let hStackSpacing: CGFloat = -30
-        static let lineLimit: Int = 1
-        static let evenNumber: Int = 2
-    }
-    
-    enum Alert {
-        static let iconSize: CGFloat = 16
-        static let title: String = "Dirección de correo:"
-        static let buttonTitle: String = "Invitar"
-        static let iconTitle: String = "xmark.circle.fill"
-        static let placeholder: String = "example@example.com"
-        static let height: CGFloat = 120
-        static let verticalpadding: CGFloat = 5
-        static let buttonHeight: CGFloat = 100
-    }
-}
-
-enum UserTableHeader: CaseIterable {
-    case icon, user, email, role, date, option
-    
-    var title: String {
-        switch self {
-            case .user: "Usuario"
-            case .email: "Email"
-            case .role: "Rol"
-            case .date: "Fecha"
-            default: ""
-        }
-    }
-}
-
 struct UserListView: View {
-    @State private var showActionSheet: Bool = false
+    @State private var showModal: Bool = false
     
     var body: some View {
         VStack {
             HeaderView(
-                title: Constants.headerTitle,
-                icon: Constants.personIcon
+                title: localizedString(.header),
+                icon: UserConstants.personIcon
             )
             
             HStack {
-                Text(Constants.userTitle)
+                Text(localizedString(.user))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.title3)
                     .bold()
                 
                 Button {
-                    showActionSheet.toggle()
+                    showModal.toggle()
                 } label: {
-                    Label(Constants.Button.title,
-                          systemImage: Constants.Button.plusIcon)
+                    Label(localizedString(.inviteUser),
+                          systemImage: UserConstants.Button.plusIcon)
                     .foregroundStyle(.msWhite)
                 }
                 .buttonStyle(.plain)
-                .padding(Constants.padding)
-                .background(.msPrimary, in: .rect(cornerRadius: Constants.cornerRadius))
+                .padding(UserConstants.padding)
+                .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
             }
             
             productTableView
         }
         .frame(maxWidth: .infinity, alignment: .top)
         .padding(.horizontal)
-        .sheet(isPresented: $showActionSheet) {
-            UserInviteView(isShowing: $showActionSheet)
+        .sheet(isPresented: $showModal) {
+            UserInviteView(isShowing: $showModal)
         }
     }
     
@@ -104,16 +54,11 @@ struct UserListView: View {
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
                     ForEach(Array(UserModel.userMockData.enumerated()), id: \.element.id) { index, user in
-                        HStack(spacing: Constants.UserRow.hStackSpacing) {
-                            productRowView(
-                                userName: "\(user.firstName) \(user.lastName)",
-                                email: user.email,
-                                role: user.roles.first?.name ?? "",
-                                date: user.createdAt
-                            )
+                        HStack(spacing: UserConstants.UserRow.hStackSpacing) {
+                            userRowView(user: user)
                             .padding(.vertical)
                         }
-                        .background(index % Constants.UserRow.evenNumber == .zero
+                        .background(index % UserConstants.UserRow.evenNumber == .zero
                                     ? .msLightGray
                                     : .msWhite)
                     }
@@ -121,10 +66,10 @@ struct UserListView: View {
             }
         }
         .overlay {
-            RoundedRectangle(cornerRadius: Constants.cornerRadius)
+            RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
                 .stroke(.msGray)
         }
-        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+        .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
     }
     
     // MARK: - Header Table View
@@ -137,8 +82,7 @@ struct UserListView: View {
                         .frame(maxWidth: .infinity,
                                alignment: title == .role ? .center : .leading)
                         .foregroundStyle(.black)
-                        .font(.body)
-                        .bold()
+                        .font(.body.bold())
                 }
             }
             .frame(maxWidth: .infinity)
@@ -148,54 +92,70 @@ struct UserListView: View {
     
     // MARK: - Table Row View
     
-    private func productRowView(userName: String, email: String, role: String, date: String) -> some View {
+    private func userRowView(user: UserModel) -> some View {
         GridRow {
-            Image(systemName: Constants.personIcon)
+            Image(systemName: UserConstants.personIcon)
                 .resizable()
-                .frame(width: Constants.iconSize,
-                       height: Constants.iconSize)
+                .frame(width: UserConstants.iconSize,
+                       height: UserConstants.iconSize)
             
-            Text(userName)
+            Text("\(user.firstName) \(user.lastName)")
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
-                .foregroundStyle(.black)
-                .lineLimit(Constants.UserRow.lineLimit)
+                .foregroundStyle(.msBlack)
+                .lineLimit(UserConstants.UserRow.lineLimit)
             
             Group {
-                Text(email)
-                    .lineLimit(Constants.UserRow.lineLimit)
+                Text(user.email)
+                    .lineLimit(UserConstants.UserRow.lineLimit)
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                 
-                Text(role)
-                    .frame(alignment: .center)
+                Text(user.roles.first?.name ?? "")
                 
-                Text(date)
+                Text(user.createdAt)
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
             .foregroundStyle(.msDarkGray)
             
-            opctionsView
+            optionsView
         }
         .frame(maxWidth: .infinity)
     }
     
-    // MARK: - Product options view
+    // MARK: - User options view
     
-    private var opctionsView: some View {
-        HStack(spacing: Constants.UserRow.spacing) {
-            Text(Constants.UserRow.editTitle)
+    private var optionsView: some View {
+        HStack(spacing: UserConstants.UserRow.spacing) {
+            Text(localizedString(.edit))
                 .underline()
                 .foregroundStyle(.msPrimary)
             
-            Image(systemName: Constants.UserRow.trashIcon)
+            Image(systemName: UserConstants.UserRow.trashIcon)
                 .resizable()
-                .frame(width: Constants.UserRow.iconSize,
-                       height: Constants.UserRow.iconSize)
+                .frame(width: UserConstants.UserRow.iconSize,
+                       height: UserConstants.UserRow.iconSize)
                 .foregroundStyle(.red)
         }
         .padding(.trailing)
+    }
+}
+
+extension UserListView {
+    private enum TitleValue {
+        case header, user, inviteUser, edit, emial, invite
+    }
+    
+    private func localizedString(_ key: TitleValue) -> String {
+        switch key {
+            case .header: "Vista General"
+            case .user: "Usuarios agregados"
+            case .inviteUser: "Invitar usuarios"
+            case .edit: "Editar"
+            case .emial: "Dirección de correo:"
+            case .invite: "Invitar"
+        }
     }
 }
 

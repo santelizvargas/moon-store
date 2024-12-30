@@ -49,22 +49,18 @@ struct UserInviteView: View {
                 .bold()
             
             HStack {
-                VStack {
-                    TextField(Constants.placeholder,
-                              text: $emailValue)
-                        .textFieldStyle(.plain)
-                        .foregroundStyle(.black)
-                }
+                TextField(Constants.placeholder,
+                          text: $emailValue)
                 .frame(height: Constants.textFieldHeight)
+                .textFieldStyle(.plain)
+                .foregroundStyle(.black)
                 .background(.msWhite)
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
                 
-                Button {
+                Button(Constants.buttonTitle) {
                     isShowing.toggle()
-                } label: {
-                    Text(Constants.buttonTitle)
-                        .foregroundStyle(.msWhite)
                 }
+                .foregroundStyle(.msWhite)
                 .buttonStyle(.plain)
                 .frame(minWidth: Constants.buttonHeight)
                 .padding(.vertical, Constants.padding)
