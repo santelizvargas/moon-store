@@ -26,13 +26,4 @@ enum UserConstants {
         static let lineLimit: Int = 1
         static let evenNumber: Int = 2
     }
-    
-    enum Alert {
-        static let iconSize: CGFloat = 16
-        static let iconTitle: String = "xmark.circle.fill"
-        static let placeholder: String = "example@example.com"
-        static let height: CGFloat = 120
-        static let verticalpadding: CGFloat = 5
-        static let buttonHeight: CGFloat = 100
-    }
 }

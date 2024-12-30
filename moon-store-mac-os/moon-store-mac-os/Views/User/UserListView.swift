@@ -142,7 +142,7 @@ struct UserListView: View {
 
 extension UserListView {
     private enum TitleValue {
-        case header, user, inviteUser, edit, emial, invite
+        case header, user, inviteUser, edit
     }
     
     private func localizedString(_ key: TitleValue) -> String {
@@ -151,8 +151,6 @@ extension UserListView {
             case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
             case .edit: "Editar"
-            case .emial: "Dirección de correo:"
-            case .invite: "Invitar"
         }
     }
 }

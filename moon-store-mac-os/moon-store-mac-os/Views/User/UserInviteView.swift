@@ -9,8 +9,6 @@ import SwiftUI
 
 private enum Constants {
     static let iconSize: CGFloat = 16
-    static let title: String = "Dirección de correo:"
-    static let buttonTitle: String = "Invitar"
     static let iconTitle: String = "xmark.circle.fill"
     static let placeholder: String = "example@example.com"
     static let height: CGFloat = 120
@@ -43,7 +41,7 @@ struct UserInviteView: View {
             .buttonStyle(.plain)
             .padding(.vertical, Constants.verticalpadding)
             
-            Text(Constants.title)
+            Text(localizedString(.emial))
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
                 .bold()
@@ -57,7 +55,7 @@ struct UserInviteView: View {
                 .background(.msWhite)
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
                 
-                Button(Constants.buttonTitle) {
+                Button(localizedString(.invite)) {
                     isShowing.toggle()
                 }
                 .foregroundStyle(.msWhite)
@@ -73,5 +71,18 @@ struct UserInviteView: View {
                alignment: .top)
         .padding(.horizontal)
         .background(.msLightGray)
+    }
+}
+
+extension UserInviteView {
+    private enum TitleValue {
+        case emial, invite
+    }
+    
+    private func localizedString(_ key: TitleValue) -> String {
+        switch key {
+            case .emial: "Dirección de correo:"
+            case .invite: "Invitar"
+        }
     }
 }
