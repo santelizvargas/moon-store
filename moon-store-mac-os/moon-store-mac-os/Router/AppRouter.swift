@@ -9,14 +9,15 @@ import SwiftUI
 
 final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
-    private let authRepository: AuthenticationRepository = .init()
     
     lazy var associatedView: some View = {
-        guard let userLogged = authRepository.loggedUser else {
+        guard let userLogged = loginViewModel.loggedUser else {
             return build(for: .login)
         }
         return build(for: .main(userLogged))
     }()
+    
+    private let loginViewModel: LoginViewModel = .init()
     
     func push(_ path: AppTransition) {
         navigationPath.append(path)

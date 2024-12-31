@@ -20,4 +20,17 @@ final class AlertPresenter {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
+    
+    static func showAlert(with error: Error) {
+        var friendlyMessage: String {
+            guard let msError = error as? MSError else {
+                return "Algo salió mal. Por favor, intenta más tarde."
+            }
+            
+            return msError.friendlyMessage
+        }
+        
+        debugPrint("An Error occurred: \(error.localizedDescription)")
+        AlertPresenter.showAlert(type: .error, alertMessage: friendlyMessage)
+    }
 }

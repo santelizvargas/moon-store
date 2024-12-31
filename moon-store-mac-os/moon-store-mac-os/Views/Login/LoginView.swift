@@ -10,7 +10,6 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject private var router: AppRouter
     @ObservedObject private var viewModel: LoginViewModel = .init()
-    private let authRepository: AuthenticationRepository = .init()
     
     var body: some View {
         VStack {
@@ -81,7 +80,7 @@ struct LoginView: View {
                 viewModel.login()
             }
             .onReceive(viewModel.$loginSuccess) { success in
-                if success, let user = authRepository.loggedUser {
+                if success, let user = viewModel.loggedUser {
                     router.push(.main(user))
                 }
             }

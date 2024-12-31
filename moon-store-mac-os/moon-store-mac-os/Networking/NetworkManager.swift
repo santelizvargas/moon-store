@@ -1,5 +1,5 @@
 //
-//  BaseNetworkService.swift
+//  NetworkManager.swift
 //  moon-store-mac-os
 //
 //  Created by Jose Luna on 12/3/24.
@@ -16,8 +16,7 @@ private enum Constants {
     static let putHttpMethod: String = "PUT"
 }
 
-class BaseNetworkService {
-    
+final class NetworkManager {
     private var components: URLComponents = {
         var components = URLComponents()
         components.scheme = Constants.scheme
@@ -33,8 +32,8 @@ class BaseNetworkService {
     
     // MARK: - HTTP GET
     
-    func getData(for path: String) async throws -> Data {
-        components.path = path
+    func getData(for endpoint: MSEndpoint) async throws -> Data {
+        components.path = endpoint.path
         
         guard let url = components.url else {
             throw MSError.badURL
@@ -48,9 +47,9 @@ class BaseNetworkService {
     
     // MARK: - HTTP POST
     
-    func postData(for path: String,
+    func postData(for endpoint: MSEndpoint,
                   with parameters: [String: Any]) async throws -> Data {
-        components.path = path
+        components.path = endpoint.path
         
         guard let url = components.url else {
             throw MSError.badURL
@@ -72,10 +71,10 @@ class BaseNetworkService {
     
     // MARK: - HTTP POST Multipart
     
-    func postMultipartData(for path: String,
+    func postMultipartData(for endpoint: MSEndpoint,
                            with parameters: [String: Any],
                            dataSet: [Data]) async throws -> Data {
-        components.path = path
+        components.path = endpoint.path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -113,9 +112,9 @@ class BaseNetworkService {
     
     // MARK: - HTTP DELETE
     
-    func deleteData(for path: String,
+    func deleteData(for endpoint: MSEndpoint,
                     with parameters: [String: Any]) async throws -> Data {
-        components.path = path
+        components.path = endpoint.path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -130,9 +129,9 @@ class BaseNetworkService {
     
     // MARK: - HTTP UPDATE
     
-    func putData(for path: String,
+    func putData(for endpoint: MSEndpoint,
                  with parameters: [String: Any]) async throws -> Data {
-        components.path = path
+        components.path = endpoint.path
         components.queryItems = makeQueryItems(parameters: parameters)
         
         guard let url = components.url else {
@@ -154,7 +153,7 @@ class BaseNetworkService {
             else { throw MSError.badHttpRequest }
             return data
         } catch {
-            throw error
+            throw MSError.networkConnection
         }
     }
 }
