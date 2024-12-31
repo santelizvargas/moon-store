@@ -53,7 +53,7 @@ final class LoginViewModel: ObservableObject {
             do {
                 let response = try await networkManager.postData(for: .login, with: parameters)
                 let loginResponse = try decoder.decode(LoginResponseModel.self, from: response)
-                try storeUser(loginResponse.data)
+                try storeUser(loginResponse.user)
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -67,17 +67,14 @@ final class LoginViewModel: ObservableObject {
         
         do {
             try userStore.removeAll()
-            try userStore.saveChanges()
         } catch {
             AlertPresenter.showAlert(with: error)
         }
     }
     
     private func storeUser(_ user: UserModel) throws {
-        userStore.save(model: user)
-        
         do {
-            try userStore.saveChanges()
+            try userStore.save(model: user)
         } catch {
             throw error
         }

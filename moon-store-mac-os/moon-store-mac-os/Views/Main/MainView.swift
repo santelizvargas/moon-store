@@ -11,6 +11,12 @@ struct MainView: View {
     @EnvironmentObject private var router: AppRouter
     @State private var screenSelection: Screen = .charts
     
+    private let user: UserModel
+    
+    init(user: UserModel) {
+        self.user = user
+    }
+    
     var body: some View {
         NavigationSplitView {
             Sidebar(screenSelection: $screenSelection)
@@ -18,10 +24,10 @@ struct MainView: View {
             detailContent
                 .screenSize()
                 .background(.msLightGray)
+                .navigationTitle(user.firstName)
         }
         .toolbarBackground(.hidden)
         .navigationBarBackButtonHidden()
-        .toolbar(removing: .title)
     }
     
     @ViewBuilder

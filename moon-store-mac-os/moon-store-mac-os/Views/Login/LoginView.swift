@@ -47,7 +47,7 @@ struct LoginView: View {
         .background(.msLightGray)
         .overlay {
             if viewModel.isLoading {
-                ProgressView()
+                MSSpinner()
             }
         }
     }
@@ -80,7 +80,9 @@ struct LoginView: View {
                 viewModel.login()
             }
             .onReceive(viewModel.$loginSuccess) { success in
-                if success { router.push(.main) }
+                if success, let user = viewModel.loggedUser {
+                    router.push(.main(user))
+                }
             }
         }
     }
