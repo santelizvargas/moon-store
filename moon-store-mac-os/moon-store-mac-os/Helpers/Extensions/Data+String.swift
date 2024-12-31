@@ -9,8 +9,7 @@ import Foundation
 
 extension Data {
     mutating func appendStringIfNeeded(_ string: String) {
-        if let data = string.data(using: .utf8) {
-            append(data)
-        }
+        guard let data = string.data(using: .utf8) else { return }
+        append(data)
     }
 }

@@ -26,10 +26,7 @@ struct MSSpinner: View {
                 ),
                 lineWidth: Constants.strokeLineWidth
             )
-            .frame(
-                width: Constants.spinnerSize,
-                height: Constants.spinnerSize
-            )
+            .frame(square: Constants.spinnerSize)
             .rotationEffect(.degrees(rotation))
             .onAppear {
                 withAnimation(
