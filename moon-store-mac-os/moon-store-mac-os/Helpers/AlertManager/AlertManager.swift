@@ -11,7 +11,7 @@ final class AlertPresenter {
     
     private init() { }
     
-    static func showAlert(type: AlertType, alertMessage: String) {
+    static func showAlert(type: AlertType = .info, alertMessage: String) {
         let alert = NSAlert()
         alert.messageText = type.title
         alert.informativeText = alertMessage
