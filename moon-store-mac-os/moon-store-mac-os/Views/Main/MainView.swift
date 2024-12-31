@@ -9,6 +9,7 @@ import SwiftUI
 
 private enum Constants {
     static let profileButtonSize: CGFloat = 25
+    static let profileIcon: String = "person.circle.fill"
 }
 
 struct MainView: View {
@@ -54,7 +55,7 @@ struct MainView: View {
                 alertMessage: "Profile feature is under development. Stay tuned for updates!"
             )
         } label: {
-            Image(systemName: "person.circle.fill")
+            Image(systemName: Constants.profileIcon)
                 .resizable()
                 .frame(square: Constants.profileButtonSize)
         }
