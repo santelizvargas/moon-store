@@ -45,11 +45,7 @@ struct LoginView: View {
         }
         .screenSize()
         .background(.msLightGray)
-        .overlay {
-            if viewModel.isLoading {
-                MSSpinner()
-            }
-        }
+        .showSpinner($viewModel.isLoading)
     }
     
     // MARK: - View Components

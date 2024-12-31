@@ -8,9 +8,7 @@
 import SwiftUI
 
 private enum Constants {
-    static let backgroundOpacity: CGFloat = 0.2
     static let strokeLineWidth: CGFloat = 10
-    static let colors: [Color] = [.clear, .msPrimary]
     static let spinnerSize: CGFloat = 50
     static let animationDuration: CGFloat = 1
     static let rotationDegrees: CGFloat = 360
@@ -22,22 +20,21 @@ struct MSSpinner: View {
     var body: some View {
         Circle()
             .stroke(
-                AngularGradient(gradient: Gradient(colors: Constants.colors),
-                                center: .center),
-                style: StrokeStyle(lineWidth: Constants.strokeLineWidth)
+                AngularGradient(
+                    colors: [.clear, .msPrimary],
+                    center: .center
+                ),
+                lineWidth: Constants.strokeLineWidth
             )
-            .frame(width: Constants.spinnerSize,
-                   height: Constants.spinnerSize)
+            .frame(square: Constants.spinnerSize)
             .rotationEffect(.degrees(rotation))
             .onAppear {
                 withAnimation(
                     .linear(duration: Constants.animationDuration)
                     .repeatForever(autoreverses: false)
-                ) { rotation = Constants.rotationDegrees }
+                ) {
+                    rotation = Constants.rotationDegrees
+                }
             }
     }
-}
-
-#Preview {
-    MSSpinner()
 }
