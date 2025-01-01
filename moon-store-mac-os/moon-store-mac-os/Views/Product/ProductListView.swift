@@ -107,8 +107,6 @@ struct ProductListView: View {
         .overlay {
             RoundedRectangle(cornerRadius: Constants.cornerRadius)
                 .stroke(.msGray)
-
-            if viewModel.isLoading { ProgressView() }
             
             if viewModel.shouldShowEmptyView {
                 MSEmptyListView {
@@ -117,6 +115,7 @@ struct ProductListView: View {
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+        .showSpinner($viewModel.isLoading)
     }
 
     // MARK: - Header Table View
