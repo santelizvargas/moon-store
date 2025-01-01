@@ -11,10 +11,10 @@ final class AlertPresenter {
     
     private init() { }
     
-    static func showAlert(type: AlertType = .info, alertMessage: String) {
+    static func showAlert(_ message: String, type: AlertType = .info) {
         let alert = NSAlert()
         alert.messageText = type.title
-        alert.informativeText = alertMessage
+        alert.informativeText = message
         
         alert.icon = NSImage(named: type.icon)
         alert.addButton(withTitle: "OK")
@@ -26,11 +26,10 @@ final class AlertPresenter {
             guard let msError = error as? MSError else {
                 return "Algo salió mal. Por favor, intenta más tarde."
             }
-            
             return msError.friendlyMessage
         }
         
         debugPrint("An Error occurred: \(error.localizedDescription)")
-        AlertPresenter.showAlert(type: .error, alertMessage: friendlyMessage)
+        showAlert(friendlyMessage, type: .error)
     }
 }

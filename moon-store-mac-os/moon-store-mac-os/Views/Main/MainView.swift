@@ -51,9 +51,7 @@ struct MainView: View {
     private var profileButton: some View {
         Button {
             // TODO: - Navigate to the profile screen and remove placeholder alert
-            AlertPresenter.showAlert(
-                alertMessage: "Profile feature is under development. Stay tuned for updates!"
-            )
+            AlertPresenter.showAlert("Profile feature is under development. Stay tuned for updates!")
         } label: {
             Image(systemName: Constants.profileIcon)
                 .resizable()
