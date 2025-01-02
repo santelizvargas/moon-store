@@ -12,7 +12,7 @@ private enum Constants {
     static let iconTitle: String = "xmark.circle.fill"
     static let placeholder: String = "example@example.com"
     static let height: CGFloat = 120
-    static let verticalpadding: CGFloat = 5
+    static let verticalPadding: CGFloat = 5
     static let buttonHeight: CGFloat = 100
     static let cornerRadius: CGFloat = 10
     static let padding: CGFloat = 10
@@ -34,16 +34,14 @@ struct UserInviteView: View {
             } label: {
                 Image(systemName: Constants.iconTitle)
                     .resizable()
-                    .frame(width: Constants.iconSize,
-                           height: Constants.iconSize)
+                    .frame(square: Constants.iconSize)
                     .foregroundStyle(.red)
             }
             .buttonStyle(.plain)
-            .padding(.vertical, Constants.verticalpadding)
+            .padding(.vertical, Constants.verticalPadding)
             
             Text(localizedString(.emial))
-                .frame(maxWidth: .infinity,
-                       alignment: .leading)
+                .leadingInfinity()
                 .bold()
             
             HStack {
@@ -52,8 +50,7 @@ struct UserInviteView: View {
                 .frame(height: Constants.textFieldHeight)
                 .textFieldStyle(.plain)
                 .foregroundStyle(.black)
-                .background(.msWhite)
-                .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+                .background(.msWhite, in: .rect(cornerRadius: Constants.cornerRadius))
                 
                 Button(localizedString(.invite)) {
                     isShowing.toggle()

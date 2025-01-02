@@ -14,7 +14,7 @@ struct UserListView: View {
         VStack {
             HStack {
                 Text(localizedString(.user))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .leadingInfinity()
                     .font(.title3)
                     .bold()
                 
@@ -89,20 +89,17 @@ struct UserListView: View {
         GridRow {
             Image(systemName: UserConstants.personIcon)
                 .resizable()
-                .frame(width: UserConstants.iconSize,
-                       height: UserConstants.iconSize)
+                .frame(square: UserConstants.iconSize)
             
             Text("\(user.firstName) \(user.lastName)")
-                .frame(maxWidth: .infinity,
-                       alignment: .leading)
+                .leadingInfinity()
                 .foregroundStyle(.msBlack)
                 .lineLimit(UserConstants.UserRow.lineLimit)
             
             Group {
                 Text(user.email)
                     .lineLimit(UserConstants.UserRow.lineLimit)
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
+                    .leadingInfinity()
                 
                 Text(user.roles.first?.name ?? "")
                 
@@ -127,8 +124,7 @@ struct UserListView: View {
             
             Image(systemName: UserConstants.UserRow.trashIcon)
                 .resizable()
-                .frame(width: UserConstants.UserRow.iconSize,
-                       height: UserConstants.UserRow.iconSize)
+                .frame(square: UserConstants.UserRow.iconSize)
                 .foregroundStyle(.red)
         }
         .padding(.trailing)
