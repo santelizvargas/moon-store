@@ -11,31 +11,36 @@ final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
     
     lazy var associatedView: some View = {
-        let route: AppTransition = authenticationRepository.isLoggedUser
-        ? .main
-        : .login
-        return build(for: route)
+        guard let userLogged = loginViewModel.loggedUser else {
+            return build(for: .login)
+        }
+        return build(for: .main(userLogged))
     }()
     
-    private let authenticationRepository: AuthenticationRepository = .init()
+    private let loginViewModel: LoginViewModel = .init()
     
     func push(_ path: AppTransition) {
         navigationPath.append(path)
     }
     
     func pop() {
+        guard !navigationPath.isEmpty else { return }
+        navigationPath.removeLast()
+    }
+    
+    func popToRoot() {
         guard !navigationPath.isEmpty else {
             push(.login)
             return
         }
-        navigationPath.removeLast()
+        navigationPath.removeLast(navigationPath.count)
     }
     
     @ViewBuilder
     func build(for route: AppTransition) -> some View {
         switch route {
             case .login: LoginView()
-            case .main: MainView()
+            case .main(let user): MainView(user: user)
         }
     }
 }

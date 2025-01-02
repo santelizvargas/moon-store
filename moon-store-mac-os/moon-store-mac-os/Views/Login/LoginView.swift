@@ -45,11 +45,7 @@ struct LoginView: View {
         }
         .screenSize()
         .background(.msLightGray)
-        .overlay {
-            if viewModel.isLoading {
-                ProgressView()
-            }
-        }
+        .showSpinner($viewModel.isLoading)
     }
     
     // MARK: - View Components
@@ -80,7 +76,9 @@ struct LoginView: View {
                 viewModel.login()
             }
             .onReceive(viewModel.$loginSuccess) { success in
-                if success { router.push(.main) }
+                if success, let user = viewModel.loggedUser {
+                    router.push(.main(user))
+                }
             }
         }
     }

@@ -39,7 +39,7 @@ enum MSError: Error {
         }
     }
     
-    var debugDescription: String {
+    var localizedDescription: String {
         switch self {
         case .badURL: "Invalid URL format"
         case .badHttpRequest: "HTTP request failed due to malformed request"

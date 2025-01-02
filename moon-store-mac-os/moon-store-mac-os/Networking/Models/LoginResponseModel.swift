@@ -10,5 +10,11 @@ import Foundation
 struct LoginResponseModel: Decodable {
     let accessToken: String
     let expiresIn: Int
-    let data: UserModel
+    let user: UserModel
+    
+    enum CodingKeys: String, CodingKey {
+        case accessToken
+        case expiresIn
+        case user = "data"
+    }
 }

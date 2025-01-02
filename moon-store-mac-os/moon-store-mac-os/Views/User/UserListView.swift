@@ -12,11 +12,6 @@ struct UserListView: View {
     
     var body: some View {
         VStack {
-            HeaderView(
-                title: localizedString(.header),
-                icon: UserConstants.personIcon
-            )
-            
             HStack {
                 Text(localizedString(.user))
                     .frame(maxWidth: .infinity, alignment: .leading)

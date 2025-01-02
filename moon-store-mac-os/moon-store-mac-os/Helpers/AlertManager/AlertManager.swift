@@ -7,15 +7,11 @@
 
 import AppKit
 
-final class AlertPresenter: ObservableObject {
-    @Published var isPresented: Bool = false
+final class AlertPresenter {
     
-    func showAlert(type: AlertType, alertMessage: String) {
-        isPresented = true
-        alertConstruction(type: type, message: alertMessage)
-    }
+    private init() { }
     
-    private func alertConstruction(type: AlertType, message: String) {
+    static func showAlert(_ message: String, type: AlertType = .info) {
         let alert = NSAlert()
         alert.messageText = type.title
         alert.informativeText = message
@@ -23,7 +19,17 @@ final class AlertPresenter: ObservableObject {
         alert.icon = NSImage(named: type.icon)
         alert.addButton(withTitle: "OK")
         alert.runModal()
+    }
+    
+    static func showAlert(with error: Error) {
+        var friendlyMessage: String {
+            guard let msError = error as? MSError else {
+                return "Algo salió mal. Por favor, intenta más tarde."
+            }
+            return msError.friendlyMessage
+        }
         
-        isPresented = false
+        debugPrint("An Error occurred: \(error.localizedDescription)")
+        showAlert(friendlyMessage, type: .error)
     }
 }

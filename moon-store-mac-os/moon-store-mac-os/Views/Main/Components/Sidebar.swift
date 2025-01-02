@@ -10,7 +10,7 @@ import SwiftUI
 struct Sidebar: View {
     @EnvironmentObject private var router: AppRouter
     @Binding private var screenSelection: Screen
-    private let authManager: AuthenticationManager = .init()
+    private let loginViewModel: LoginViewModel = .init()
     
     init(screenSelection: Binding<Screen>) {
         _screenSelection = screenSelection
@@ -56,8 +56,8 @@ struct Sidebar: View {
     
     private var logoutButton: some View {
         Button {
-            authManager.logout()
-            router.pop()
+            loginViewModel.logout()
+            router.popToRoot()
         } label: {
             Label("Cerrar Sesión", systemImage: "person.badge.minus")
         }
