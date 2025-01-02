@@ -52,12 +52,9 @@ struct ProductListView: View {
 
     var body: some View {
         VStack {
-            headerView
-
             HStack {
                 SearchView(searchText: $viewModel.searchText)
-
-                Spacer()
+                    .leadingInfinity()
 
                 Button {
                     // TODO: Add action when available
@@ -78,22 +75,6 @@ struct ProductListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.horizontal)
         .background(.msLightGray)
-    }
-
-    // MARK: - Header View
-
-    private var headerView: some View {
-        HStack {
-            Text("Lista de Productos")
-                .font(.title)
-                .leadingInfinity()
-
-            Image(systemName: Constants.personIcon)
-                .resizable()
-                .frame(width: Constants.iconSize, height: Constants.iconSize)
-        }
-        .padding(.vertical)
-        .foregroundStyle(.black)
     }
 
     // MARK: - Table View
