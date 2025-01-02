@@ -7,23 +7,32 @@
 
 import SwiftUI
 
+enum ShapeType {
+    case circle
+    case rectangle
+}
+
 private enum Constants {
     static let placeholder: String = "questionmark.circle.dashed"
     static let imageSize: CGFloat = 50
     static let spinnerSize: CGFloat = imageSize * 0.5
+    static let shapeCornerRadius: CGFloat = 25
 }
 
 struct MSAsyncImage: View {
     private let url: String
     private let size: CGFloat
     private let placeholder: String
+    private let shape: ShapeType
     
     init(url: String,
          size: CGFloat = Constants.imageSize,
-         placeHolder: String = Constants.placeholder) {
+         placeHolder: String = Constants.placeholder,
+         shape: ShapeType = .circle) {
         self.url = url
         self.size = size
         self.placeholder = placeHolder
+        self.shape = shape
     }
     
     var body: some View {
@@ -37,8 +46,15 @@ struct MSAsyncImage: View {
                 MSSpinner(spinnerSize: Constants.spinnerSize)
             }
         }
-        .clipShape(Circle())
         .frame(square: size)
+        .background(.clear, in: .rect(cornerRadius: cornerSize))
+    }
+    
+    private var cornerSize: CGFloat {
+        switch shape {
+            case .circle: size
+            case .rectangle: Constants.shapeCornerRadius
+        }
     }
 }
 
