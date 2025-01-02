@@ -15,8 +15,9 @@ enum ShapeType {
 private enum Constants {
     static let placeholder: String = "questionmark.circle.dashed"
     static let imageSize: CGFloat = 50
-    static let spinnerSize: CGFloat = imageSize * 0.5
-    static let shapeCornerRadius: CGFloat = 25
+    static let spinnerSize: CGFloat = imageSize * 0.8
+    static let shapeCornerRadius: CGFloat = 6
+    static let animationDuration: CGFloat = 2
 }
 
 struct MSAsyncImage: View {
@@ -36,18 +37,15 @@ struct MSAsyncImage: View {
     }
     
     var body: some View {
-        AsyncImage(url: URL(string: url)) { phase in
-            if let image = phase.image {
-                image.resizable()
-            } else if phase.error != nil {
-                Image(systemName: placeholder)
-                    .resizable()
-            } else {
-                MSSpinner(spinnerSize: Constants.spinnerSize)
-            }
+        AsyncImage(url: URL(string: url)) { image in
+            image
+                .resizable()
+        } placeholder: {
+            Image(systemName: Constants.placeholder)
+                .resizable()
         }
         .frame(square: size)
-        .background(.clear, in: .rect(cornerRadius: cornerSize))
+        .clipShape(RoundedRectangle(cornerRadius: cornerSize))
     }
     
     private var cornerSize: CGFloat {
