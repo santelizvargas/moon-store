@@ -25,6 +25,7 @@ struct MSAsyncImage: View {
     private let size: CGFloat
     private let placeholder: String
     private let shape: ShapeType
+    private let imageCache: MemoryCache<String, Image> = .init()
     
     init(url: String,
          size: CGFloat = Constants.imageSize,
@@ -38,8 +39,10 @@ struct MSAsyncImage: View {
     
     var body: some View {
         AsyncImage(url: URL(string: url)) { image in
-            image
-                .resizable()
+            if let cachedImage = saveImage(image) {
+                cachedImage
+                    .resizable()
+            }
         } placeholder: {
             Image(systemName: Constants.placeholder)
                 .resizable()
@@ -53,6 +56,11 @@ struct MSAsyncImage: View {
             case .circle: size
             case .rectangle: Constants.shapeCornerRadius
         }
+    }
+    
+    private func saveImage(_ image: Image) -> Image? {
+        imageCache[url] = image
+        return imageCache[url]
     }
 }
 
