@@ -76,7 +76,7 @@ struct ProductListView: View {
         .padding(.horizontal)
         .background(.msLightGray)
     }
-
+    
     // MARK: - Table View
 
     private var productTableView: some View {
