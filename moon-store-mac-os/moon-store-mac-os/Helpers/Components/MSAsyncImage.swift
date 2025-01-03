@@ -25,7 +25,7 @@ struct MSAsyncImage: View {
     private let size: CGFloat
     private let placeholder: String
     private let shape: ShapeType
-    private let imageCache: MemoryCache<String, Image> = .init()
+    private let imageCache: ImageCache = .shared
     
     init(url: String,
          size: CGFloat = Constants.imageSize,
@@ -38,17 +38,25 @@ struct MSAsyncImage: View {
     }
     
     var body: some View {
-        AsyncImage(url: URL(string: url)) { image in
-            let cachedImage = getCachedImageIfExist(image)
-            
+        asyncImage
+            .frame(square: size)
+            .clipShape(.rect(cornerRadius: cornerSize))
+    }
+    
+    @ViewBuilder
+    private var asyncImage: some View {
+        if let cachedImage = imageCache.getImage(from: url) {
             cachedImage
                 .resizable()
-        } placeholder: {
-            Image(systemName: Constants.placeholder)
-                .resizable()
+        } else {
+            AsyncImage(url: URL(string: url)) { image in
+                imageCache.addImage(image, with: url)
+                    .resizable()
+            } placeholder: {
+                Image(systemName: Constants.placeholder)
+                    .resizable()
+            }
         }
-        .frame(square: size)
-        .clipShape(RoundedRectangle(cornerRadius: cornerSize))
     }
     
     private var cornerSize: CGFloat {
@@ -56,14 +64,6 @@ struct MSAsyncImage: View {
             case .circle: size
             case .rectangle: Constants.shapeCornerRadius
         }
-    }
-    
-    private func getCachedImageIfExist(_ image: Image) -> Image {
-        guard let cachedImage = imageCache[url] else {
-            imageCache[url] = image
-            return image
-        }
-        return cachedImage
     }
 }
 

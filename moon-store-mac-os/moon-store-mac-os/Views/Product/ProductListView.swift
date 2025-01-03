@@ -142,7 +142,7 @@ struct ProductListView: View {
 
     private func productRowView(_ product: ProductModel) -> some View {
         GridRow {
-            MSAsyncImage(url: product.images.first ?? "",
+            MSAsyncImage(url: product.images.first ?? "https://plus.unsplash.com/premium_photo-1673967831980-1d377baaded2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2F0c3xlbnwwfHwwfHx8MA%3D%3D",
                          size: Constants.iconSize)
 
             Text(product.name)
