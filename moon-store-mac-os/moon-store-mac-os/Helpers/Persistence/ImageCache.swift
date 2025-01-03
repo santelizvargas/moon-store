@@ -5,11 +5,11 @@
 //  Created by Jose Luna on 1/2/25.
 //
 
-
 import SwiftUI
 
 final class ImageCache {
     static let shared: ImageCache = .init()
+    
     private let imageCache = MemoryCache<String, Image>()
     
     private init() { }
@@ -23,4 +23,5 @@ final class ImageCache {
     func getImage(from url: String) -> Image? {
         imageCache[url]
     }
+    
 }
