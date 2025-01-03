@@ -58,9 +58,9 @@ final class AddProductViewModel: ObservableObject {
                                                     stock: stock,
                                                     category: category.id,
                                                     imageDataSet: [imageData])
-                AlertPresenter.showAlert("Producto creado exitosamente!", type: .info)
-                resetProductProperties()
+                AlertPresenter.showAlert("Producto creado exitosamente!")
                 wasCreatedSuccessfully = true
+                resetProductProperties()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
