@@ -20,6 +20,7 @@ enum MSError: Error {
     case notDeleted
     case badData
     case badKey
+    case duplicateKey
     
     // Authentication
     case badCredentials
@@ -35,6 +36,7 @@ enum MSError: Error {
         case .networkConnection: "Por favor, verifica tu conexión a internet e inténtalo de nuevo."
         case .badCredentials, .userNotFound:
                 "Las credenciales son incorrectas. Por favor, inténtalo de nuevo."
+        case .duplicateKey: "El nombre ya existe, por favor ingrese uno diferente."
         default: "Algo salió mal. Por favor, intenta más tarde."
         }
     }
@@ -53,6 +55,7 @@ enum MSError: Error {
         case .userNotFound: "User not found in the database"
         case .encodingError: "Encoding error occurred"
         case .decodingError: "Decoding error occurred"
+        case .duplicateKey: "Duplicate key"
         }
     }
 }
