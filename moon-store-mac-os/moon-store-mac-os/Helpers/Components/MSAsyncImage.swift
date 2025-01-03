@@ -39,10 +39,10 @@ struct MSAsyncImage: View {
     
     var body: some View {
         AsyncImage(url: URL(string: url)) { image in
-            if let cachedImage = saveImage(image) {
-                cachedImage
-                    .resizable()
-            }
+            let cachedImage = getCachedImageIfExist(image)
+            
+            cachedImage
+                .resizable()
         } placeholder: {
             Image(systemName: Constants.placeholder)
                 .resizable()
@@ -58,9 +58,12 @@ struct MSAsyncImage: View {
         }
     }
     
-    private func saveImage(_ image: Image) -> Image? {
-        imageCache[url] = image
-        return imageCache[url]
+    private func getCachedImageIfExist(_ image: Image) -> Image {
+        guard let cachedImage = imageCache[url] else {
+            imageCache[url] = image
+            return image
+        }
+        return cachedImage
     }
 }
 
