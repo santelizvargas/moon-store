@@ -32,8 +32,8 @@ struct AddProductView: View {
             }
             .padding(.vertical)
             
-            PrimaryButton("Crear producto") {
-                viewModel.createProduct()
+            PrimaryButton("Agregar producto") {
+                viewModel.addProduct()
             }
             .frame(width: Constants.createButtonWidth)
         }

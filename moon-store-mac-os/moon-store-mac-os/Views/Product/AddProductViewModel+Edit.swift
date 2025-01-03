@@ -36,7 +36,7 @@ final class AddProductViewModel: ObservableObject {
     
     private let productManager: ProductManager = .init()
     
-    func createProduct() {
+    func addProduct() {
         guard canCreateProduct,
               let price = Double(price),
               let stock = Int(stock),
@@ -51,13 +51,13 @@ final class AddProductViewModel: ObservableObject {
             }
             
             do {
-                try await productManager.createProduct(name: name,
-                                                       description: description,
-                                                       salePrice: price,
-                                                       purchasePrice: price,
-                                                       stock: stock,
-                                                       category: category.id,
-                                                       imageDataSet: [imageData])
+                try await productManager.addProduct(name: name,
+                                                    description: description,
+                                                    salePrice: price,
+                                                    purchasePrice: price,
+                                                    stock: stock,
+                                                    category: category.id,
+                                                    imageDataSet: [imageData])
                 AlertPresenter.showAlert("Producto creado exitosamente!", type: .info)
                 resetProductProperties()
                 wasCreatedSuccessfully = true

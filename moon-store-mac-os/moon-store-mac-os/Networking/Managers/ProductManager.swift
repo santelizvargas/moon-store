@@ -12,13 +12,13 @@ final class ProductManager {
     
     // MARK: - Create product
     
-    func createProduct(name: String,
-                       description: String,
-                       salePrice: Double,
-                       purchasePrice: Double,
-                       stock: Int,
-                       category: String,
-                       imageDataSet: [Data]) async throws {
+    func addProduct(name: String,
+                    description: String,
+                    salePrice: Double,
+                    purchasePrice: Double,
+                    stock: Int,
+                    category: String,
+                    imageDataSet: [Data]) async throws {
         let parameters: [String: Any] = [
             "name": name,
             "description": description,
