@@ -17,6 +17,12 @@ private enum Constants {
 struct MSSpinner: View {
     @State private var rotation: Double = .zero
     
+    private let spinnerSize: CGFloat
+    
+    init(spinnerSize: CGFloat = Constants.spinnerSize) {
+        self.spinnerSize = spinnerSize
+    }
+    
     var body: some View {
         Circle()
             .stroke(
@@ -26,7 +32,7 @@ struct MSSpinner: View {
                 ),
                 lineWidth: Constants.strokeLineWidth
             )
-            .frame(square: Constants.spinnerSize)
+            .frame(square: spinnerSize)
             .rotationEffect(.degrees(rotation))
             .onAppear {
                 withAnimation(

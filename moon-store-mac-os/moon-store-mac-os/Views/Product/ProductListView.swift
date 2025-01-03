@@ -88,8 +88,6 @@ struct ProductListView: View {
         .overlay {
             RoundedRectangle(cornerRadius: Constants.cornerRadius)
                 .stroke(.msGray)
-
-            if viewModel.isLoading { ProgressView() }
             
             if viewModel.shouldShowEmptyView {
                 MSEmptyListView {
@@ -98,6 +96,7 @@ struct ProductListView: View {
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+        .showSpinner($viewModel.isLoading)
     }
 
     // MARK: - Header Table View
@@ -143,13 +142,8 @@ struct ProductListView: View {
 
     private func productRowView(_ product: ProductModel) -> some View {
         GridRow {
-            Image(systemName: Constants.personIcon)
-                .resizable()
-                .frame(
-                    width: Constants.iconSize,
-                    height: Constants.iconSize
-                )
-                .padding(.horizontal)
+            MSAsyncImage(url: product.images.first ?? "https://plus.unsplash.com/premium_photo-1673967831980-1d377baaded2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2F0c3xlbnwwfHwwfHx8MA%3D%3D",
+                         size: Constants.iconSize)
 
             Text(product.name)
                 .leadingInfinity()
