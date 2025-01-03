@@ -6,22 +6,20 @@
 //
 
 import Foundation
-import _PhotosUI_SwiftUI
+import PhotosUI
 import SwiftUI
 
 final class MSImagePickerViewModel: ObservableObject {
     @Published var selectedItem: PhotosPickerItem?
-    @Published var selectedImage: Image?
     
-    func loadImage() {
-        guard let selectedItem else { return }
+    func loadImage() async -> Image? {
+        guard let selectedItem else { return nil }
         
-        Task { @MainActor in
-            do {
-                selectedImage = try await loadAsyncImage(from: selectedItem)
-            } catch {
-                AlertPresenter.showAlert(with: error)
-            }
+        do {
+            return try await loadAsyncImage(from: selectedItem)
+        } catch {
+            AlertPresenter.showAlert(with: error)
+            return nil
         }
     }
     

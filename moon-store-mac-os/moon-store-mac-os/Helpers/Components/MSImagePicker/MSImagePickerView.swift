@@ -32,12 +32,14 @@ struct MSImagePickerView: View {
             )
             .buttonStyle(.borderedProminent)
             .foregroundStyle(.msPrimary)
-            .onChange(of: viewModel.selectedItem) {
-                handleImageSelection()
+            .task(id: viewModel.selectedItem) {
+                guard let image = await viewModel.loadImage() else { return }
+                selectedImage = image
             }
             
             loadedImage
                 .frame(maxSquare: Constants.imageSize)
+                .foregroundStyle(.msPrimary)
         }
     }
     
@@ -45,7 +47,7 @@ struct MSImagePickerView: View {
     private var loadedImage: some View {
         let rectangleBackground = RoundedRectangle(cornerRadius: Constants.cornerRadius)
         
-        if let image = viewModel.selectedImage {
+        if let image = selectedImage {
             image
                 .resizable()
                 .scaledToFit()
@@ -54,10 +56,5 @@ struct MSImagePickerView: View {
             rectangleBackground
                 .stroke(lineWidth: Constants.strokeLineWidth)
         }
-    }
-    
-    private func handleImageSelection() {
-        viewModel.loadImage()
-        selectedImage = viewModel.selectedImage
     }
 }

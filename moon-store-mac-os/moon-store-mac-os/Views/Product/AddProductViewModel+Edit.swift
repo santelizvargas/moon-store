@@ -16,18 +16,20 @@ final class AddProductViewModel: ObservableObject {
     @Published var stock: String = ""
     @Published var description: String = ""
     @Published var category: ProductCategory = .laptop
+    @Published var wasCreatedSuccessfully: Bool = false
     
     @Published var imageSelected: Image? {
         didSet {
+            guard imageSelected != nil else { return }
             loadImageData()
         }
     }
     
     var canCreateProduct: Bool {
-        name.isEmpty ||
-        price.isEmpty ||
-        description.isEmpty ||
-        stock.isEmpty
+        name.isNotEmpty &&
+        price.isNotEmpty &&
+        description.isNotEmpty &&
+        stock.isNotEmpty
     }
     
     private var imageData: Data?
@@ -42,7 +44,7 @@ final class AddProductViewModel: ObservableObject {
         
         isLoading = true
         
-        Task { @MainActor in
+        Task {
             
             defer {
                 isLoading = false
@@ -58,6 +60,7 @@ final class AddProductViewModel: ObservableObject {
                                                        imageDataSet: [imageData])
                 AlertPresenter.showAlert("Producto creado exitosamente!", type: .info)
                 resetProductProperties()
+                wasCreatedSuccessfully = true
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -69,25 +72,29 @@ final class AddProductViewModel: ObservableObject {
         price = ""
         stock = ""
         description = ""
+        imageSelected = nil
+        imageData = nil
     }
     
     private func loadImageData() {
         let imageRendered = ImageRenderer(content: imageSelected)
         
-        if let cgImage = imageRendered.cgImage {
-            let data = NSMutableData()
-            guard let imageDestination = CGImageDestinationCreateWithData(data as CFMutableData,
-                                                                          UTType.jpeg.identifier as CFString,
-                                                                          1,
-                                                                          nil)
-            else { return }
-            
-            CGImageDestinationAddImage(imageDestination, cgImage, nil)
-            
-            if CGImageDestinationFinalize(imageDestination) {
-                imageData = data as Data
-            }
-        }
+        guard let cgImage = imageRendered.cgImage else { return }
+        
+        let data = NSMutableData()
+        
+        guard let imageDestination = CGImageDestinationCreateWithData(
+            data as CFMutableData,
+            UTType.jpeg.identifier as CFString,
+            1,
+            nil
+        ) else { return }
+        
+        CGImageDestinationAddImage(imageDestination, cgImage, nil)
+        
+        guard CGImageDestinationFinalize(imageDestination) else { return }
+        
+        imageData = data as Data
     }
     
 }

@@ -9,54 +9,58 @@ import SwiftUI
 import PhotosUI
 
 private enum Constants {
-    static let buttonHeight: CGFloat = 40
-    static let horizontalSpacing: CGFloat = 20
-    static let hasBorder: Bool = true
-    static let minHeight: CGFloat = 30
     static let cornerRadiusSize: CGFloat = 4
-    static let photoMaxHeight: CGFloat = 200
-    static let detailButtonHeight: CGFloat = 70
-    static let strokLengths: CGFloat = 10
-    static let spaceSize: CGFloat = 10
-    static let minOpacity: CGFloat = 0.6
-    static let maxOpacity: CGFloat = 1
-    static let loadingImage: String = "square.and.arrow.down"
-    static let saveProductImage: String = "square.and.arrow.down.on.square.fill"
-    static let productTextFieldMaxHeight: CGFloat = 35
+    static let createButtonWidth: CGFloat = 200
+    static let crossIcon: String = "xmark"
+    static let modalMinHeight: CGFloat = 450
+    static let modalMinWidth: CGFloat = 650
 }
 
 struct AddProductView: View {
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject private var viewModel = AddProductViewModel()
     
     var body: some View {
-        HStack {
-            MSImagePickerView(selectedImage: $viewModel.imageSelected)
+        VStack {
             
-            productInformationView
+            modalHeader
+            
+            HStack {
+                MSImagePickerView(selectedImage: $viewModel.imageSelected)
+                
+                productInformationView
+            }
+            .padding(.vertical)
+            
+            PrimaryButton("Crear producto") {
+                viewModel.createProduct()
+            }
+            .frame(width: Constants.createButtonWidth)
         }
-        .foregroundStyle(.msPrimary)
         .padding()
-        .screenSize()
+        .frame(minWidth: Constants.modalMinWidth,
+               minHeight: Constants.modalMinHeight,
+               alignment: .top)
         .background(.msWhite)
         .showSpinner($viewModel.isLoading)
-        .overlay(alignment: .top) {
-            HStack {
-                Text("Agregando producto")
-                    .font(.headline)
-                
-                Spacer()
-                
-                Button("Agregar producto") {
-                    viewModel.createProduct()
-                }
-                .disabled(viewModel.canCreateProduct)
-                .opacity(viewModel.canCreateProduct
-                         ? Constants.minOpacity
-                         : Constants.maxOpacity)
+        .onReceive(viewModel.$wasCreatedSuccessfully) { success in
+            guard success else { return }
+            dismiss()
+        }
+    }
+    
+    private var modalHeader: some View {
+        HStack {
+            Text("Agregando producto")
+                .font(.headline)
+            
+            Spacer()
+            
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: Constants.crossIcon)
             }
-            .leadingInfinity()
-            .padding()
-            .foregroundStyle(.msPrimary)
         }
     }
     
@@ -85,20 +89,17 @@ struct AddProductView: View {
         }
     }
     
-    // MARK: - Category Button
+    // MARK: - Category Menu
     
     private var categoryButton: some View {
-        Menu {
+        Menu(viewModel.category.title) {
             ForEach(ProductCategory.allCases) { category in
                 Button(category.title) {
                     viewModel.category = category
                 }
             }
-        } label: {
-            Text(viewModel.category.title)
-                .leadingInfinity()
-                .foregroundStyle(.msPrimary)
         }
+        .foregroundStyle(.msPrimary)
         .overlay {
             RoundedRectangle(cornerRadius: Constants.cornerRadiusSize)
                 .stroke(.msGray)
