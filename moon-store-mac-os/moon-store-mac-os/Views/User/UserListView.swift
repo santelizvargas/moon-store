@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserListView: View {
+    @ObservedObject private var viewModel: UserListViewModel = .init()
     @State private var showModal: Bool = false
     
     var body: some View {
@@ -46,7 +47,7 @@ struct UserListView: View {
             
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(Array(UserModel.userMockData.enumerated()), id: \.element.id) { index, user in
+                    ForEach(Array(viewModel.userList.enumerated()), id: \.element.id) { index, user in
                         HStack(spacing: UserConstants.UserRow.hStackSpacing) {
                             userRowView(user: user)
                             .padding(.vertical)
@@ -61,8 +62,15 @@ struct UserListView: View {
         .overlay {
             RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
                 .stroke(.msGray)
+            
+            if viewModel.showEmptyView {
+                MSEmptyListView {
+                    viewModel.getUsers()
+                }
+            }
         }
         .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
+        .showSpinner($viewModel.isLoading)
     }
     
     // MARK: - Header Table View
@@ -103,7 +111,7 @@ struct UserListView: View {
                 
                 Text(user.roles.first?.name ?? "")
                 
-                Text(user.createdAt)
+                Text(user.createdAt.formattedDate)
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
