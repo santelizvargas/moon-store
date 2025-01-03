@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserListView: View {
-    @ObservedObject private var viewModel: UserListViewModel = .init()
+    @StateObject private var viewModel: UserListViewModel = .init()
     @State private var showModal: Bool = false
     
     var body: some View {
@@ -111,7 +111,7 @@ struct UserListView: View {
                 
                 Text(user.roles.first?.name ?? "")
                 
-                Text(user.createdAt.formattedDate)
+                Text(user.createdAt.formattedDate ?? localizedString(.invalidDate))
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
@@ -141,7 +141,7 @@ struct UserListView: View {
 
 extension UserListView {
     private enum TitleValue {
-        case header, user, inviteUser, edit
+        case header, user, inviteUser, edit, invalidDate
     }
     
     private func localizedString(_ key: TitleValue) -> String {
@@ -150,6 +150,7 @@ extension UserListView {
             case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
             case .edit: "Editar"
+            case .invalidDate: "Fecha inválida"
         }
     }
 }

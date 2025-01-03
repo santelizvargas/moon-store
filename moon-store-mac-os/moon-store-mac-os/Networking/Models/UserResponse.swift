@@ -6,5 +6,14 @@
 //
 
 struct UserResponse: Decodable {
-    let data: [UserModel]
+    let users: [UserModel]
+    
+    private enum CodingKeys: String, CodingKey {
+        case users = "data"
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.users = try container.decode([UserModel].self, forKey: .users)
+    }
 }
