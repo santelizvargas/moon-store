@@ -12,6 +12,7 @@ enum UserConstants {
     static let iconSize: CGFloat = 30
     static let personIcon: String = "person.crop.circle.fill"
     static let padding: CGFloat = 10
+    static let spacing: CGFloat = 15
     static let textFieldHeight: CGFloat = 40
     
     enum Button {
@@ -19,10 +20,11 @@ enum UserConstants {
     }
     
     enum UserRow {
+        static let optionSize: CGFloat = 100
         static let spacing: CGFloat = 10
         static let trashIcon: String = "trash"
         static let iconSize: CGFloat = 20
-        static let hStackSpacing: CGFloat = -30
+        static let height: CGFloat = 50
         static let lineLimit: Int = 1
         static let evenNumber: Int = 2
     }
