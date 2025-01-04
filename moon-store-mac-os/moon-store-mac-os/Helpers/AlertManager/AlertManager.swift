@@ -32,4 +32,21 @@ final class AlertPresenter {
         debugPrint("An Error occurred: \(error.localizedDescription)")
         showAlert(friendlyMessage, type: .error)
     }
+    
+    static func showConfirmationAlert(message: String,
+                                      actionButtonTitle: String,
+                                      action: @escaping () -> Void) {
+        let alert = NSAlert()
+        alert.messageText = AlertType.warning.title
+        alert.informativeText = message
+        
+        alert.icon = NSImage(named: AlertType.warning.icon)
+        alert.addButton(withTitle: "Cancelar")
+        alert.addButton(withTitle: actionButtonTitle)
+        let response = alert.runModal()
+        
+        if response == .alertSecondButtonReturn {
+            action()
+        }
+    }
 }

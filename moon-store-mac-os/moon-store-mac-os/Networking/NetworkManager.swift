@@ -124,7 +124,15 @@ final class NetworkManager {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = Constants.deleteHttpMethod
         
-        return try await request(urlRequest: urlRequest)
+        do {
+            let json = try JSONSerialization.data(withJSONObject: parameters)
+            urlRequest.httpBody = json
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            return try await request(urlRequest: urlRequest)
+        } catch {
+            throw MSError.encodingError
+        }
     }
     
     // MARK: - HTTP UPDATE

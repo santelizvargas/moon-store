@@ -171,14 +171,14 @@ struct ProductListView: View {
             }
             .frame(maxWidth: .infinity)
 
-            optionsView
+            optionsView(for: product)
         }
         .frame(maxWidth: .infinity)
     }
 
     // MARK: - Product options view
 
-    private var optionsView: some View {
+    private func optionsView(for product: ProductModel) -> some View {
         HStack(spacing: Constants.ProductRow.spacing) {
             Text(Constants.ProductRow.optionTitle)
                 .leadingInfinity()
@@ -193,13 +193,15 @@ struct ProductListView: View {
                 )
                 .foregroundStyle(.msGray)
 
-            Image(systemName: Constants.ProductRow.trashIcon)
-                .resizable()
-                .frame(
-                    width: Constants.ProductRow.iconSize,
-                    height: Constants.ProductRow.iconSize
-                )
-                .foregroundStyle(.red)
+            Button {
+                viewModel.showDeleteAlert(with: product.id)
+            } label: {
+                Image(systemName: Constants.ProductRow.trashIcon)
+                    .resizable()
+                    .frame(square: Constants.ProductRow.iconSize)
+                    .foregroundStyle(.red)
+            }
+            .buttonStyle(.plain)
         }
         .padding(.trailing)
     }
