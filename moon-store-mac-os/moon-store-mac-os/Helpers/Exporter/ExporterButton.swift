@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+private enum Constants {
+    static let cornerRadius: CGFloat = 10
+    static let padding: CGFloat = 10
+}
+
 struct ExporterButton<CollectionType: Collection>: View {
     @State private var isPresented = false
     
@@ -24,7 +29,10 @@ struct ExporterButton<CollectionType: Collection>: View {
         Button(title) {
             isPresented.toggle()
         }
-        .buttonStyle(.borderedProminent)
+        .buttonStyle(.plain)
+        .padding(Constants.padding)
+        .foregroundStyle(.msWhite)
+        .background(.msPrimary, in: .rect(cornerRadius: Constants.cornerRadius))
         .fileExporter(
             isPresented: $isPresented,
             document: formattedDocument,

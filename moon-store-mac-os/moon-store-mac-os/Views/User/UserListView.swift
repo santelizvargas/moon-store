@@ -27,7 +27,11 @@ struct UserListView: View {
                 .foregroundStyle(.msWhite)
                 .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
                 
-                ExporterButton(title: "Export Users", fileName: "Users", collection: UserModel.userMockData)
+                ExporterButton(
+                    title: "Exportar Usuarios",
+                    fileName: "Usuarios",
+                    collection: UserModel.userMockData
+                )
             }
             
             productTableView
