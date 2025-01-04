@@ -5,8 +5,12 @@
 //  Created by Diana Zeledon on 30/12/24.
 //
 
+import SwiftUI
+
 enum UserTableHeader: CaseIterable, Identifiable {
-    case icon, user, email, role, date, option
+    case user, email, role, date, option
+    
+    var id: UserTableHeader { self }
     
     var title: String {
         switch self {
@@ -18,5 +22,18 @@ enum UserTableHeader: CaseIterable, Identifiable {
         }
     }
     
-    var id: UserTableHeader { self }
+    var aligment: Alignment {
+        switch self {
+            case .role, .date: .center
+            default: .leading
+        }
+    }
+    
+    var padding: Edge.Set {
+        switch self {
+            case .user: .leading
+            case .option: .trailing
+            default: .vertical
+        }
+    }
 }

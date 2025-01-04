@@ -11,35 +11,41 @@ struct UserListView: View {
     @State private var showModal: Bool = false
     
     var body: some View {
-        VStack {
-            HStack {
-                Text(localizedString(.user))
-                    .leadingInfinity()
-                    .font(.title3)
-                    .bold()
-                
-                Button(localizedString(.inviteUser),
-                       systemImage: UserConstants.Button.plusIcon) {
-                    showModal.toggle()
-                }
-                .buttonStyle(.plain)
-                .padding(UserConstants.padding)
-                .foregroundStyle(.msWhite)
-                .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
-                
-                ExporterButton(
-                    title: "Exportar Usuarios",
-                    fileName: "Usuarios",
-                    collection: UserModel.userMockData
-                )
-            }
-            
+        VStack(spacing: UserConstants.spacing) {
+            headerView
             productTableView
         }
         .frame(maxWidth: .infinity, alignment: .top)
-        .padding(.horizontal)
+        .padding()
         .sheet(isPresented: $showModal) {
             UserInviteView(isShowing: $showModal)
+        }
+    }
+    
+    // MARK: - Header View
+    
+    private var headerView: some View {
+        HStack {
+            Text(localizedString(.user))
+                .font(.title3.bold())
+                .leadingInfinity()
+            
+            Button(
+                localizedString(.inviteUser),
+                systemImage: UserConstants.Button.plusIcon
+            ) {
+                showModal.toggle()
+            }
+            .buttonStyle(.plain)
+            .padding(UserConstants.padding)
+            .foregroundStyle(.msWhite)
+            .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
+            
+            ExporterButton(
+                title: "Exportar Usuarios",
+                fileName: "Usuarios",
+                collection: UserModel.userMockData
+            )
         }
     }
     
@@ -53,54 +59,59 @@ struct UserListView: View {
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
                     ForEach(Array(UserModel.userMockData.enumerated()), id: \.element.id) { index, user in
-                        HStack(spacing: UserConstants.UserRow.hStackSpacing) {
-                            userRowView(user: user)
-                            .padding(.vertical)
-                        }
-                        .background(index % UserConstants.UserRow.evenNumber == .zero
-                                    ? .msLightGray
-                                    : .msWhite)
+                        userRowView(user: user, isEvenRow: index.isMultiple(of: UserConstants.UserRow.evenNumber))
                     }
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
         .overlay {
             RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
                 .stroke(.msGray)
         }
         .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
+        .frame(maxHeight: .infinity, alignment: .top)
     }
     
     // MARK: - Header Table View
     
     private var headerTableView: some View {
-        Grid {
+        Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
             GridRow {
-                ForEach(UserTableHeader.allCases) { title in
-                    Text(title.title)
-                        .frame(maxWidth: .infinity,
-                               alignment: title == .role ? .center : .leading)
-                        .foregroundStyle(.black)
+                ForEach(UserTableHeader.allCases) { header in
+                    Text(header.title)
+                        .padding(header.padding)
+                        .frame(
+                            maxWidth: header == .option ? UserConstants.UserRow.optionSize : .infinity,
+                            alignment: header.aligment
+                        )
+                        .foregroundStyle(.msBlack)
                         .font(.body.bold())
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical)
+            .frame(height: UserConstants.UserRow.height)
         }
     }
     
     // MARK: - Table Row View
     
-    private func userRowView(user: UserModel) -> some View {
+    private func userRowView(user: UserModel, isEvenRow: Bool) -> some View {
         GridRow {
-            Image(systemName: UserConstants.personIcon)
-                .resizable()
-                .frame(square: UserConstants.iconSize)
-            
-            Text("\(user.firstName) \(user.lastName)")
-                .leadingInfinity()
-                .foregroundStyle(.msBlack)
-                .lineLimit(UserConstants.UserRow.lineLimit)
+            HStack(spacing: UserConstants.UserRow.spacing) {
+                let fullName: String = "\(user.firstName) \(user.lastName)"
+                
+                Text(abbreviated(for: fullName))
+                    .frame(square: UserConstants.iconSize)
+                    .background(.msPrimary, in: .circle)
+                    .foregroundStyle(.msWhite)
+                
+                Text(fullName)
+                    .leadingInfinity()
+                    .foregroundStyle(.msBlack)
+                    .lineLimit(UserConstants.UserRow.lineLimit)
+            }
+            .padding(.leading)
+            .frame(maxWidth: .infinity)
             
             Group {
                 Text(user.email)
@@ -117,7 +128,8 @@ struct UserListView: View {
             
             optionsView
         }
-        .frame(maxWidth: .infinity)
+        .frame(height: UserConstants.UserRow.height)
+        .background(isEvenRow ? .msLightGray : .msWhite)
     }
     
     // MARK: - User options view
@@ -133,7 +145,15 @@ struct UserListView: View {
                 .frame(square: UserConstants.UserRow.iconSize)
                 .foregroundStyle(.red)
         }
-        .padding(.trailing)
+        .frame(width: UserConstants.UserRow.optionSize)
+    }
+    
+    private func abbreviated(for name: String) -> String {
+        let formatter = PersonNameComponentsFormatter()
+        
+        guard let components = formatter.personNameComponents(from: name) else { return "" }
+        formatter.style = .abbreviated
+        return formatter.string(from: components)
     }
 }
 
