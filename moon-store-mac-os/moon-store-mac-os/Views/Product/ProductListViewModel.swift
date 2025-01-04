@@ -22,6 +22,8 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
+    var productSelected: ProductModel?
+    
     private let productManager: ProductManager = .init()
     private let decoder: JSONDecoder = .init()
     
@@ -49,14 +51,43 @@ final class ProductListViewModel: ObservableObject {
     }
     
     func showDeleteAlert(with id: Int) {
+        updateSelectedProduct(with: id)
+        
         AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
                                              actionButtonTitle: "Eliminar") { [weak self] in
             guard let self else { return }
-            self.deleteProduct(with: id)
+            self.deleteSelectedProduct()
         }
     }
     
-    private func deleteProduct(with id: Int) {
+    func supplyProductSelectedProduct(_ quantity: String) {
+        guard let productSelected,
+              let quantity = Double(quantity) else { return }
+        
+        isLoading = true
+        
+        Task { @MainActor in
+            defer {
+                isLoading = false
+            }
+            
+            do {
+                try await productManager.supplyProduct(id: productSelected.id,
+                                                       with: quantity)
+                getProducts()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
+    func updateSelectedProduct(with id: Int) {
+        productSelected = products.first { $0.id == id }
+    }
+    
+    private func deleteSelectedProduct() {
+        guard let productSelected else { return }
+        
         isLoading = true
         Task { @MainActor in
             defer {
@@ -64,7 +95,7 @@ final class ProductListViewModel: ObservableObject {
             }
             
             do {
-                try await productManager.deleteProduct(with: id)
+                try await productManager.deleteProduct(with: productSelected.id)
                 getProducts()
             } catch {
                 AlertPresenter.showAlert(with: error)

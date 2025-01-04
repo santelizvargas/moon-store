@@ -76,4 +76,25 @@ final class ProductManager {
             throw error
         }
     }
+    
+    // MARK: Supply product
+    
+    func supplyProduct(id: Int,
+                       with quantity: Double) async throws {
+        let parameters: [String: Any] = [
+            "id": id,
+            "stock": quantity
+        ]
+        
+        do {
+            let data = try await networkManager.putData(for: .products, with: parameters)
+            let response = try decoder.decode(CreateProductResponse.self, from: data)
+            
+            if response.code == Constants.errorCode {
+                throw MSError.notFound
+            }
+        } catch {
+            throw error
+        }
+    }
 }
