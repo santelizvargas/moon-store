@@ -21,9 +21,9 @@ struct SupplyProductView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var quantity: String = ""
     
-    private let supplyProduct: (Int) -> Void
+    private let supplyProduct: (String) -> Void
     
-    init(supplyProduct: @escaping (Int) -> Void) {
+    init(supplyProduct: @escaping (String) -> Void) {
         self.supplyProduct = supplyProduct
     }
     
@@ -72,7 +72,6 @@ struct SupplyProductView: View {
     }
     
     private func supplySuccess() {
-        guard let quantity = Int(quantity) else { return }
         dismiss()
         supplyProduct(quantity)
     }

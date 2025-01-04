@@ -80,14 +80,14 @@ final class ProductManager {
     // MARK: Supply product
     
     func supplyProduct(id: Int,
-                       with quantity: Int) async throws {
+                       with quantity: Double) async throws {
         let parameters: [String: Any] = [
             "id": id,
             "stock": quantity
         ]
         
         do {
-            let data = try await networkManager.postData(for: .products, with: parameters)
+            let data = try await networkManager.putData(for: .products, with: parameters)
             let response = try JSONDecoder().decode(CreateProductResponse.self, from: data)
             
             if response.code == 500 {

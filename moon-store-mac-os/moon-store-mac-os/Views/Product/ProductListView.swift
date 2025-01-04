@@ -75,7 +75,9 @@ struct ProductListView: View {
                 AddProductView()
             }
             .sheet(isPresented: $showSupplyProductModal) {
-                SupplyProductView { _ in }
+                SupplyProductView { quantity in
+                    viewModel.supplyProduct(quantity)
+                }
             }
 
             productTableView
@@ -186,6 +188,7 @@ struct ProductListView: View {
         HStack(spacing: Constants.ProductRow.spacing) {
             Button {
                 showSupplyProductModal.toggle()
+                viewModel.updateSelectedProduct(with: product.id)
             } label: {
                 Text(Constants.ProductRow.optionTitle)
                     .leadingInfinity()

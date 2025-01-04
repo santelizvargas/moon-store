@@ -28,6 +28,7 @@ final class ProductListViewModel: ObservableObject {
     private var isSearchInProgress: Bool = false
     private var products: [ProductModel] = []
     private var productsFiltered: [ProductModel] = []
+    private var selectedProduct: ProductModel?
     
     init () {
         getProducts()
@@ -56,17 +57,29 @@ final class ProductListViewModel: ObservableObject {
         }
     }
     
-    func supplyProduct(with id: Int, quantity: Int) {
+    func supplyProduct(_ quantity: String) {
+        guard let selectedProduct,
+              let quantity = Double(quantity) else { return }
+        
         isLoading = true
         
         Task { @MainActor in
+            defer {
+                isLoading = false
+            }
+            
             do {
-                try await productManager.supplyProduct(id: id, with: quantity)
+                try await productManager.supplyProduct(id: selectedProduct.id,
+                                                       with: quantity)
                 getProducts()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
         }
+    }
+    
+    func updateSelectedProduct(with id: Int) {
+        selectedProduct = products.first { $0.id == id }
     }
     
     private func deleteProduct(with id: Int) {
