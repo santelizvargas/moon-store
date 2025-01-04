@@ -22,7 +22,7 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
-    private let networkManager: NetworkManager = .init()
+    private let productManager: ProductManager = .init()
     private let decoder: JSONDecoder = .init()
     
     private var isSearchInProgress: Bool = false
@@ -40,14 +40,38 @@ final class ProductListViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                let data = try await networkManager.getData(for: .products)
-                let response = try decoder.decode(ProductResponse.self, from: data)
-                products = response.data
+                products = try await productManager.getProducts()
                 productList = products
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
         }
+    }
+    
+    func showDeleteAlert(with id: Int) {
+        let deleteAction: () -> Void = { [weak self] in
+            
+            guard let self else { return }
+            
+            self.isLoading = true
+            
+            Task { @MainActor in
+                defer {
+                    self.isLoading = false
+                }
+                
+                do {
+                    try await self.productManager.deleteProduct(with: id)
+                    self.getProducts()
+                } catch {
+                    AlertPresenter.showAlert(with: error)
+                }
+            }
+        }
+
+        AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
+                                             actionButtonTitle: "Eliminar",
+                                             action: deleteAction)
     }
     
     private func filterProducts() {
