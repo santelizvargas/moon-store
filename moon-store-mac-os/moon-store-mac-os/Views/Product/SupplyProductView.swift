@@ -21,9 +21,12 @@ struct SupplyProductView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var quantity: String = ""
     
+    private let productName: String
     private let supplyProduct: (String) -> Void
     
-    init(supplyProduct: @escaping (String) -> Void) {
+    init(productName: String,
+         supplyProduct: @escaping (String) -> Void) {
+        self.productName = productName
         self.supplyProduct = supplyProduct
     }
     
@@ -88,7 +91,7 @@ extension SupplyProductView {
     
     private func localizedString(_ key: SupplyProductViewKey) -> String {
         switch key {
-            case .title: "Abasteciendo producto"
+            case .title: "Abasteciendo \(productName)"
             case .textFieldTitle: "Cantidad"
             case .supplyButton: "Abastecer"
         }
@@ -96,5 +99,5 @@ extension SupplyProductView {
 }
 
 #Preview {
-    SupplyProductView { _ in }
+    SupplyProductView(productName: "Product") { _ in }
 }

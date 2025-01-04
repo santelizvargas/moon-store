@@ -22,13 +22,14 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
+    var productSelected: ProductModel?
+    
     private let productManager: ProductManager = .init()
     private let decoder: JSONDecoder = .init()
     
     private var isSearchInProgress: Bool = false
     private var products: [ProductModel] = []
     private var productsFiltered: [ProductModel] = []
-    private var selectedProduct: ProductModel?
     
     init () {
         getProducts()
@@ -49,16 +50,16 @@ final class ProductListViewModel: ObservableObject {
         }
     }
     
-    func showDeleteAlert(with id: Int) {
+    func showDeleteAlert() {
         AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
                                              actionButtonTitle: "Eliminar") { [weak self] in
             guard let self else { return }
-            self.deleteProduct(with: id)
+            self.deleteSelectedProduct()
         }
     }
     
-    func supplyProduct(_ quantity: String) {
-        guard let selectedProduct,
+    func supplyProductSelectedProduct(_ quantity: String) {
+        guard let productSelected,
               let quantity = Double(quantity) else { return }
         
         isLoading = true
@@ -69,7 +70,7 @@ final class ProductListViewModel: ObservableObject {
             }
             
             do {
-                try await productManager.supplyProduct(id: selectedProduct.id,
+                try await productManager.supplyProduct(id: productSelected.id,
                                                        with: quantity)
                 getProducts()
             } catch {
@@ -79,10 +80,11 @@ final class ProductListViewModel: ObservableObject {
     }
     
     func updateSelectedProduct(with id: Int) {
-        selectedProduct = products.first { $0.id == id }
+        productSelected = products.first { $0.id == id }
     }
     
-    private func deleteProduct(with id: Int) {
+    private func deleteSelectedProduct() {
+        guard let productSelected else { return }
         isLoading = true
         Task { @MainActor in
             defer {
@@ -90,7 +92,7 @@ final class ProductListViewModel: ObservableObject {
             }
             
             do {
-                try await productManager.deleteProduct(with: id)
+                try await productManager.deleteProduct(with: productSelected.id)
                 getProducts()
             } catch {
                 AlertPresenter.showAlert(with: error)
