@@ -88,7 +88,7 @@ final class ProductManager {
         
         do {
             let data = try await networkManager.putData(for: .products, with: parameters)
-            let response = try JSONDecoder().decode(CreateProductResponse.self, from: data)
+            let response = try decoder.decode(CreateProductResponse.self, from: data)
             
             if response.code == Constants.errorCode {
                 throw MSError.notFound
