@@ -8,14 +8,11 @@
 import PhotosUI
 import SwiftUI
 
-final class MSImagePickerViewModel: ObservableObject {
-    @Published var selectedItem: PhotosPickerItem?
-    
-    func loadImage() async -> Image? {
-        guard let selectedItem else { return nil }
-        
+final class MSImagePickerUtility {
+    func loadImage(from item: PhotosPickerItem?) async -> Image? {
+        guard let item else { return nil }
         do {
-            return try await loadAsyncImage(from: selectedItem)
+            return try await loadAsyncImage(from: item)
         } catch {
             AlertPresenter.showAlert(with: error)
             return nil

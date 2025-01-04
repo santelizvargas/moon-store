@@ -15,8 +15,10 @@ private enum Constants {
 }
 
 struct MSImagePickerView: View {
-    @StateObject private var viewModel: MSImagePickerViewModel = .init()
     @Binding private var selectedImage: Image?
+    @State private var selectedItem: PhotosPickerItem?
+    
+    private let viewModel: MSImagePickerUtility = .init()
     
     init(selectedImage: Binding<Image?>) {
         _selectedImage = selectedImage
@@ -26,13 +28,13 @@ struct MSImagePickerView: View {
         VStack {
             PhotosPicker(
                 "Seleccionar imagen",
-                selection: $viewModel.selectedItem,
+                selection: $selectedItem,
                 matching: .images
             )
             .buttonStyle(.borderedProminent)
             .foregroundStyle(.msPrimary)
-            .task(id: viewModel.selectedItem) {
-                guard let image = await viewModel.loadImage() else { return }
+            .task(id: selectedItem) {
+                guard let image = await viewModel.loadImage(from: selectedItem) else { return }
                 selectedImage = image
             }
             
