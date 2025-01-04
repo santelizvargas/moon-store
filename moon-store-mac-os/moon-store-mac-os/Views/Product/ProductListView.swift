@@ -50,6 +50,7 @@ private enum ProductTableTitle: String, CaseIterable {
 struct ProductListView: View {
     @StateObject private var viewModel: ProductListViewModel = .init()
     @State private var showAddProductModal: Bool = false
+    @State private var showSupplyProductModal: Bool = false
 
     var body: some View {
         VStack {
@@ -72,6 +73,9 @@ struct ProductListView: View {
             .padding(.bottom)
             .sheet(isPresented: $showAddProductModal) {
                 AddProductView()
+            }
+            .sheet(isPresented: $showSupplyProductModal) {
+                SupplyProductView { _ in }
             }
 
             productTableView
@@ -180,10 +184,15 @@ struct ProductListView: View {
 
     private func optionsView(for product: ProductModel) -> some View {
         HStack(spacing: Constants.ProductRow.spacing) {
-            Text(Constants.ProductRow.optionTitle)
-                .leadingInfinity()
-                .foregroundStyle(.blue)
-                .underline()
+            Button {
+                showSupplyProductModal.toggle()
+            } label: {
+                Text(Constants.ProductRow.optionTitle)
+                    .leadingInfinity()
+                    .foregroundStyle(.blue)
+                    .underline()
+            }
+            .buttonStyle(.plain)
 
             Image(.edit)
                 .resizable()

@@ -56,6 +56,19 @@ final class ProductListViewModel: ObservableObject {
         }
     }
     
+    func supplyProduct(with id: Int, quantity: Int) {
+        isLoading = true
+        
+        Task { @MainActor in
+            do {
+                try await productManager.supplyProduct(id: id, with: quantity)
+                getProducts()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
     private func deleteProduct(with id: Int) {
         isLoading = true
         Task { @MainActor in
