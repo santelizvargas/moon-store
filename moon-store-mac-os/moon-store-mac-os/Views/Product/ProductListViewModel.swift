@@ -85,6 +85,9 @@ final class ProductListViewModel: ObservableObject {
     
     private func deleteSelectedProduct() {
         guard let productSelected else { return }
+        
+        updateSelectedProduct(with: productSelected.id)
+        
         isLoading = true
         Task { @MainActor in
             defer {

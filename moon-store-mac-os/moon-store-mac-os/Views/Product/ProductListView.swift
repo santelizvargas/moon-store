@@ -208,7 +208,7 @@ struct ProductListView: View {
                 .foregroundStyle(.msGray)
 
             Button {
-                viewModel.showDeleteAlert(with: product.id)
+                viewModel.showDeleteAlert()
             } label: {
                 Image(systemName: Constants.ProductRow.trashIcon)
                     .resizable()
