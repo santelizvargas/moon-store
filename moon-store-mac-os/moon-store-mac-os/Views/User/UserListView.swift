@@ -26,6 +26,12 @@ struct UserListView: View {
                 .padding(UserConstants.padding)
                 .foregroundStyle(.msWhite)
                 .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
+                
+                ExporterButton(
+                    title: "Exportar Usuarios",
+                    fileName: "Usuarios",
+                    collection: UserModel.userMockData
+                )
             }
             
             productTableView

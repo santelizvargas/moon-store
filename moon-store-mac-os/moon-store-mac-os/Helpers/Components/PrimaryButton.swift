@@ -27,10 +27,7 @@ struct PrimaryButton: View {
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: Constants.maxHeight)
-        .foregroundStyle(.white)
-        .background {
-            RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                .fill(.blue)
-        }
+        .foregroundStyle(.msWhite)
+        .background(.msPrimary, in: .rect(cornerRadius: Constants.cornerRadius))
     }
 }
