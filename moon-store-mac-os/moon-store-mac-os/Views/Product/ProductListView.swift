@@ -78,9 +78,7 @@ struct ProductListView: View {
                 AddProductView()
             }
             .sheet(isPresented: $showSupplyProductModal) {
-                SupplyProductView(
-                    productName: viewModel.productSelected?.name ?? ""
-                ) { quantity in
+                SupplyProductView(productName: viewModel.productSelected?.name ?? "") { quantity in
                     viewModel.supplyProductSelectedProduct(quantity)
                 }
             }
