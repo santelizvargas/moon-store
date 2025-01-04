@@ -10,6 +10,7 @@ import Foundation
 final class ProductListViewModel: ObservableObject {
     @Published var productList: [ProductModel] = []
     @Published var isLoading: Bool = false
+    @Published var productCount: Int = 0
     @Published var searchText: String = "" {
         didSet {
             filterProducts()
@@ -44,6 +45,7 @@ final class ProductListViewModel: ObservableObject {
             do {
                 products = try await productManager.getProducts()
                 productList = products
+                getProductCount()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -81,6 +83,16 @@ final class ProductListViewModel: ObservableObject {
     
     func updateSelectedProduct(with id: Int) {
         productSelected = products.first { $0.id == id }
+    }
+    
+    private func getProductCount() {
+        Task { @MainActor in
+            do {
+                productCount = try await productManager.getProductCount()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
     }
     
     private func deleteSelectedProduct() {

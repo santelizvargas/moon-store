@@ -28,13 +28,15 @@ private enum Constants {
     }
 }
 
-private enum ProductTableTitle: String, CaseIterable {
+private enum ProductTableTitle: String, CaseIterable, Identifiable {
     case productIcon
     case product
     case category
     case inStock
     case price
     case options
+    
+    var id: String { rawValue }
 
     var title: String {
         switch self {
@@ -42,7 +44,8 @@ private enum ProductTableTitle: String, CaseIterable {
             case .category: "Categoría"
             case .inStock: "En Stock"
             case .price: "Precio"
-            case .options, .productIcon: ""
+            case .productIcon: ""
+            case .options: "Total: "
         }
     }
 }
@@ -134,8 +137,13 @@ struct ProductListView: View {
     private var headerTableView: some View {
         Grid {
             GridRow {
-                ForEach(ProductTableTitle.allCases, id: \.self) { title in
-                    Text(title.title)
+                ForEach(ProductTableTitle.allCases) { title in
+                    
+                    let text: String = title == .options
+                    ? "\(title.title)\(viewModel.productCount)"
+                    : title.title
+                    
+                    Text(text)
                         .frame(
                             maxWidth: .infinity,
                             alignment: title == .product ? .leading : .center
