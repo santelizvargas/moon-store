@@ -54,6 +54,7 @@ struct ProductListView: View {
     @StateObject private var viewModel: ProductListViewModel = .init()
     @State private var showAddProductModal: Bool = false
     @State private var showSupplyProductModal: Bool = false
+    @State private var showDetailProductModal: Bool = false
 
     var body: some View {
         VStack {
@@ -82,6 +83,11 @@ struct ProductListView: View {
                     productName: viewModel.productSelected?.name ?? ""
                 ) { quantity in
                     viewModel.supplyProductSelectedProduct(quantity)
+                }
+            }
+            .sheet(isPresented: $showDetailProductModal) {
+                if let product = viewModel.productSelected {
+                    ProductDetailView(product: product)
                 }
             }
 
@@ -188,6 +194,10 @@ struct ProductListView: View {
             .frame(maxWidth: .infinity)
 
             optionsView(for: product)
+        }
+        .onTapGesture {
+            showDetailProductModal.toggle()
+            viewModel.updateSelectedProduct(with: product.id)
         }
         .frame(maxWidth: .infinity)
     }
