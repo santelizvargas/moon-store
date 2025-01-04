@@ -34,5 +34,4 @@ extension Binding where Value == String {
         
         return self
     }
-
 }
