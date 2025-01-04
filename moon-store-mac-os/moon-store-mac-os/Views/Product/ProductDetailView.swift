@@ -40,8 +40,10 @@ struct ProductDetailView: View {
                     .leadingInfinity()
                 
                 HStack {
-                    roundedBadge(with: product.category.title)
-                    roundedBadge(with: "\(product.stock) disponible(s)")
+                    roundedBadge(with: product.category.title, backgroundColor: .msLightBlue)
+                    
+                    roundedBadge(with: localizedString(.stockTitle),
+                                 backgroundColor: isAvailableProduct ? .msLightBlue : .msOrange)
                 }
                 .leadingInfinity()
                 
@@ -49,7 +51,7 @@ struct ProductDetailView: View {
                     .foregroundStyle(.black)
                     .leadingInfinity()
                 
-                Text("$ \(product.salePrice)")
+                Text(localizedString(.priceTitle))
                     .font(.title2)
                     .leadingInfinity()
                 
@@ -73,14 +75,40 @@ struct ProductDetailView: View {
         }
     }
     
-    private func roundedBadge(with text: String) -> some View {
+    private var isAvailableProduct: Bool {
+        product.stock > .zero
+    }
+    
+    private func roundedBadge(with text: String,
+                              backgroundColor: Color) -> some View {
         Text(text)
             .foregroundStyle(.msWhite)
             .padding(.horizontal)
             .padding(.vertical, Constants.roundedBadgeVerticalPadding)
             .background(
-                .msPrimary,
+                backgroundColor,
                 in: .rect(cornerRadius: Constants.roundedBadgeCornerRadius)
             )
+    }
+}
+
+// MARK: Localized
+
+extension ProductDetailView {
+    private enum ProductDetailViewKey {
+        case stockTitle
+        case priceTitle
+    }
+    
+    private func localizedString(_ key: ProductDetailViewKey) -> String {
+        switch key {
+            case .stockTitle:
+                isAvailableProduct
+                ? "\(product.stock) disponible(s)"
+                : "Agotado"
+                
+            case .priceTitle:
+                "$ \(product.salePrice)"
+        }
     }
 }
