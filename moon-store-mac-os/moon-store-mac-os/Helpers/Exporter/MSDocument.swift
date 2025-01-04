@@ -12,7 +12,7 @@ struct MSDocument: FileDocument {
     static let readableContentTypes: [UTType] = [.pdf, .commaSeparatedText]
     private let content: String
     
-    init(text: String) {
+    init(content: String) {
         self.content = text
     }
     

@@ -49,7 +49,7 @@ struct ExporterButton<CollectionType: Collection>: View {
                 FileFactory.makeUserStringFormatted(users: users)
             } else { "Nothing" }
         }()
-        return MSDocument(text: stringFormat)
+        return MSDocument(content: stringFormat)
     }
     
     private func handleExportResult(_ result: Result<URL, Error>) {
