@@ -22,7 +22,6 @@ struct AddProductView: View {
     
     var body: some View {
         VStack {
-            
             modalHeader
             
             HStack {
@@ -32,9 +31,10 @@ struct AddProductView: View {
             }
             .padding(.vertical)
             
-            PrimaryButton("Agregar producto") {
+            PrimaryButton(localizedString(.addProductButton)) {
                 viewModel.addProduct()
             }
+            .disabled(!viewModel.canCreateProduct)
             .frame(width: Constants.createButtonWidth)
         }
         .padding()
@@ -51,10 +51,9 @@ struct AddProductView: View {
     
     private var modalHeader: some View {
         HStack {
-            Text("Agregando producto")
+            Text(localizedString(.title))
                 .font(.headline)
-            
-            Spacer()
+                .leadingInfinity()
             
             Button {
                 dismiss()
@@ -69,21 +68,22 @@ struct AddProductView: View {
     private var productInformationView: some View {
         VStack {
             MSTextField(
-                title: "Nombre del producto",
+                title: localizedString(.productName),
                 text: $viewModel.name
             )
             
             MSTextField(
-                title: "Precio",
+                title: localizedString(.productPrice),
                 text: $viewModel.price.allowOnlyDecimalNumbers
             )
 
             MSTextField(
-                title: "Unidades disponibles",
+                title: localizedString(.productStock),
                 text: $viewModel.stock.allowOnlyNumbers
             )
             
-            MSTextField(title: "Descripción", text: $viewModel.description)
+            MSTextField(title: localizedString(.productDescription),
+                        text: $viewModel.description)
             
             categoryButton
         }
@@ -92,17 +92,47 @@ struct AddProductView: View {
     // MARK: - Category Menu
     
     private var categoryButton: some View {
-        Menu(viewModel.category.title) {
-            ForEach(ProductCategory.allCases) { category in
-                Button(category.title) {
-                    viewModel.category = category
+        VStack(alignment: .leading) {
+            Text(localizedString(.productCategory))
+            
+            Menu(viewModel.category.title) {
+                ForEach(ProductCategory.allCases) { category in
+                    Button(category.title) {
+                        viewModel.category = category
+                    }
                 }
             }
+            .foregroundStyle(.msPrimary)
+            .overlay {
+                RoundedRectangle(cornerRadius: Constants.cornerRadiusSize)
+                    .stroke(.msGray)
+            }
         }
-        .foregroundStyle(.msPrimary)
-        .overlay {
-            RoundedRectangle(cornerRadius: Constants.cornerRadiusSize)
-                .stroke(.msGray)
+    }
+}
+
+// MARK: Localized String
+
+extension AddProductView {
+    private enum AddProductViewKey {
+        case addProductButton
+        case title
+        case productName
+        case productDescription
+        case productPrice
+        case productStock
+        case productCategory
+    }
+    
+    private func localizedString(_ key: AddProductViewKey) -> String {
+        switch key {
+            case .addProductButton: "Agregar producto"
+            case .title: "Agregando producto"
+            case .productName: "Nombre"
+            case .productDescription: "Descripción"
+            case .productPrice: "Precio"
+            case .productStock: "Unidades disponibles"
+            case .productCategory: "Categoría"
         }
     }
 }

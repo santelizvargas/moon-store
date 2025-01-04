@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import _PhotosUI_SwiftUI
+import PhotosUI
 
 @MainActor
 final class AddProductViewModel: ObservableObject {
@@ -20,7 +20,6 @@ final class AddProductViewModel: ObservableObject {
     
     @Published var imageSelected: Image? {
         didSet {
-            guard imageSelected != nil else { return }
             loadImageData()
         }
     }
@@ -77,6 +76,8 @@ final class AddProductViewModel: ObservableObject {
     }
     
     private func loadImageData() {
+        guard imageSelected != nil else { return }
+        
         let imageRendered = ImageRenderer(content: imageSelected)
         
         guard let cgImage = imageRendered.cgImage else { return }
@@ -91,7 +92,7 @@ final class AddProductViewModel: ObservableObject {
         ) else { return }
         
         CGImageDestinationAddImage(imageDestination, cgImage, nil)
-        
+
         guard CGImageDestinationFinalize(imageDestination) else { return }
         
         imageData = data as Data

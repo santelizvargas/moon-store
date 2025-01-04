@@ -7,6 +7,10 @@
 
 import Foundation
 
+private enum Constants {
+    static let duplicateKeyErrorCode: Int = 500
+}
+
 final class ProductManager {
     private let networkManager: NetworkManager = .init()
     
@@ -33,7 +37,7 @@ final class ProductManager {
                                                                   with: parameters,
                                                                   dataSet: imageDataSet)
             let response = try JSONDecoder().decode(CreateProductResponse.self, from: data)
-            if response.code == 500 {
+            if response.code == Constants.duplicateKeyErrorCode {
                 throw MSError.duplicateKey
             }
         } catch {

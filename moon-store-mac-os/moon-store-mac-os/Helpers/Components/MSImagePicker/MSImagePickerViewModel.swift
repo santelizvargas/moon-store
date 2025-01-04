@@ -5,7 +5,6 @@
 //  Created by Jose Luna on 1/2/25.
 //
 
-import Foundation
 import PhotosUI
 import SwiftUI
 

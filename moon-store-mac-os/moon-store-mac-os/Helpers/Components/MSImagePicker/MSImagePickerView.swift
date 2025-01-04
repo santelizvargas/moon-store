@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import _PhotosUI_SwiftUI
+import PhotosUI
 
 private enum Constants {
     static let imageSize: CGFloat = 200
@@ -16,7 +16,6 @@ private enum Constants {
 
 struct MSImagePickerView: View {
     @StateObject private var viewModel: MSImagePickerViewModel = .init()
-    
     @Binding private var selectedImage: Image?
     
     init(selectedImage: Binding<Image?>) {
