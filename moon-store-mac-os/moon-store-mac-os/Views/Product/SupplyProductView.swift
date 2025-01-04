@@ -75,8 +75,8 @@ struct SupplyProductView: View {
     }
     
     private func supplySuccess() {
-        dismiss()
         supplyProduct(quantity)
+        dismiss()
     }
 }
 
