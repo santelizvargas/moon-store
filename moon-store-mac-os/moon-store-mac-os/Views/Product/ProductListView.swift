@@ -49,6 +49,7 @@ private enum ProductTableTitle: String, CaseIterable {
 
 struct ProductListView: View {
     @StateObject private var viewModel: ProductListViewModel = .init()
+    @State private var showAddProductModal: Bool = false
 
     var body: some View {
         VStack {
@@ -57,7 +58,7 @@ struct ProductListView: View {
                     .leadingInfinity()
 
                 Button {
-                    // TODO: Add action when available
+                    showAddProductModal.toggle()
                 } label: {
                     Label("Agregar Producto", systemImage: Constants.plusIcon)
                         .foregroundStyle(.msWhite)
@@ -69,6 +70,9 @@ struct ProductListView: View {
                     in: .rect(cornerRadius: Constants.cornerRadius))
             }
             .padding(.bottom)
+            .sheet(isPresented: $showAddProductModal) {
+                AddProductView()
+            }
 
             productTableView
         }

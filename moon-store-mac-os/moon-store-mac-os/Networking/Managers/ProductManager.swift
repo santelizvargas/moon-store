@@ -1,0 +1,47 @@
+//
+//  ProductManager.swift
+//  moon-store-mac-os
+//
+//  Created by Jose Luna on 1/2/25.
+//
+
+import Foundation
+
+private enum Constants {
+    static let duplicateKeyErrorCode: Int = 500
+}
+
+final class ProductManager {
+    private let networkManager: NetworkManager = .init()
+    
+    // MARK: - Create product
+    
+    func addProduct(name: String,
+                    description: String,
+                    salePrice: Double,
+                    purchasePrice: Double,
+                    stock: Int,
+                    category: String,
+                    imageDataSet: [Data]) async throws {
+        let parameters: [String: Any] = [
+            "name": name,
+            "description": description,
+            "salePrice": salePrice,
+            "purchasePrice": purchasePrice,
+            "category": category,
+            "stock": stock
+        ]
+        
+        do {
+            let data = try await networkManager.postMultipartData(for: .products,
+                                                                  with: parameters,
+                                                                  dataSet: imageDataSet)
+            let response = try JSONDecoder().decode(CreateProductResponse.self, from: data)
+            if response.code == Constants.duplicateKeyErrorCode {
+                throw MSError.duplicateKey
+            }
+        } catch {
+            throw error
+        }
+    }
+}

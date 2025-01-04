@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ProductCategory: String, Decodable {
+enum ProductCategory: String, Decodable, CaseIterable, Identifiable {
     case laptop
     case phone
     case audio
@@ -18,6 +18,8 @@ enum ProductCategory: String, Decodable {
     case home
     case peripheral
     case networking
+    
+    var id: String { rawValue }
     
     var title: String { rawValue.capitalized }
     
