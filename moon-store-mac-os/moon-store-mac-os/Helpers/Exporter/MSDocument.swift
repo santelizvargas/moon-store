@@ -13,7 +13,7 @@ struct MSDocument: FileDocument {
     private let content: String
     
     init(content: String) {
-        self.content = text
+        self.content = content
     }
     
     init(configuration: ReadConfiguration) throws {
