@@ -18,7 +18,7 @@ private enum Constants {
 
 struct AddProductView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var viewModel = AddProductViewModel()
+    @ObservedObject private var viewModel = AddProductViewModel() = .init()
     
     var body: some View {
         VStack {
