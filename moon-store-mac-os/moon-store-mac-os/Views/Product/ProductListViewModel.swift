@@ -49,29 +49,27 @@ final class ProductListViewModel: ObservableObject {
     }
     
     func showDeleteAlert(with id: Int) {
-        let deleteAction: () -> Void = { [weak self] in
-            
+        AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
+                                             actionButtonTitle: "Eliminar") { [weak self] in
             guard let self else { return }
+            self.deleteProduct(with: id)
+        }
+    }
+    
+    private func deleteProduct(with id: Int) {
+        isLoading = true
+        Task { @MainActor in
+            defer {
+                isLoading = false
+            }
             
-            self.isLoading = true
-            
-            Task { @MainActor in
-                defer {
-                    self.isLoading = false
-                }
-                
-                do {
-                    try await self.productManager.deleteProduct(with: id)
-                    self.getProducts()
-                } catch {
-                    AlertPresenter.showAlert(with: error)
-                }
+            do {
+                try await productManager.deleteProduct(with: id)
+                getProducts()
+            } catch {
+                AlertPresenter.showAlert(with: error)
             }
         }
-
-        AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
-                                             actionButtonTitle: "Eliminar",
-                                             action: deleteAction)
     }
     
     private func filterProducts() {

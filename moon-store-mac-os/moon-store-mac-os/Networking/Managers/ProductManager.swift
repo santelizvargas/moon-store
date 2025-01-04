@@ -55,8 +55,11 @@ final class ProductManager {
         
         do {
             let data = try await networkManager.deleteData(for: .products, with: parameters)
-            let response = try JSONDecoder().decode(DeleteProductResponse.self, from: data)
-            if response.code == Constants.errorCode { throw MSError.notFound }
+            let response = try decoder.decode(DeleteProductResponse.self, from: data)
+            
+            if response.code == Constants.errorCode {
+                throw MSError.notFound
+            }
         } catch {
             throw error
         }

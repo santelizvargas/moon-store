@@ -198,10 +198,7 @@ struct ProductListView: View {
             } label: {
                 Image(systemName: Constants.ProductRow.trashIcon)
                     .resizable()
-                    .frame(
-                        width: Constants.ProductRow.iconSize,
-                        height: Constants.ProductRow.iconSize
-                    )
+                    .frame(square: Constants.ProductRow.iconSize)
                     .foregroundStyle(.red)
             }
             .buttonStyle(.plain)
