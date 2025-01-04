@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+private enum Constants {
+    static let decimalNumbersRegex: String = "^[0-9]*\\.?[0-9]*$"
+}
+
 extension Binding where Value == String {
     var allowOnlyNumbers: Self {
         DispatchQueue.main.async {
@@ -20,12 +24,15 @@ extension Binding where Value == String {
     
     var allowOnlyDecimalNumbers: Self {
         DispatchQueue.main.async {
-            let filtered = wrappedValue.filter { $0.isNumber || $0 == "." }
-            if filtered != wrappedValue {
-                wrappedValue = filtered
+            if let match = wrappedValue.range(of: Constants.decimalNumbersRegex,
+                                              options: .regularExpression) {
+                wrappedValue = String(wrappedValue[match])
+            } else if wrappedValue.last == "." || wrappedValue.last == " " {
+                wrappedValue.removeLast()
             }
         }
+        
         return self
     }
-}
 
+}
