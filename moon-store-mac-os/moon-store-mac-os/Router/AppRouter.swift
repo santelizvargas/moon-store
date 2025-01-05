@@ -11,13 +11,8 @@ final class AppRouter: ObservableObject {
     @Published var navigationPath: NavigationPath = .init()
     
     lazy var associatedView: some View = {
-        guard let userLogged = loginViewModel.loggedUser else {
-            return build(for: .login)
-        }
-        return build(for: .main(userLogged))
+        build(for: .login)
     }()
-    
-    private let loginViewModel: LoginViewModel = .init()
     
     func push(_ path: AppTransition) {
         navigationPath.append(path)
@@ -29,10 +24,7 @@ final class AppRouter: ObservableObject {
     }
     
     func popToRoot() {
-        guard !navigationPath.isEmpty else {
-            push(.login)
-            return
-        }
+        guard !navigationPath.isEmpty else { return }
         navigationPath.removeLast(navigationPath.count)
     }
     
