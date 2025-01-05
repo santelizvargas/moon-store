@@ -23,7 +23,7 @@ extension String {
         dateFormatter.dateFormat = Constants.dateFormat
         dateFormatter.locale = Locale(identifier: Constants.uSIdentifier)
         
-        guard let date = dateFormatter.date(from: self) else { return ""}
+        guard let date = dateFormatter.date(from: self) else { return nil }
         dateFormatter.dateFormat = Constants.spanishFormat
         dateFormatter.locale = Locale(identifier: Constants.eSIdentifier)
         
