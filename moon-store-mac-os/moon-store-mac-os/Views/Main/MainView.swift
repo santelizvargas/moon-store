@@ -9,7 +9,6 @@ import SwiftUI
 
 private enum Constants {
     static let profileButtonSize: CGFloat = 25
-    static let profileIcon: String = "person.circle.fill"
 }
 
 struct MainView: View {
@@ -48,18 +47,19 @@ struct MainView: View {
         switch screenSelection {
             case .products: ProductListView()
             case .users: UserListView()
+            case .profile: ProfileView(user: user)
             default: Text(screenSelection.rawValue)
         }
     }
     
     private var profileButton: some View {
-        Button {
+        Button("\(user.firstName) \(user.lastName)".abbreviated) {
             screenSelection = .profile
-        } label: {
-            Image(systemName: Constants.profileIcon)
-                .resizable()
-                .frame(square: Constants.profileButtonSize)
         }
         .buttonStyle(.plain)
+        .bold()
+        .frame(square: Constants.profileButtonSize)
+        .background(.msPrimary, in: .circle)
+        .foregroundStyle(.msWhite)
     }
 }

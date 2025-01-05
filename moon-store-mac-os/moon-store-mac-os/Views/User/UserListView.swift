@@ -100,7 +100,7 @@ struct UserListView: View {
             HStack(spacing: UserConstants.UserRow.spacing) {
                 let fullName: String = "\(user.firstName) \(user.lastName)"
                 
-                Text(abbreviated(for: fullName))
+                Text(fullName.abbreviated)
                     .frame(square: UserConstants.iconSize)
                     .background(.msPrimary, in: .circle)
                     .foregroundStyle(.msWhite)
@@ -146,14 +146,6 @@ struct UserListView: View {
                 .foregroundStyle(.red)
         }
         .frame(width: UserConstants.UserRow.optionSize)
-    }
-    
-    private func abbreviated(for name: String) -> String {
-        let formatter = PersonNameComponentsFormatter()
-        
-        guard let components = formatter.personNameComponents(from: name) else { return "" }
-        formatter.style = .abbreviated
-        return formatter.string(from: components)
     }
 }
 
