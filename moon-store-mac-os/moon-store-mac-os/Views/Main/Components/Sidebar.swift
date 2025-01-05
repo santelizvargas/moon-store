@@ -11,9 +11,11 @@ struct Sidebar: View {
     @EnvironmentObject private var router: AppRouter
     @Binding private var screenSelection: Screen
     private let loginViewModel: LoginViewModel = .init()
+    private let availableSections: [ScreenSection]
     
-    init(screenSelection: Binding<Screen>) {
+    init(screenSelection: Binding<Screen>, roleId: Int) {
         _screenSelection = screenSelection
+        availableSections = ScreenSection.allCases(for: roleId)
     }
     
     var body: some View {
@@ -22,7 +24,7 @@ struct Sidebar: View {
                 .font(.largeTitle.bold())
                 .foregroundStyle(.msPrimary)
             
-            List(ScreenSection.allCases) { section in
+            List(availableSections) { section in
                 Section(section.id.uppercased()) {
                     ForEach(section.screens) { screen in
                         sidebarItem(for: screen)
