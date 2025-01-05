@@ -16,4 +16,14 @@ final class FileFactory {
         
         return [header, formattedUsers].joined(separator: "\n")
     }
+    
+    static func makeProductStringFormatted(products: [ProductModel]) -> String {
+        let header = "Nombre, Categoria, En Stock, Precio, Descripcion"
+        
+        let formattedProducts = products.map { product in
+            "\(product.name), \(product.category.title), \(product.stock), \(product.salePrice), \(product.description)"
+        }.joined(separator: "\n")
+        
+        return [header, formattedProducts].joined(separator: "\n")
+    }
 }
