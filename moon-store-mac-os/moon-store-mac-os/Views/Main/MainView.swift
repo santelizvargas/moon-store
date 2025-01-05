@@ -14,7 +14,7 @@ private enum Constants {
 
 struct MainView: View {
     @EnvironmentObject private var router: AppRouter
-    @State private var screenSelection: Screen = .charts
+    @State private var screenSelection: Screen = .profile
     
     private let user: UserModel
     
@@ -24,7 +24,10 @@ struct MainView: View {
     
     var body: some View {
         NavigationSplitView {
-            Sidebar(screenSelection: $screenSelection)
+            Sidebar(
+                screenSelection: $screenSelection,
+                roleId: user.roles.first?.id ?? .zero
+            )
         } detail: {
             detailContent
                 .screenSize()
@@ -51,8 +54,7 @@ struct MainView: View {
     
     private var profileButton: some View {
         Button {
-            // TODO: - Navigate to the profile screen and remove placeholder alert
-            AlertPresenter.showAlert("Profile feature is under development. Stay tuned for updates!")
+            screenSelection = .profile
         } label: {
             Image(systemName: Constants.profileIcon)
                 .resizable()

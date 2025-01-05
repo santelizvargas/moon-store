@@ -104,7 +104,7 @@ final class ProductManager {
         do {
             let data = try await networkManager.getData(for: .productCount)
             let response = try decoder.decode(ProductCountResponse.self, from: data)
-            return response.productCount.quantity
+            return response.count.quantity
         } catch {
             throw error
         }

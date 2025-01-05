@@ -79,9 +79,7 @@ struct ProductListView: View {
                 AddProductView()
             }
             .sheet(isPresented: $showSupplyProductModal) {
-                SupplyProductView(
-                    productName: viewModel.productSelected?.name ?? ""
-                ) { quantity in
+                SupplyProductView(productName: viewModel.productSelected?.name ?? "") { quantity in
                     viewModel.supplyProductSelectedProduct(quantity)
                 }
             }
@@ -143,16 +141,16 @@ struct ProductListView: View {
     private var headerTableView: some View {
         Grid {
             GridRow {
-                ForEach(ProductTableTitle.allCases) { title in
+                ForEach(ProductTableTitle.allCases) { header in
                     
-                    let text: String = title == .options
-                    ? "\(title.title)\(viewModel.productCount)"
-                    : title.title
+                    let text: String = header == .options
+                    ? "\(header.title)\(viewModel.productCount)"
+                    : header.title
                     
                     Text(text)
                         .frame(
                             maxWidth: .infinity,
-                            alignment: title == .product ? .leading : .center
+                            alignment: header == .product ? .leading : .center
                         )
                         .foregroundStyle(.black)
                         .font(.body)
