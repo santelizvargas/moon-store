@@ -19,7 +19,7 @@ final class UserListViewModel: ObservableObject {
         !isLoading
     }
     
-    init () {
+    init() {
         getUsers()
     }
     
