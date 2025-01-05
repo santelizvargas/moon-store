@@ -10,7 +10,7 @@ import Foundation
 final class ProductListViewModel: ObservableObject {
     @Published var productList: [ProductModel] = []
     @Published var isLoading: Bool = false
-    @Published var productCount: Int = 0
+    @Published var productCount: Int = .zero
     @Published var searchText: String = "" {
         didSet {
             filterProducts()

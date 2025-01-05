@@ -7,16 +7,16 @@
 
 struct ProductCountResponse: Decodable {
     let message: String
-    let productCount: ProductCount
+    let count: ProductCount
     
     enum CodingKeys: String, CodingKey {
         case message
-        case productCount = "data"
+        case count = "data"
     }
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.message = try container.decode(String.self, forKey: .message)
-        self.productCount = try container.decode(ProductCount.self, forKey: .productCount)
+        self.count = try container.decode(ProductCount.self, forKey: .count)
     }
 }
