@@ -47,6 +47,8 @@ struct ExporterButton<CollectionType: Collection>: View {
         let stringFormat: String = {
             if let users = collection as? [UserModel] {
                 FileFactory.makeUserStringFormatted(users: users)
+            } else if let products = collection as? [ProductModel] {
+                FileFactory.makeProductStringFormatted(products: products)
             } else { "Nothing" }
         }()
         return MSDocument(content: stringFormat)

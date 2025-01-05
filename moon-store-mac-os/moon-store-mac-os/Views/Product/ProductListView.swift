@@ -57,6 +57,11 @@ struct ProductListView: View {
             HStack {
                 SearchView(searchText: $viewModel.searchText)
                     .leadingInfinity()
+                
+                ExporterButton(title: "Exportar",
+                               fileName: "Products",
+                               collection: viewModel.productList)
+                .disabled(viewModel.cannotExportProducts)
 
                 Button {
                     showAddProductModal.toggle()

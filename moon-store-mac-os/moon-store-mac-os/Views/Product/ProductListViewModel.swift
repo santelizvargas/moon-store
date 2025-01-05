@@ -22,6 +22,10 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
+    var cannotExportProducts: Bool {
+        productList.isEmpty
+    }
+    
     var productSelected: ProductModel?
     
     private let productManager: ProductManager = .init()
