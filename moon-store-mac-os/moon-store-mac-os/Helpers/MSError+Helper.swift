@@ -33,6 +33,11 @@ enum MSError: Error {
     // Image Picker
     case invalidSelection
     case unsupportedFormat
+    
+    // Users
+    case duplicatePassword
+    case passwordsNotMatch
+    case invalidPassword
 
     var friendlyMessage: String {
         switch self {
@@ -43,6 +48,9 @@ enum MSError: Error {
         case .duplicateKey: "El nombre ya existe, por favor ingrese uno diferente."
         case .invalidSelection, .unsupportedFormat:
                 "La imagen no pudo cargarse correctamente, por favor intenta de nuevo"
+        case .duplicatePassword: "La contraseña nueva debe ser diferente a la actual"
+        case .passwordsNotMatch: "Las contraseñas no coinciden"
+            case .invalidPassword: "Invalid password"
         default: "Algo salió mal. Por favor, intenta más tarde."
         }
     }
@@ -64,6 +72,9 @@ enum MSError: Error {
         case .duplicateKey: "Duplicate key"
         case .invalidSelection: "Invalid image selection"
         case .unsupportedFormat: "Format not supported"
+        case .duplicatePassword: "Duplicate password"
+        case .passwordsNotMatch: "Passwords do not match"
+        case .invalidPassword: "Invalid password"
         }
     }
 }
