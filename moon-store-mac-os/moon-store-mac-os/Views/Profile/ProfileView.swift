@@ -22,6 +22,8 @@ private enum Constants {
 }
 
 struct ProfileView: View {
+    @ObservedObject private var  viewModel: ProfileViewModel = .init()
+    
     private let user: UserModel
 
     init(user: UserModel) {
@@ -39,6 +41,7 @@ struct ProfileView: View {
         }
         .padding()
         .frame(maxHeight: .infinity, alignment: .top)
+        .showSpinner($viewModel.isLoading)
     }
     
     private var fullName: String {
@@ -69,11 +72,14 @@ struct ProfileView: View {
     private var updatePassword: some View {
         cardContainer(title: "Actualizar Contraseña") {
             Group {
-                MSTextField(title: "Contraseña Actual", text: .constant(""), isSecure: true)
-                MSTextField(title: "Nueva Contraseña", text: .constant(""), isSecure: true)
-                MSTextField(title: "Confirmar Contraseña", text: .constant(""), isSecure: true)
+                MSTextField(title: "Contraseña Actual", text: $viewModel.currentPassword, isSecure: true)
+                MSTextField(title: "Nueva Contraseña", text: $viewModel.newPassword, isSecure: true)
+                MSTextField(title: "Confirmar Contraseña", text: $viewModel.confirmPassword, isSecure: true)
                 
-                PrimaryButton("Actualizar") { }
+                PrimaryButton("Actualizar") {
+                    viewModel.updatePassword(with: user.email)
+                }
+                .disabled(viewModel.cannotUpdatePassword)
             }
             .padding(.horizontal)
         }

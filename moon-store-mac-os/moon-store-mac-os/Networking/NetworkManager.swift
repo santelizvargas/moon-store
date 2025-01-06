@@ -137,6 +137,7 @@ final class NetworkManager {
     
     // MARK: - HTTP UPDATE
     
+    @discardableResult
     func putData(for endpoint: MSEndpoint,
                  with parameters: [String: Any]) async throws -> Data {
         components.path = endpoint.path
