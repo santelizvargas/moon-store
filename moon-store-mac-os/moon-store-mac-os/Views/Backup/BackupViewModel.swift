@@ -20,7 +20,7 @@ final class BackupViewModel: ObservableObject {
     func getBackupList() {
         isLoading = true
         
-        Task {
+        Task { @MainActor in
             defer { isLoading = false }
             
             do {
@@ -31,15 +31,23 @@ final class BackupViewModel: ObservableObject {
         }
     }
     
-    func backupDatabase() {
+    func showBackupConfirmationAlert() {
+        AlertPresenter.showConfirmationAlert(message: "Esta seguro que desea realizar un backup de la base de datos?",
+                                             actionButtonTitle: "Backup") { [weak self] in
+            guard let self else { return }
+            backupDatabase()
+        }
+    }
+    
+    func restoreBackup(_ backup: String) {
         isLoading = true
         
-        Task {
+        Task { @MainActor in
             defer { isLoading = false }
             
             do {
-                try await backupManager.backupDatabase()
-                AlertPresenter.showAlert("Backup realizado correctamente!")
+                try await backupManager.restoreBackup(with: backup)
+                AlertPresenter.showAlert("Restauración realizada correctamente!")
                 getBackupList()
             } catch {
                 AlertPresenter.showAlert(with: error)
@@ -47,15 +55,15 @@ final class BackupViewModel: ObservableObject {
         }
     }
     
-    func restoreBackup(_ backup: String) {
+    private func backupDatabase() {
         isLoading = true
         
-        Task {
+        Task { @MainActor in
             defer { isLoading = false }
             
             do {
-                try await backupManager.restoreBackup(with: backup)
-                AlertPresenter.showAlert("Restauración realizada correctamente!")
+                try await backupManager.backupDatabase()
+                AlertPresenter.showAlert("Backup realizado correctamente!")
                 getBackupList()
             } catch {
                 AlertPresenter.showAlert(with: error)
