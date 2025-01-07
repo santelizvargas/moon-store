@@ -19,7 +19,7 @@ struct UserListView: View {
         .frame(maxWidth: .infinity, alignment: .top)
         .padding()
         .sheet(isPresented: $showModal) {
-            UserInviteView(isShowing: $showModal)
+            InviteUserView()
         }
     }
     
@@ -164,8 +164,4 @@ extension UserListView {
             case .edit: "Editar"
         }
     }
-}
-
-#Preview {
-    UserListView()
 }
