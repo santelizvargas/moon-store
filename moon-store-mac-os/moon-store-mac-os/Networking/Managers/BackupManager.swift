@@ -16,7 +16,7 @@ final class BackupManager {
     func getBackupList() async throws -> [String] {
         do {
             let data = try await networkManager.getData(for: .listDatabase)
-            let response = try JSONDecoder().decode(BackupListResponseModel.self, from: data)
+            let response = try decoder.decode(BackupListResponseModel.self, from: data)
             return response.data
         } catch {
             throw error
@@ -27,8 +27,8 @@ final class BackupManager {
     
     func backupDatabase() async throws {
         do {
-            let data = try await networkManager.postData(for: .backupDatabase, with: [:])
-            let response = try JSONDecoder().decode(BackupResponseModel.self, from: data)
+            let data = try await networkManager.postData(for: .backupDatabase)
+            let response = try decoder.decode(BackupResponseModel.self, from: data)
             debugPrint("Response: \(response.message)")
         } catch {
             throw error
@@ -44,7 +44,7 @@ final class BackupManager {
         
         do {
             let data = try await networkManager.postData(for: .restoreDatabase, with: parameters)
-            let response = try JSONDecoder().decode(BackupResponseModel.self, from: data)
+            let response = try decoder.decode(BackupResponseModel.self, from: data)
             debugPrint("Response: \(response.message)")
         } catch {
             throw error

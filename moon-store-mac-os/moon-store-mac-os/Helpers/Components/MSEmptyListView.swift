@@ -9,8 +9,8 @@ import SwiftUI
 
 private enum Constants {
     static let cornerRadius: CGFloat = 10
-    static let imageSize: CGFloat = 200
-    static let imageHeight: CGFloat = imageSize * 0.7
+    static let defaultImageSize: CGFloat = 200
+    static let imageHeight: CGFloat = defaultImageSize * 0.7
     static let emptyListImage: String = "list.bullet.clipboard"
     static let buttonIcon: String = "repeat"
 }
@@ -19,7 +19,7 @@ struct MSEmptyListView: View {
     private let retryAction: () -> Void
     private let imageSize: CGFloat
     
-    init(imageSize: CGFloat = Constants.imageSize,
+    init(imageSize: CGFloat = Constants.defaultImageSize,
          retryAction: @escaping () -> Void) {
         self.imageSize = imageSize
         self.retryAction = retryAction
@@ -29,7 +29,7 @@ struct MSEmptyListView: View {
         VStack {
             Image(.msEmpty)
                 .resizable()
-                .frame(width: Constants.imageSize,
+                .frame(width: Constants.defaultImageSize,
                        height: Constants.imageHeight)
                 .foregroundStyle(.msDarkGray)
             

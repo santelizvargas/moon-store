@@ -11,6 +11,10 @@ final class BackupViewModel: ObservableObject {
     @Published var backupList: [String] = []
     @Published var isLoading: Bool = false
     
+    var shouldShowEmptyView: Bool {
+        backupList.isEmpty && !isLoading
+    }
+    
     private let backupManager: BackupManager = .init()
     
     init() {

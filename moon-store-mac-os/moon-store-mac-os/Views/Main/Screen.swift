@@ -14,8 +14,8 @@ enum ScreenSection: String, Identifiable, CaseIterable {
     
     var screens: [Screen] {
         switch self {
-            case .overview: [.charts, .users]
-            case .inventory: [.products, .backups]
+            case .overview: [.charts, .users, .backups]
+            case .inventory: [.products]
             case .billing: [.newSale, .salesReport]
         }
     }

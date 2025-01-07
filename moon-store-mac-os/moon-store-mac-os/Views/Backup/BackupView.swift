@@ -9,35 +9,32 @@ import SwiftUI
 
 private enum Constants {
     static let lineLimit: Int = 1
-    static let listWidth: CGFloat = 400
     static let cornerRadius: CGFloat = 8
     static let buttonWidth: CGFloat = 200
 }
 
 struct BackupView: View {
-    @ObservedObject private var viewModel: BackupViewModel = .init()
+    @StateObject private var viewModel: BackupViewModel = .init()
     
     var body: some View {
         VStack {
             headerView
             
-            if viewModel.backupList.isEmpty, !viewModel.isLoading {
+            if viewModel.shouldShowEmptyView {
                 MSEmptyListView {
                     viewModel.getBackupList()
                 }
             } else {
                 List(viewModel.backupList, id: \.self) { backup in
-                    Text(backup)
+                    Text("\(localizedString(.rowPrefix)) \(backup)")
                         .frame(alignment: .center)
                         .lineLimit(Constants.lineLimit)
                     
                 }
-                .frame(width: Constants.listWidth)
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
             }
         }
         .padding()
-        .screenSize()
         .showSpinner($viewModel.isLoading)
     }
     
@@ -61,12 +58,14 @@ extension BackupView {
     private enum BackupViewKey {
         case headerTitle
         case addBackupButton
+        case rowPrefix
     }
     
     private func localizedString(_ key: BackupViewKey) -> String {
         switch key {
-            case .headerTitle: "Backups"
-            case .addBackupButton: "Backup base de datos"
+            case .headerTitle: "Respaldo"
+            case .addBackupButton: "Respaldar base de datos"
+            case .rowPrefix: "Nombre del respaldo: "
         }
     }
 }

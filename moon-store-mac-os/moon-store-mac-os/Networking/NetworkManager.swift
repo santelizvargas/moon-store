@@ -48,7 +48,7 @@ final class NetworkManager {
     // MARK: - HTTP POST
     
     func postData(for endpoint: MSEndpoint,
-                  with parameters: [String: Any]) async throws -> Data {
+                  with parameters: [String: Any] = [:]) async throws -> Data {
         components.path = endpoint.path
         
         guard let url = components.url else {
