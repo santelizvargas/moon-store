@@ -11,7 +11,7 @@ final class UserListViewModel: ObservableObject {
     @Published var userList: [UserModel] = []
     @Published var isLoading: Bool = false
     
-    private let networkManager: NetworkManager = .init()
+    private let userManager: UserManager = .init()
     private let decoder: JSONDecoder = .init()
     
     var showEmptyView: Bool {
@@ -34,9 +34,7 @@ final class UserListViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                let data = try await networkManager.getData(for: .users)
-                let response = try decoder.decode(UserResponse.self, from: data)
-                userList = response.users
+                userList = try await userManager.getUsers()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }

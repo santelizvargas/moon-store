@@ -18,6 +18,7 @@ struct UserListView: View {
         }
         .frame(maxWidth: .infinity, alignment: .top)
         .padding()
+        .showSpinner($viewModel.isLoading)
         .sheet(isPresented: $showModal) {
             InviteUserView()
         }

@@ -11,6 +11,18 @@ final class UserManager {
     private let networkManager: NetworkManager = .init()
     private let decoder: JSONDecoder = .init()
     
+    // MARK: - Get users
+    
+    func getUsers() async throws -> [UserModel] {
+        do {
+            let data = try await networkManager.getData(for: .users)
+            let response = try decoder.decode(UserResponse.self, from: data)
+            return response.users
+        } catch {
+            throw error
+        }
+    }
+    
     // MARK: - Update password
     
     func updatePassword(email: String,
