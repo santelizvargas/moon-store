@@ -51,51 +51,47 @@ struct UserListView: View {
         }
     }
     
-    // MARK: - Header Table View
-    
-    private var headerTableView: some View {
-        Grid {
-            GridRow {
-                ForEach(UserTableHeader.allCases) { title in
-                    Text(title.title)
-                        .frame(maxWidth: .infinity,
-                               alignment: title == .role ? .center : .leading)
-                        .foregroundStyle(.black)
-                        .font(.body.bold())
-                }
-            }
-        }
-        .padding(.leading, UserConstants.headerTableViewLeadingPadding)
-    }
-    
     // MARK: - Table View
     
     private var productTableView: some View {
-        VStack {
+        VStack(spacing: .zero) {
             headerTableView
+                .background(.msWhite)
             
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(Array(viewModel.userList.enumerated()),
-                            id: \.element.id) { index, user in
-                        userRowView(user: user,
-                                    isEvenRow: UserConstants.UserRow.evenNumber == .zero)
-                    }
-                }
-                .fixedSize(horizontal: false, vertical: true)
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
-                    .stroke(.msGray)
-                
-                if viewModel.showEmptyView {
-                    MSEmptyListView {
-                        viewModel.getUsers()
+                    ForEach(Array(viewModel.userList.enumerated()), id: \.element.id) { index, user in
+                        userRowView(user: user, isEvenRow: index.isMultiple(of: UserConstants.UserRow.evenNumber))
                     }
                 }
             }
-            .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
-            .showSpinner($viewModel.isLoading)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
+                .stroke(.msGray)
+        }
+        .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+    
+    // MARK: - Header Table View
+    
+    private var headerTableView: some View {
+        Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
+            GridRow {
+                ForEach(UserTableHeader.allCases) { header in
+                    Text(header.title)
+                        .padding(header.padding)
+                        .frame(
+                            maxWidth: header == .option ? UserConstants.UserRow.optionSize : .infinity,
+                            alignment: header.aligment
+                        )
+                        .foregroundStyle(.msBlack)
+                        .font(.body.bold())
+                }
+            }
+            .frame(height: UserConstants.UserRow.height)
         }
     }
     
@@ -117,6 +113,7 @@ struct UserListView: View {
                     .lineLimit(UserConstants.UserRow.lineLimit)
             }
             .padding(.leading)
+            .frame(maxWidth: .infinity)
             
             Group {
                 Text(user.email)
@@ -125,7 +122,7 @@ struct UserListView: View {
                 
                 Text(user.roles.first?.name ?? "")
                 
-                Text(user.createdAt.formattedDate ?? localizedString(.invalidDate))
+                Text(user.createdAt)
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
@@ -156,7 +153,7 @@ struct UserListView: View {
 
 extension UserListView {
     private enum TitleValue {
-        case header, user, inviteUser, edit, invalidDate
+        case header, user, inviteUser, edit
     }
     
     private func localizedString(_ key: TitleValue) -> String {
@@ -165,7 +162,6 @@ extension UserListView {
             case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
             case .edit: "Editar"
-            case .invalidDate: "Fecha inválida"
         }
     }
 }
