@@ -10,6 +10,7 @@ import Foundation
 final class ProductListViewModel: ObservableObject {
     @Published var productList: [ProductModel] = []
     @Published var isLoading: Bool = false
+    @Published var productCount: Int = .zero
     @Published var searchText: String = "" {
         didSet {
             filterProducts()
@@ -22,7 +23,13 @@ final class ProductListViewModel: ObservableObject {
         !isSearchInProgress
     }
     
-    private let networkManager: NetworkManager = .init()
+    var cannotExportProducts: Bool {
+        productList.isEmpty
+    }
+    
+    var productSelected: ProductModel?
+    
+    private let productManager: ProductManager = .init()
     private let decoder: JSONDecoder = .init()
     
     private var isSearchInProgress: Bool = false
@@ -40,10 +47,72 @@ final class ProductListViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                let data = try await networkManager.getData(for: .products)
-                let response = try decoder.decode(ProductResponse.self, from: data)
-                products = response.data
+                products = try await productManager.getProducts()
                 productList = products
+                getProductCount()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
+    func showDeleteAlert(with id: Int) {
+        updateSelectedProduct(with: id)
+        
+        AlertPresenter.showConfirmationAlert(message: "¿Está seguro que quiere eliminar el producto?",
+                                             actionButtonTitle: "Eliminar") { [weak self] in
+            guard let self else { return }
+            self.deleteSelectedProduct()
+        }
+    }
+    
+    func supplyProductSelectedProduct(_ quantity: String) {
+        guard let productSelected,
+              let quantity = Double(quantity) else { return }
+        
+        isLoading = true
+        
+        Task { @MainActor in
+            defer {
+                isLoading = false
+            }
+            
+            do {
+                try await productManager.supplyProduct(id: productSelected.id,
+                                                       with: quantity)
+                getProducts()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
+    func updateSelectedProduct(with id: Int) {
+        productSelected = products.first { $0.id == id }
+    }
+    
+    private func getProductCount() {
+        Task { @MainActor in
+            do {
+                productCount = try await productManager.getProductCount()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
+    private func deleteSelectedProduct() {
+        guard let productSelected else { return }
+        
+        isLoading = true
+        Task { @MainActor in
+            defer {
+                isLoading = false
+            }
+            
+            do {
+                try await productManager.deleteProduct(with: productSelected.id)
+                getProducts()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }

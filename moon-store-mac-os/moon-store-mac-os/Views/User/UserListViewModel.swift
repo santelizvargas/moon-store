@@ -19,6 +19,10 @@ final class UserListViewModel: ObservableObject {
         !isLoading
     }
     
+    var cannotExportList: Bool {
+        userList.isEmpty
+    }
+    
     init() {
         getUsers()
     }

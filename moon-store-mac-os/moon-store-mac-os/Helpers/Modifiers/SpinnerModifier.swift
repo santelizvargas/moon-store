@@ -17,7 +17,6 @@ struct SpinnerModifier: ViewModifier {
     func body(content: Content) -> some View {
         if showSpinner {
             content
-                .frame(maxSquare: .infinity)
                 .overlay {
                     MSSpinner()
                 }

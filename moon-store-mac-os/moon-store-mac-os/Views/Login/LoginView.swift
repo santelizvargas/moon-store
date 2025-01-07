@@ -46,6 +46,7 @@ struct LoginView: View {
         .screenSize()
         .background(.msLightGray)
         .showSpinner($viewModel.isLoading)
+        .onAppear(perform: goToMain)
     }
     
     // MARK: - View Components
@@ -76,9 +77,8 @@ struct LoginView: View {
                 viewModel.login()
             }
             .onReceive(viewModel.$loginSuccess) { success in
-                if success, let user = viewModel.loggedUser {
-                    router.push(.main(user))
-                }
+                guard success else { return }
+                goToMain()
             }
         }
     }
@@ -93,6 +93,11 @@ struct LoginView: View {
                 .foregroundStyle(.blue)
         }
         .padding(.top)
+    }
+    
+    private func goToMain() {
+        guard let user = viewModel.loggedUser else { return }
+        router.push(.main(user))
     }
 }
 

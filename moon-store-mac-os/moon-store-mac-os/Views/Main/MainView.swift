@@ -9,12 +9,11 @@ import SwiftUI
 
 private enum Constants {
     static let profileButtonSize: CGFloat = 25
-    static let profileIcon: String = "person.circle.fill"
 }
 
 struct MainView: View {
     @EnvironmentObject private var router: AppRouter
-    @State private var screenSelection: Screen = .charts
+    @State private var screenSelection: Screen = .profile
     
     private let user: UserModel
     
@@ -24,7 +23,10 @@ struct MainView: View {
     
     var body: some View {
         NavigationSplitView {
-            Sidebar(screenSelection: $screenSelection)
+            Sidebar(
+                screenSelection: $screenSelection,
+                roleId: user.roles.first?.id ?? .zero
+            )
         } detail: {
             detailContent
                 .screenSize()
@@ -45,19 +47,19 @@ struct MainView: View {
         switch screenSelection {
             case .products: ProductListView()
             case .users: UserListView()
+            case .profile: ProfileView(user: user)
             default: Text(screenSelection.rawValue)
         }
     }
     
     private var profileButton: some View {
-        Button {
-            // TODO: - Navigate to the profile screen and remove placeholder alert
-            AlertPresenter.showAlert("Profile feature is under development. Stay tuned for updates!")
-        } label: {
-            Image(systemName: Constants.profileIcon)
-                .resizable()
-                .frame(square: Constants.profileButtonSize)
+        Button("\(user.firstName) \(user.lastName)".abbreviated) {
+            screenSelection = .profile
         }
         .buttonStyle(.plain)
+        .bold()
+        .frame(square: Constants.profileButtonSize)
+        .background(.msPrimary, in: .circle)
+        .foregroundStyle(.msWhite)
     }
 }

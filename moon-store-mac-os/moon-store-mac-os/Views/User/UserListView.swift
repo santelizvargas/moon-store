@@ -12,65 +12,43 @@ struct UserListView: View {
     @State private var showModal: Bool = false
     
     var body: some View {
-        VStack {
-            HStack {
-                Text(localizedString(.user))
-                    .leadingInfinity()
-                    .font(.title3)
-                    .bold()
-                
-                Button(localizedString(.inviteUser),
-                       systemImage: UserConstants.Button.plusIcon) {
-                    showModal.toggle()
-                }
-                .buttonStyle(.plain)
-                .padding(UserConstants.padding)
-                .foregroundStyle(.msWhite)
-                .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
-            }
-            
+        VStack(spacing: UserConstants.spacing) {
+            headerView
             productTableView
         }
         .frame(maxWidth: .infinity, alignment: .top)
-        .padding(.horizontal)
+        .padding()
         .sheet(isPresented: $showModal) {
             UserInviteView(isShowing: $showModal)
         }
     }
     
-    // MARK: - Table View
+    // MARK: - Header View
     
-    private var productTableView: some View {
-        VStack(spacing: .zero) {
-            headerTableView
-                .background(.msWhite)
+    private var headerView: some View {
+        HStack {
+            Text(localizedString(.user))
+                .font(.title3.bold())
+                .leadingInfinity()
             
-            ScrollView(showsIndicators: false) {
-                Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(Array(viewModel.userList.enumerated()), id: \.element.id) { index, user in
-                        HStack(spacing: UserConstants.UserRow.hStackSpacing) {
-                            userRowView(user: user)
-                            .padding(.vertical)
-                        }
-                        .background(index % UserConstants.UserRow.evenNumber == .zero
-                                    ? .msLightGray
-                                    : .msWhite)
-                    }
-                }
+            Button(
+                localizedString(.inviteUser),
+                systemImage: UserConstants.Button.plusIcon
+            ) {
+                showModal.toggle()
             }
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
-                .stroke(.msGray)
+            .buttonStyle(.plain)
+            .padding(UserConstants.padding)
+            .foregroundStyle(.msWhite)
+            .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
             
-            if viewModel.showEmptyView {
-                MSEmptyListView {
-                    viewModel.getUsers()
-                }
-            }
+            ExporterButton(
+                title: "Exportar Usuarios",
+                fileName: "Usuarios",
+                collection: viewModel.userList
+            )
+            .disabled(viewModel.cannotExportList)
         }
-        .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
-        .showSpinner($viewModel.isLoading)
     }
     
     // MARK: - Header Table View
@@ -86,23 +64,59 @@ struct UserListView: View {
                         .font(.body.bold())
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical)
+        }
+        .padding(.leading, UserConstants.headerTableViewLeadingPadding)
+    }
+    
+    // MARK: - Table View
+    
+    private var productTableView: some View {
+        VStack {
+            headerTableView
+            
+            ScrollView(showsIndicators: false) {
+                Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
+                    ForEach(Array(viewModel.userList.enumerated()),
+                            id: \.element.id) { index, user in
+                        userRowView(user: user,
+                                    isEvenRow: UserConstants.UserRow.evenNumber == .zero)
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: UserConstants.cornerRadius)
+                    .stroke(.msGray)
+                
+                if viewModel.showEmptyView {
+                    MSEmptyListView {
+                        viewModel.getUsers()
+                    }
+                }
+            }
+            .clipShape(.rect(cornerRadius: UserConstants.cornerRadius))
+            .showSpinner($viewModel.isLoading)
         }
     }
     
     // MARK: - Table Row View
     
-    private func userRowView(user: UserModel) -> some View {
+    private func userRowView(user: UserModel, isEvenRow: Bool) -> some View {
         GridRow {
-            Image(systemName: UserConstants.personIcon)
-                .resizable()
-                .frame(square: UserConstants.iconSize)
-            
-            Text("\(user.firstName) \(user.lastName)")
-                .leadingInfinity()
-                .foregroundStyle(.msBlack)
-                .lineLimit(UserConstants.UserRow.lineLimit)
+            HStack(spacing: UserConstants.UserRow.spacing) {
+                let fullName: String = "\(user.firstName) \(user.lastName)"
+                
+                Text(fullName.abbreviated)
+                    .frame(square: UserConstants.iconSize)
+                    .background(.msPrimary, in: .circle)
+                    .foregroundStyle(.msWhite)
+                
+                Text(fullName)
+                    .leadingInfinity()
+                    .foregroundStyle(.msBlack)
+                    .lineLimit(UserConstants.UserRow.lineLimit)
+            }
+            .padding(.leading)
             
             Group {
                 Text(user.email)
@@ -119,7 +133,8 @@ struct UserListView: View {
             
             optionsView
         }
-        .frame(maxWidth: .infinity)
+        .frame(height: UserConstants.UserRow.height)
+        .background(isEvenRow ? .msLightGray : .msWhite)
     }
     
     // MARK: - User options view
@@ -135,7 +150,7 @@ struct UserListView: View {
                 .frame(square: UserConstants.UserRow.iconSize)
                 .foregroundStyle(.red)
         }
-        .padding(.trailing)
+        .frame(width: UserConstants.UserRow.optionSize)
     }
 }
 

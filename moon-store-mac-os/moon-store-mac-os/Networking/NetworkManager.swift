@@ -124,11 +124,20 @@ final class NetworkManager {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = Constants.deleteHttpMethod
         
-        return try await request(urlRequest: urlRequest)
+        do {
+            let json = try JSONSerialization.data(withJSONObject: parameters)
+            urlRequest.httpBody = json
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            return try await request(urlRequest: urlRequest)
+        } catch {
+            throw MSError.encodingError
+        }
     }
     
     // MARK: - HTTP UPDATE
     
+    @discardableResult
     func putData(for endpoint: MSEndpoint,
                  with parameters: [String: Any]) async throws -> Data {
         components.path = endpoint.path
@@ -141,7 +150,15 @@ final class NetworkManager {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = Constants.putHttpMethod
         
-        return try await request(urlRequest: urlRequest)
+        do {
+            let json = try JSONSerialization.data(withJSONObject: parameters)
+            urlRequest.httpBody = json
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            return try await request(urlRequest: urlRequest)
+        } catch {
+            throw MSError.encodingError
+        }
     }
     
     func request(urlRequest: URLRequest) async throws -> Data {
