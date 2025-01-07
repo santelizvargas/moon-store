@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserListView: View {
+    @StateObject private var viewModel: UserListViewModel = .init()
     @State private var showModal: Bool = false
     
     var body: some View {
@@ -18,7 +19,7 @@ struct UserListView: View {
         .frame(maxWidth: .infinity, alignment: .top)
         .padding()
         .sheet(isPresented: $showModal) {
-            UserInviteView(isShowing: $showModal)
+            InviteUserView()
         }
     }
     
@@ -44,8 +45,9 @@ struct UserListView: View {
             ExporterButton(
                 title: "Exportar Usuarios",
                 fileName: "Usuarios",
-                collection: UserModel.userMockData
+                collection: viewModel.userList
             )
+            .disabled(viewModel.cannotExportList)
         }
     }
     
@@ -58,7 +60,7 @@ struct UserListView: View {
             
             ScrollView(showsIndicators: false) {
                 Grid(horizontalSpacing: .zero, verticalSpacing: .zero) {
-                    ForEach(Array(UserModel.userMockData.enumerated()), id: \.element.id) { index, user in
+                    ForEach(Array(viewModel.userList.enumerated()), id: \.element.id) { index, user in
                         userRowView(user: user, isEvenRow: index.isMultiple(of: UserConstants.UserRow.evenNumber))
                     }
                 }
@@ -162,8 +164,4 @@ extension UserListView {
             case .edit: "Editar"
         }
     }
-}
-
-#Preview {
-    UserListView()
 }

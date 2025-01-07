@@ -11,9 +11,10 @@ enum UserConstants {
     static let cornerRadius: CGFloat = 10
     static let iconSize: CGFloat = 30
     static let personIcon: String = "person.crop.circle.fill"
-    static let padding: CGFloat = 10
+    static let padding: CGFloat = 6
     static let spacing: CGFloat = 15
     static let textFieldHeight: CGFloat = 40
+    static let headerTableViewLeadingPadding: CGFloat = 25
     
     enum Button {
         static let plusIcon: String = "paperplane.fill"
