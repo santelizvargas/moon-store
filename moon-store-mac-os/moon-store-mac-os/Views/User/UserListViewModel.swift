@@ -57,6 +57,21 @@ final class UserListViewModel: ObservableObject {
         }
     }
     
+    func assignRole(role: String, email: String, revoke: Int?) {
+        isLoading = true
+        
+        Task { @MainActor in
+            defer { isLoading = false }
+            
+            do {
+                try await userManager.assignRole(role: role, email: email, revoke: revoke ?? .zero)
+                getUsers()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
     private func enableUser(with id: Int) {
         isLoading = true
         

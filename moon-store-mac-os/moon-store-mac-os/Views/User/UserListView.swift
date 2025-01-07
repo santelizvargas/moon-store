@@ -139,9 +139,15 @@ struct UserListView: View {
     
     private func optionsView(for user: UserModel) -> some View {
         HStack(spacing: UserConstants.UserRow.spacing) {
-            Text(localizedString(.edit))
-                .underline()
-                .foregroundStyle(.msPrimary)
+            Menu(Role.getRole(from: user.roles.first).title) {
+                ForEach(user.roles.first?.getRoles() ?? []) { role in
+                    Button(role.title) {
+                        viewModel.assignRole(role: role.name,
+                                             email: user.email,
+                                             revoke: user.roles.first?.id)
+                    }
+                }
+            }
             
             Button {
                 user.deletedAt == nil
@@ -157,7 +163,6 @@ struct UserListView: View {
             }
             .buttonStyle(.plain)
         }
-        .frame(width: UserConstants.UserRow.optionSize)
     }
 }
 
@@ -171,7 +176,7 @@ extension UserListView {
             case .header: "Vista General"
             case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
-            case .edit: "Editar"
+            case .edit: "Editar Roles"
         }
     }
 }

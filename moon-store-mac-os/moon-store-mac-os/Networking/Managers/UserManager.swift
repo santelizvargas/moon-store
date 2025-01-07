@@ -77,4 +77,37 @@ final class UserManager {
             throw error
         }
     }
+    
+    // MARK: - Assign Role
+    
+    func assignRole(role: String, email: String, revoke: Int) async throws {
+        let parameters: [String: Any] = [
+            "email": email,
+            "role": role
+        ]
+        
+        do {
+            try await networkManager.postData(for: .roles,
+                                              with: parameters)
+            try await revokeRole(id: revoke, email: email)
+        } catch {
+            throw error
+        }
+    }
+    
+    // MARK: - Revoke Role
+    
+    private func revokeRole(id: Int, email: String) async throws {
+        let parameters: [String: Any] = [
+            "email": email,
+            "roleId": id
+        ]
+        
+        do {
+            try await networkManager.deleteData(for: .roles,
+                                                 with: parameters)
+        } catch {
+            throw error
+        }
+    }
 }
