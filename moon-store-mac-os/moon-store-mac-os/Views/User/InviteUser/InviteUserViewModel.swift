@@ -16,7 +16,7 @@ final class InviteUserViewModel: ObservableObject {
     @Published var email: String = ""
     
     var cannotOpenMailApp: Bool {
-        email.isEmpty
+        !email.matchesEmail()
     }
     
     func showModalToInviteUser() {
