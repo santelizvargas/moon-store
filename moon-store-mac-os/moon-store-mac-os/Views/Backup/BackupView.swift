@@ -43,14 +43,30 @@ struct BackupView: View {
     
     private var headerView: some View {
         HStack {
-            Text("Backups")
+            Text(localizedString(.headerTitle))
                 .font(.title)
                 .leadingInfinity()
             
-            PrimaryButton("Backup base de datos") {
+            PrimaryButton(localizedString(.addBackupButton)) {
                 viewModel.showBackupConfirmationAlert()
             }
             .frame(width: Constants.buttonWidth)
+        }
+    }
+}
+
+// MARK: Localized
+
+extension BackupView {
+    private enum BackupViewKey {
+        case headerTitle
+        case addBackupButton
+    }
+    
+    private func localizedString(_ key: BackupViewKey) -> String {
+        switch key {
+            case .headerTitle: "Backups"
+            case .addBackupButton: "Backup base de datos"
         }
     }
 }
