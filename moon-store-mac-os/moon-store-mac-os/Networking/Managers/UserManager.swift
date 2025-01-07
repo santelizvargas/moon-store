@@ -49,4 +49,32 @@ final class UserManager {
             throw MSError.invalidPassword
         }
     }
+    
+    // MARK: - Enable User
+    
+    func enableUser(id: Int) async throws {
+        let parameters: [String: Any] = [
+            "id": id
+        ]
+        
+        do {
+            try await networkManager.putData(for: .enableUser,
+                                             with: parameters)
+        } catch {
+            throw error
+        }
+    }
+    
+    // MARK: - Disable User
+    
+    func disableUser(id: Int) async throws {
+        let parameters: [String: Any] = ["id": id]
+        
+        do {
+            try await networkManager.deleteData(for: .disableUser,
+                                                 with: parameters)
+        } catch {
+            throw error
+        }
+    }
 }

@@ -129,7 +129,7 @@ struct UserListView: View {
             .frame(maxWidth: .infinity)
             .foregroundStyle(.msDarkGray)
             
-            optionsView
+            optionsView(for: user)
         }
         .frame(height: UserConstants.UserRow.height)
         .background(isEvenRow ? .msLightGray : .msWhite)
@@ -137,16 +137,25 @@ struct UserListView: View {
     
     // MARK: - User options view
     
-    private var optionsView: some View {
+    private func optionsView(for user: UserModel) -> some View {
         HStack(spacing: UserConstants.UserRow.spacing) {
             Text(localizedString(.edit))
                 .underline()
                 .foregroundStyle(.msPrimary)
             
-            Image(systemName: UserConstants.UserRow.trashIcon)
-                .resizable()
-                .frame(square: UserConstants.UserRow.iconSize)
-                .foregroundStyle(.red)
+            Button {
+                user.deletedAt == nil
+                ? viewModel.showDisableUserConfirmationAlert(for: user.id)
+                : viewModel.showEnableUserConfirmationAlert(for: user.id)
+            } label: {
+                Image(systemName: user.deletedAt == nil
+                      ? UserConstants.UserRow.trashIcon
+                      : UserConstants.UserRow.reloadIcon)
+                    .resizable()
+                    .frame(square: UserConstants.UserRow.iconSize)
+                    .foregroundStyle(.red)
+            }
+            .buttonStyle(.plain)
         }
         .frame(width: UserConstants.UserRow.optionSize)
     }

@@ -40,4 +40,50 @@ final class UserListViewModel: ObservableObject {
             }
         }
     }
+    
+    func showEnableUserConfirmationAlert(for id: Int) {
+        AlertPresenter.showConfirmationAlert(message: "Estas seguro que quieres habilitar este usuario?",
+                                             actionButtonTitle: "Habilitar") { [weak self] in
+            guard let self else { return }
+            enableUser(with: id)
+        }
+    }
+    
+    func showDisableUserConfirmationAlert(for id: Int) {
+        AlertPresenter.showConfirmationAlert(message: "Estas seguro que quieres desabilitar este usuario?",
+                                             actionButtonTitle: "Desabilitar") { [weak self] in
+            guard let self else { return }
+            disableUser(with: id)
+        }
+    }
+    
+    private func enableUser(with id: Int) {
+        isLoading = true
+        
+        Task { @MainActor in
+            defer { isLoading = false }
+            
+            do {
+                try await userManager.enableUser(id: id)
+                getUsers()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
+    
+    private func disableUser(with id: Int) {
+        isLoading = true
+        
+        Task { @MainActor in
+            defer { isLoading = false }
+            
+            do {
+                try await userManager.disableUser(id: id)
+                getUsers()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
+    }
 }
