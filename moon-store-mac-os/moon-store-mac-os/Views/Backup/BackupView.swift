@@ -29,7 +29,6 @@ struct BackupView: View {
                     Text("\(localizedString(.rowPrefix)) \(backup)")
                         .frame(alignment: .center)
                         .lineLimit(Constants.lineLimit)
-                    
                 }
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
             }
