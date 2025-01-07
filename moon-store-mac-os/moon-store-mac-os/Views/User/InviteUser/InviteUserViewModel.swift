@@ -9,14 +9,21 @@ import AppKit
 
 private enum Constants {
     static let emailSubject = "Invitación de MS Store"
-    static let emailBody: String = "Hola! \n\n Has sido invitado a probar nuestra aplicación MS Store por Bryan Luna, un desarrollador de software en Apple.\n\n Para acceder a la aplicación y ver más detalles, visita: \n\n https://github.com/Rexmoon/moon-store"
+    static let emailBody: String = """
+    Hola!
+    
+    Has sido invitado a probar nuestra aplicación MS Store por Bryan Luna, un desarrollador de software en Apple.
+    Para acceder a la aplicación y ver más detalles, visita:
+    
+    https://github.com/Rexmoon/moon-store
+    """
 }
 
 final class InviteUserViewModel: ObservableObject {
     @Published var email: String = ""
     
     var cannotOpenMailApp: Bool {
-        !email.matchesEmail()
+        !email.matchesEmail
     }
     
     func showModalToInviteUser() {
@@ -34,5 +41,4 @@ final class InviteUserViewModel: ObservableObject {
               let url = URL(string: encodedURLString) else { return }
         NSWorkspace.shared.open(url)
     }
-
 }

@@ -10,8 +10,8 @@ private enum Constants {
 }
 
 extension String {
-    func matchesEmail() -> Bool {
-        guard let range = self.range(of: Constants.emailRegex,
+    var matchesEmail: Bool {
+        guard let range = range(of: Constants.emailRegex,
                                      options: .regularExpression) else { return false }
         return range.lowerBound == startIndex && range.upperBound == endIndex
     }
