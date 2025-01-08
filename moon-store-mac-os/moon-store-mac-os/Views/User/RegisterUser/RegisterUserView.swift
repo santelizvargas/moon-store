@@ -102,6 +102,7 @@ struct RegisterUserView: View {
             .padding()
             .buttonStyle(.plain)
         }
+        .showSpinner($viewModel.isLoading)
     }
 }
 

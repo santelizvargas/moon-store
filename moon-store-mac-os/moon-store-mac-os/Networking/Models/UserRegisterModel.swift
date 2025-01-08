@@ -21,7 +21,7 @@ struct UserRegisterModel: Codable {
         identification.isEmpty ||
         phone.isEmpty ||
         address.isEmpty ||
-        email.matchesEmail ||
+        !email.matchesEmail ||
         password.isEmpty ||
         confirmPassword.isEmpty
     }

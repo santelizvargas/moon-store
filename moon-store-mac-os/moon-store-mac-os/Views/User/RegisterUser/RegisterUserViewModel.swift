@@ -13,10 +13,11 @@ final class RegisterUserViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     var cannotRegisterYet: Bool {
-        userModel.cannotRegisterYet()
+        userModel.cannotRegisterYet() ||
+        userModel.password != userModel.confirmPassword
     }
     
-    private let authenticationManager: UserManager = .init()
+    private let userManager: UserManager = .init()
     
     func registerUser() {
         isLoading = true
@@ -25,9 +26,9 @@ final class RegisterUserViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                try await authenticationManager.registerUser(user: userModel)
-                userModel = UserRegisterModel()
+                try await userManager.registerUser(user: userModel)
                 AlertPresenter.showAlert("Usuario registrado exitosamente!")
+                userModel = UserRegisterModel()
                 wasRegisterSuccess = true
             } catch {
                 AlertPresenter.showAlert(with: error)

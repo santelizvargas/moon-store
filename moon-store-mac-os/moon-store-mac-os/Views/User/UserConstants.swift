@@ -15,9 +15,11 @@ enum UserConstants {
     static let spacing: CGFloat = 15
     static let textFieldHeight: CGFloat = 40
     static let headerTableViewLeadingPadding: CGFloat = 25
+    static let userFileName: String = "Usuarios"
     
     enum Button {
-        static let plusIcon: String = "paperplane.fill"
+        static let width: CGFloat = 125
+        static let height: CGFloat = 35
     }
     
     enum UserRow {

@@ -178,7 +178,7 @@ final class NetworkManager {
     
     // MARK: - Convert To dictionary
     
-    func convertToDictionary<T: Codable>(data: T) async throws -> [String: Any] {
+    func convertToDictionary<T: Codable>(data: T) throws -> [String: Any] {
         do {
             let jsonData = try JSONEncoder().encode(data)
             let parameters = try JSONSerialization.jsonObject(with: jsonData,
