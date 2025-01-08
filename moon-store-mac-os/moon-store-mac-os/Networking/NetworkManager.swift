@@ -175,4 +175,18 @@ final class NetworkManager {
             throw MSError.networkConnection
         }
     }
+    
+    // MARK: - Convert To dictionary
+    
+    func convertToDictionary<T: Codable>(data: T) async throws -> [String: Any] {
+        do {
+            let jsonData = try JSONEncoder().encode(data)
+            let parameters = try JSONSerialization.jsonObject(with: jsonData,
+                                                              options: .mutableContainers) as? [String: Any]
+            guard let parameters else { throw MSError.encodingError }
+            return parameters
+        } catch {
+            throw error
+        }
+    }
 }

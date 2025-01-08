@@ -110,4 +110,14 @@ final class UserManager {
             throw error
         }
     }
+    
+    func registerUser(user: UserRegisterModel) async throws {
+        do {
+            let parameters = try await networkManager.convertToDictionary(data: user)
+            try await networkManager.postData(for: .register,
+                                              with: parameters)
+        } catch {
+            throw error
+        }
+    }
 }
