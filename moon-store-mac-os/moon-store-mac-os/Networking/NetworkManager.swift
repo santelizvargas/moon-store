@@ -47,6 +47,7 @@ final class NetworkManager {
     
     // MARK: - HTTP POST
     
+    @discardableResult
     func postData(for endpoint: MSEndpoint,
                   with parameters: [String: Any] = [:]) async throws -> Data {
         components.path = endpoint.path
@@ -112,6 +113,7 @@ final class NetworkManager {
     
     // MARK: - HTTP DELETE
     
+    @discardableResult
     func deleteData(for endpoint: MSEndpoint,
                     with parameters: [String: Any]) async throws -> Data {
         components.path = endpoint.path

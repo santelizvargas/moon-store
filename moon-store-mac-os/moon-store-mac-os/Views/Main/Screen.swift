@@ -54,8 +54,30 @@ enum Screen: String, Identifiable {
     }
 }
 
-// TODO: - Use this enum for Roles instead of Role Model, move to a file
-
-enum Role: Int {
+enum Role: Int, CaseIterable, Identifiable {
     case owner, admin, seller, supplier
+    
+    var id: Int { rawValue }
+    
+    var name: String {
+        switch self {
+            case .owner: "owner"
+            case .admin: "admin"
+            case .seller: "seller"
+            case .supplier: "supplier"
+        }
+    }
+    
+    var title: String {
+        switch self {
+            case .owner: "Owner"
+            case .admin: "Administrador"
+            case .seller: "Vendedor"
+            case .supplier: "Abastecedor"
+        }
+    }
+    
+    static func getRole(from role: RoleModel?) -> Role {
+        Role.allCases.first(where: { $0.id == role?.id }) ?? .supplier
+    }
 }
