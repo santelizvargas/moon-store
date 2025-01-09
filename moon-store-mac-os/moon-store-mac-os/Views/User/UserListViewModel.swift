@@ -36,7 +36,7 @@ final class UserListViewModel: ObservableObject {
             
             do {
                 userList = try await userManager.getUsers()
-                avoidShowLoggedUser()
+                filterUsersExcludingLoggedUser()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -104,7 +104,7 @@ final class UserListViewModel: ObservableObject {
         }
     }
     
-    private func avoidShowLoggedUser() {
+    private func filterUsersExcludingLoggedUser() {
         guard let loggedUser = authenticationManager.loggedUser else { return }
         userList = userList.filter { loggedUser.id != $0.id }
     }

@@ -17,29 +17,24 @@ final class AuthenticationManager {
     }
     
     var loggedUser: UserModel? {
-        do {
-            let users = try userStore.fetch()
-            return users.first
-        } catch {
-            debugPrint("Error: User not found \(error.localizedDescription) redirect to login")
-            return nil
-        }
+        let users = try? userStore.fetch()
+        return users?.first
     }
     
     // MARK: - Login
     
-    func login(email: String, password: String) async throws {
-        guard !isLoggedUser else { return }
-        
+    func login(email: String, password: String) async throws -> UserModel {
         let parameters: [String: Any] = [
             "email": email,
             "password": password
         ]
         
         do {
-            let response = try await networkManager.postData(for: .login, with: parameters)
-            let loginResponse = try decoder.decode(LoginResponseModel.self, from: response)
-            try storeUser(loginResponse.user)
+            let data = try await networkManager.postData(for: .login, with: parameters)
+            let response = try decoder.decode(LoginResponseModel.self, from: data)
+            let user = response.user
+            try storeUser(user)
+            return user
         } catch {
             throw error
         }
@@ -48,7 +43,7 @@ final class AuthenticationManager {
     // MARK: - Logout
     
     func logout() {
-        guard loggedUser != nil else { return }
+        guard isLoggedUser else { return }
         
         do {
             try userStore.removeAll()

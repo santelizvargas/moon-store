@@ -124,7 +124,7 @@ struct UserListView: View {
                     .lineLimit(UserConstants.UserRow.lineLimit)
                     .leadingInfinity()
                 
-                Text(user.createdAt.formattedDate)
+                Text(localizedString(.dateText(user.createdAt)))
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
@@ -169,7 +169,7 @@ struct UserListView: View {
 
 extension UserListView {
     private enum TitleValue {
-        case header, inviteUser, edit, registerButton, exportButton
+        case header, inviteUser, edit, registerButton, exportButton, dateText(String?)
     }
     
     private func localizedString(_ key: TitleValue) -> String {
@@ -179,6 +179,7 @@ extension UserListView {
             case .edit: "Editar Roles"
             case .registerButton: "Registrar usuario"
             case .exportButton: "Exportar"
+            case .dateText(let date): date?.formattedDate ?? "Fecha inválida"
         }
     }
 }

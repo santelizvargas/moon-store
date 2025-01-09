@@ -82,6 +82,7 @@ struct LoginView: View {
             PrimaryButton("Iniciar sesión") {
                 viewModel.login()
             }
+            .disabled(viewModel.cannotLoginYet)
             .onReceive(viewModel.$loggedUser) { _ in
                 goToMain()
             }

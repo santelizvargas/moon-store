@@ -13,7 +13,7 @@ final class RegisterUserViewModel: ObservableObject {
     @Published var userRegistered: UserModel?
     
     var cannotRegisterYet: Bool {
-        userModel.cannotRegisterYet() ||
+        userModel.cannotRegisterYet ||
         userModel.password != userModel.confirmPassword
     }
     

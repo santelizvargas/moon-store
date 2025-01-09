@@ -15,7 +15,7 @@ struct UserRegisterModel: Codable {
     var password: String = ""
     var confirmPassword: String = ""
     
-    func cannotRegisterYet() -> Bool {
+    var cannotRegisterYet: Bool {
         firstName.isEmpty ||
         lastName.isEmpty ||
         identification.isEmpty ||

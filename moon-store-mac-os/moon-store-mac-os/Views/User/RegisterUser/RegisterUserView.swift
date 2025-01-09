@@ -47,7 +47,7 @@ struct RegisterUserView: View {
     
     private var headerView: some View {
         HStack {
-            Text("Registrando usuario")
+            Text(localized(.viewTitle))
                 .font(.title2)
                 .leadingInfinity()
             
@@ -60,9 +60,9 @@ struct RegisterUserView: View {
             }
             .buttonStyle(.plain)
         }
+        .padding(.bottom)
     }
     
-    @ViewBuilder
     private var registerForm: some View {
         Grid(horizontalSpacing: Constants.spacing,
              verticalSpacing: Constants.spacing) {
@@ -141,6 +141,7 @@ extension RegisterUserView {
         case passwordTextField
         case confirmPasswordTextField
         case registerButtonTitle
+        case viewTitle
     }
     
     private func localized(_ key: RegisterUserViewKey) -> String {
@@ -154,6 +155,7 @@ extension RegisterUserView {
             case .passwordTextField: "Contraseña"
             case .confirmPasswordTextField: "Confirmar contraseña"
             case .registerButtonTitle: "Registrar"
+            case .viewTitle: "Registrando usuario"
         }
     }
 }

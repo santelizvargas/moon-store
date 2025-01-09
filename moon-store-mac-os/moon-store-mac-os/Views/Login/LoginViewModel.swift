@@ -15,6 +15,11 @@ final class LoginViewModel: ObservableObject {
     
     private let authenticationManager: AuthenticationManager = .init()
     
+    var cannotLoginYet: Bool {
+        !email.matchesEmail ||
+        password.isEmpty
+    }
+    
     init() {
         loggedUser = authenticationManager.loggedUser
     }
@@ -23,14 +28,13 @@ final class LoginViewModel: ObservableObject {
         isLoading = true
         
         Task { @MainActor in
-            defer {
-                isLoading = false
-                loggedUser = authenticationManager.loggedUser
-            }
+            defer { isLoading = false }
             
             do {
-                try await authenticationManager.login(email: email,
+                let user = try await authenticationManager.login(email: email,
                                                       password: password)
+                loggedUser = user
+                resetPropertiesDefaultValue()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -39,5 +43,11 @@ final class LoginViewModel: ObservableObject {
     
     func logout() {
         authenticationManager.logout()
+    }
+    
+    private func resetPropertiesDefaultValue() {
+        email = ""
+        password = ""
+        loggedUser = nil
     }
 }
