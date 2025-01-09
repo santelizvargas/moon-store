@@ -9,7 +9,8 @@ import SwiftUI
 
 struct UserListView: View {
     @StateObject private var viewModel: UserListViewModel = .init()
-    @State private var showModal: Bool = false
+    @State private var showInviteUserModal: Bool = false
+    @State private var showRegisterUserModal: Bool = false
     
     var body: some View {
         VStack(spacing: UserConstants.spacing) {
@@ -19,8 +20,13 @@ struct UserListView: View {
         .frame(maxWidth: .infinity, alignment: .top)
         .padding()
         .showSpinner($viewModel.isLoading)
-        .sheet(isPresented: $showModal) {
+        .sheet(isPresented: $showInviteUserModal) {
             InviteUserView()
+        }
+        .sheet(isPresented: $showRegisterUserModal) {
+            RegisterUserView { _ in
+                viewModel.getUsers()
+            }
         }
     }
     
@@ -28,28 +34,26 @@ struct UserListView: View {
     
     private var headerView: some View {
         HStack {
-            Text(localizedString(.user))
-                .font(.title3.bold())
-                .leadingInfinity()
-            
-            Button(
-                localizedString(.inviteUser),
-                systemImage: UserConstants.Button.plusIcon
-            ) {
-                showModal.toggle()
+            PrimaryButton(localizedString(.inviteUser)) {
+                showInviteUserModal.toggle()
             }
-            .buttonStyle(.plain)
-            .padding(UserConstants.padding)
-            .foregroundStyle(.msWhite)
-            .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
+            .frame(width: UserConstants.Button.width,
+                   height: UserConstants.Button.height)
+            
+            PrimaryButton(localizedString(.registerButton)) {
+                showRegisterUserModal.toggle()
+            }
+            .frame(width: UserConstants.Button.width,
+                   height: UserConstants.Button.height)
             
             ExporterButton(
-                title: "Exportar Usuarios",
-                fileName: "Usuarios",
+                title: localizedString(.exportButton),
+                fileName: UserConstants.userFileName,
                 collection: viewModel.userList
             )
             .disabled(viewModel.cannotExportList)
         }
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     // MARK: - Table View
@@ -84,9 +88,8 @@ struct UserListView: View {
                 ForEach(UserTableHeader.allCases) { header in
                     Text(header.title)
                         .padding(header.padding)
-                        .frame(
-                            maxWidth: header == .option ? UserConstants.UserRow.optionSize : .infinity,
-                            alignment: header.aligment
+                        .frame(maxWidth: .infinity,
+                               alignment: header.alignment
                         )
                         .foregroundStyle(.msBlack)
                         .font(.body.bold())
@@ -121,9 +124,7 @@ struct UserListView: View {
                     .lineLimit(UserConstants.UserRow.lineLimit)
                     .leadingInfinity()
                 
-                Text(user.roles.first?.name ?? "")
-                
-                Text(user.createdAt)
+                Text(user.createdAt.formattedDate)
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
@@ -168,15 +169,20 @@ struct UserListView: View {
 
 extension UserListView {
     private enum TitleValue {
-        case header, user, inviteUser, edit
+        case header, inviteUser, edit, registerButton, exportButton
     }
     
     private func localizedString(_ key: TitleValue) -> String {
         switch key {
             case .header: "Vista General"
-            case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
             case .edit: "Editar Roles"
+            case .registerButton: "Registrar usuario"
+            case .exportButton: "Exportar"
         }
     }
+}
+
+#Preview {
+    UserListView()
 }

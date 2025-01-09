@@ -110,4 +110,18 @@ final class UserManager {
             throw error
         }
     }
+    
+    // MARK: - Register user
+    
+    func registerUser(user: UserRegisterModel) async throws -> UserModel {
+        do {
+            let parameters = try networkManager.convertToDictionary(data: user)
+            let data = try await networkManager.postData(for: .register,
+                                                         with: parameters)
+            let response = try decoder.decode(LoginResponseModel.self, from: data)
+            return response.user
+        } catch {
+            throw error
+        }
+    }
 }
