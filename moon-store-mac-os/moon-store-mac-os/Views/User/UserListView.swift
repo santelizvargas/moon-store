@@ -53,7 +53,7 @@ struct UserListView: View {
             )
             .disabled(viewModel.cannotExportList)
         }
-        .leadingInfinity()
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     // MARK: - Table View
@@ -88,11 +88,8 @@ struct UserListView: View {
                 ForEach(UserTableHeader.allCases) { header in
                     Text(header.title)
                         .padding(header.padding)
-                        .frame(
-                            maxWidth: header == .option
-                            ? UserConstants.UserRow.optionSize
-                            : .infinity,
-                            alignment: header.alignment
+                        .frame(maxWidth: .infinity,
+                               alignment: header.alignment
                         )
                         .foregroundStyle(.msBlack)
                         .font(.body.bold())
@@ -127,7 +124,7 @@ struct UserListView: View {
                     .lineLimit(UserConstants.UserRow.lineLimit)
                     .leadingInfinity()
                 
-                Text(user.createdAt)
+                Text(user.createdAt.formattedDate)
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)

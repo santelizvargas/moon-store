@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum UserTableHeader: CaseIterable, Identifiable {
-    case user, email, role, date, option
+    case user, email, date, role
     
     var id: UserTableHeader { self }
     
@@ -18,7 +18,6 @@ enum UserTableHeader: CaseIterable, Identifiable {
             case .email: "Email"
             case .date: "Fecha"
             case .role: "Rol"
-            default: ""
         }
     }
     
@@ -32,7 +31,6 @@ enum UserTableHeader: CaseIterable, Identifiable {
     var padding: Edge.Set {
         switch self {
             case .user: .leading
-            case .option: .trailing
             default: .vertical
         }
     }
