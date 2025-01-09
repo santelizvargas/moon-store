@@ -82,8 +82,7 @@ struct LoginView: View {
             PrimaryButton("Iniciar sesión") {
                 viewModel.login()
             }
-            .onReceive(viewModel.$loginSuccess) { success in
-                guard success else { return }
+            .onReceive(viewModel.$loggedUser) { _ in
                 goToMain()
             }
         }

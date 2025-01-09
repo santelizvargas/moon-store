@@ -11,78 +11,33 @@ final class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var isLoading: Bool = false
-    @Published var loginSuccess: Bool = false
+    @Published var loggedUser: UserModel?
     
-    var isLoggedUser: Bool {
-        loggedUser != nil
+    private let authenticationManager: AuthenticationManager = .init()
+    
+    init() {
+        loggedUser = authenticationManager.loggedUser
     }
-    
-    var loggedUser: UserModel? {
-        do {
-            let users = try userStore.fetch()
-            return users.first
-        } catch {
-            debugPrint("Error: User not found \(error.localizedDescription) redirect to login")
-            return nil
-        }
-    }
-    
-    private let networkManager: NetworkManager = .init()
-    private let userStore: DataManager<UserModel> = .init()
-    private let decoder: JSONDecoder = .init()
-    
-    // MARK: - Login
     
     func login() {
-        guard !isLoggedUser else { return }
-        
         isLoading = true
         
         Task { @MainActor in
             defer {
                 isLoading = false
-                loginSuccess = isLoggedUser
-                if loginSuccess { resetTextFields() }
+                loggedUser = authenticationManager.loggedUser
             }
             
-            let parameters: [String: Any] = [
-                "email": email,
-                "password": password
-            ]
-            
             do {
-                let response = try await networkManager.postData(for: .login, with: parameters)
-                let loginResponse = try decoder.decode(LoginResponseModel.self, from: response)
-                try storeUser(loginResponse.user)
+                try await authenticationManager.login(email: email,
+                                                      password: password)
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
         }
     }
     
-    // MARK: - Logout
-    
     func logout() {
-        guard loggedUser != nil else { return }
-        
-        do {
-            try userStore.removeAll()
-        } catch {
-            AlertPresenter.showAlert(with: error)
-        }
+        authenticationManager.logout()
     }
-    
-    private func storeUser(_ user: UserModel) throws {
-        do {
-            try userStore.save(model: user)
-        } catch {
-            throw error
-        }
-    }
-    
-    private func resetTextFields() {
-        email = ""
-        password = ""
-    }
-    
 }

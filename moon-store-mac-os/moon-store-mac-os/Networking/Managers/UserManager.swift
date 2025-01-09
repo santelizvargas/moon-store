@@ -111,6 +111,8 @@ final class UserManager {
         }
     }
     
+    // MARK: - Register user
+    
     func registerUser(user: UserRegisterModel) async throws -> UserModel {
         do {
             let parameters = try networkManager.convertToDictionary(data: user)

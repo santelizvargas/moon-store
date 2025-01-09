@@ -8,10 +8,11 @@
 import Foundation
 
 final class UserListViewModel: ObservableObject {
-    @Published var userList: [UserModel] = []
     @Published var isLoading: Bool = false
+    @Published var userList: [UserModel] = []
     
     private let userManager: UserManager = .init()
+    private let authenticationManager: AuthenticationManager = .init()
     private let decoder: JSONDecoder = .init()
     
     var showEmptyView: Bool {
@@ -35,6 +36,7 @@ final class UserListViewModel: ObservableObject {
             
             do {
                 userList = try await userManager.getUsers()
+                avoidShowLoggedUser()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -100,5 +102,10 @@ final class UserListViewModel: ObservableObject {
                 AlertPresenter.showAlert(with: error)
             }
         }
+    }
+    
+    private func avoidShowLoggedUser() {
+        guard let loggedUser = authenticationManager.loggedUser else { return }
+        userList = userList.filter { loggedUser.id != $0.id }
     }
 }
