@@ -35,7 +35,7 @@ struct UserListView: View {
     private var headerView: some View {
         HStack {
             PrimaryButton(localizedString(.inviteUser)) {
-                showRegisterUserModal.toggle()
+                showInviteUserModal.toggle()
             }
             .frame(width: UserConstants.Button.width,
                    height: UserConstants.Button.height)
@@ -89,8 +89,10 @@ struct UserListView: View {
                     Text(header.title)
                         .padding(header.padding)
                         .frame(
-                            maxWidth: header == .option ? UserConstants.UserRow.optionSize : .infinity,
-                            alignment: header.aligment
+                            maxWidth: header == .option
+                            ? UserConstants.UserRow.optionSize
+                            : .infinity,
+                            alignment: header.alignment
                         )
                         .foregroundStyle(.msBlack)
                         .font(.body.bold())
@@ -124,8 +126,6 @@ struct UserListView: View {
                 Text(user.email)
                     .lineLimit(UserConstants.UserRow.lineLimit)
                     .leadingInfinity()
-                
-                Text(user.roles.first?.name ?? "")
                 
                 Text(user.createdAt)
                     .frame(alignment: .leading)

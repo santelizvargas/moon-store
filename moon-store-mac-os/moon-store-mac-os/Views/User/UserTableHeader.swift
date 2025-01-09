@@ -16,13 +16,13 @@ enum UserTableHeader: CaseIterable, Identifiable {
         switch self {
             case .user: "Usuario"
             case .email: "Email"
-            case .role: "Rol"
             case .date: "Fecha"
+            case .role: "Rol"
             default: ""
         }
     }
     
-    var aligment: Alignment {
+    var alignment: Alignment {
         switch self {
             case .role, .date: .center
             default: .leading
