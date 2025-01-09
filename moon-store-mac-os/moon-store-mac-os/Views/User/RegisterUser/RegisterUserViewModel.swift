@@ -9,8 +9,8 @@ import Foundation
 
 final class RegisterUserViewModel: ObservableObject {
     @Published var userModel: UserRegisterModel = .init()
-    @Published var wasRegisterSuccess: Bool = false
     @Published var isLoading: Bool = false
+    @Published var userRegistered: UserModel?
     
     var cannotRegisterYet: Bool {
         userModel.cannotRegisterYet() ||
@@ -26,10 +26,10 @@ final class RegisterUserViewModel: ObservableObject {
             defer { isLoading = false }
             
             do {
-                try await userManager.registerUser(user: userModel)
+                let user = try await userManager.registerUser(user: userModel)
                 AlertPresenter.showAlert("Usuario registrado exitosamente!")
                 userModel = UserRegisterModel()
-                wasRegisterSuccess = true
+                userRegistered = user
             } catch {
                 AlertPresenter.showAlert(with: error)
             }

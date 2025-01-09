@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject private var router: AppRouter
     @ObservedObject private var viewModel: LoginViewModel = .init()
+    @State private var showRegisterModal: Bool = false
     
     var body: some View {
         VStack {
@@ -47,6 +48,11 @@ struct LoginView: View {
         .background(.msLightGray)
         .showSpinner($viewModel.isLoading)
         .onAppear(perform: goToMain)
+        .sheet(isPresented: $showRegisterModal) {
+            RegisterUserView { user in
+                router.push(.main(user))
+            }
+        }
     }
     
     // MARK: - View Components
@@ -88,9 +94,11 @@ struct LoginView: View {
             Text("¿Aún no tienes una cuenta?")
                 .foregroundStyle(.black)
             
-            Button("Regístrate") { }
-                .buttonStyle(.plain)
-                .foregroundStyle(.blue)
+            Button("Regístrate") {
+                showRegisterModal.toggle()
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.blue)
         }
         .padding(.top)
     }

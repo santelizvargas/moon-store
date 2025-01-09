@@ -20,14 +20,52 @@ struct RegisterUserView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: RegisterUserViewModel = .init()
     
-    private let onRegisterSuccess: () -> Void
+    private let onRegisterSuccess: (UserModel) -> Void
     
-    init(onRegisterSuccess: @escaping () -> Void) {
+    init(onRegisterSuccess: @escaping (UserModel) -> Void) {
         self.onRegisterSuccess = onRegisterSuccess
     }
     
     var body: some View {
-        Grid(horizontalSpacing: Constants.spacing, verticalSpacing: Constants.spacing) {
+        
+        VStack {
+            headerView
+            
+            registerForm
+                .frame(minWidth: Constants.gridMinWidth)
+                .onReceive(viewModel.$userRegistered) { user in
+                    guard let user else { return }
+                    dismiss()
+                    onRegisterSuccess(user)
+                }
+                .showSpinner($viewModel.isLoading)
+            
+            registerButton
+        }
+        .padding(Constants.gridPadding)
+    }
+    
+    private var headerView: some View {
+        HStack {
+            Text("Registrando usuario")
+                .font(.title2)
+                .leadingInfinity()
+            
+            
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: Constants.crossIcon)
+                    .foregroundStyle(.msPrimary)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+    
+    @ViewBuilder
+    private var registerForm: some View {
+        Grid(horizontalSpacing: Constants.spacing,
+             verticalSpacing: Constants.spacing) {
             GridRow {
                 MSTextField(
                     title: localized(.nameTextField),
@@ -77,32 +115,16 @@ struct RegisterUserView: View {
                     isSecure: true
                 )
             }
-            
-            PrimaryButton(localized(.registerButtonTitle)) {
-                viewModel.registerUser()
-            }
-            .frame(width: Constants.registerButtonWidth,
-                   height: Constants.registerButtonHeight)
-            .disabled(viewModel.cannotRegisterYet)
         }
-        .padding(Constants.gridPadding)
-        .frame(minWidth: Constants.gridMinWidth)
-        .onReceive(viewModel.$wasRegisterSuccess) { success in
-            guard success else { return }
-            dismiss()
-            onRegisterSuccess()
+    }
+    
+    private var registerButton: some View {
+        PrimaryButton(localized(.registerButtonTitle)) {
+            viewModel.registerUser()
         }
-        .overlay(alignment: .topTrailing) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: Constants.crossIcon)
-                    .foregroundStyle(.msPrimary)
-            }
-            .padding()
-            .buttonStyle(.plain)
-        }
-        .showSpinner($viewModel.isLoading)
+        .frame(width: Constants.registerButtonWidth,
+               height: Constants.registerButtonHeight)
+        .disabled(viewModel.cannotRegisterYet)
     }
 }
 
@@ -137,5 +159,5 @@ extension RegisterUserView {
 }
 
 #Preview {
-    RegisterUserView() { }
+    RegisterUserView() { _ in }
 }

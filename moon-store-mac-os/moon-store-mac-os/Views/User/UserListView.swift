@@ -24,7 +24,7 @@ struct UserListView: View {
             InviteUserView()
         }
         .sheet(isPresented: $showRegisterUserModal) {
-            RegisterUserView {
+            RegisterUserView { _ in
                 viewModel.getUsers()
             }
         }
