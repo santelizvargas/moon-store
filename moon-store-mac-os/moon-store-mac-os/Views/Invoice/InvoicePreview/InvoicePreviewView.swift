@@ -18,6 +18,8 @@ private enum Constants {
     static let minHeight: CGFloat = 600
     static let logoSize: CGFloat = 150
     static let ivaValue: CGFloat = 0.15
+    static let previewIcon: String = "xmark"
+    static let dashSymbol: String = "-"
 }
 
 struct InvoicePreviewView: View {
@@ -38,11 +40,8 @@ struct InvoicePreviewView: View {
             maxHeight: .infinity
         )
         .frame(width: Constants.maxWidth)
-        .foregroundStyle(.black)
-        .background {
-            RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                .fill(.msWhite)
-        }
+        .background(.msWhite,
+                    in: .rect(cornerRadius: Constants.cornerRadius))
     }
     
     private var contentView: some View {
@@ -50,55 +49,56 @@ struct InvoicePreviewView: View {
             headerView
             
             VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text("+505 8942 6818")
-                Text(verbatim: "info@electronic.store")
-                Text("Catedral de León 2C al Norte, León - Nicaragua")
+                Text(localized(.ownerPhone))
+                Text(localized(.ownerEmail))
+                Text(localized(.ownerAddress))
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .foregroundStyle(.msGray)
+            .leadingInfinity()
             
             VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text("Datos del cliente")
+                Text(localized(.clientData))
                     .font(.title3.bold())
                 
                 Grid(alignment: .leading, verticalSpacing: Constants.gridSpacing) {
                     GridRow {
-                        Text("Nombre:")
+                        Text(localized(.name))
                         Text(invoiceSale.clientName)
-                            .foregroundStyle(.msGray)
                     }
                     
                     GridRow {
-                        Text("Identificacion:")
+                        Text(localized(.identification))
                         Text(invoiceSale.clientIdentification)
-                            .foregroundStyle(.msGray)
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            leadingInfinity()
             
             VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text("Detalles de factura")
+                Text(localized(.invoiceDetail))
                     .font(.title3.bold())
                 
-                Grid(alignment: .leading, horizontalSpacing: Constants.productGridSpacing, verticalSpacing: Constants.totalSpacing) {
+                Grid(alignment: .leading,
+                     horizontalSpacing: Constants.productGridSpacing,
+                     verticalSpacing: Constants.totalSpacing) {
                     GridRow {
-                        Text("Cantidad")
-                        Text("Descripción")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("P. Unitario")
-                        Text("P. Total")
+                        Text(localized(.amount))
+                        
+                        Text(localized(.description))
+                            .leadingInfinity()
+                        
+                        Text(localized(.unitPrice))
+                        
+                        Text(localized(.totalPrice))
                     }
                     .bold()
                     
-                    ForEach(invoiceSale.products, id: \.idString) { product in
+                    ForEach(invoiceSale.products) { product in
                         GridRow {
                             Text(product.quantity.description)
                             Text(product.name)
-                            Text("$\(getDoubleFormat(for: product.price))")
-                            Text("$\(getDoubleFormat(for: product.totalPrice))")
+                            Text(localized(.currencyText(product.price)))
+                            Text(localized(.currencyText(product.totalPrice)))
                         }
-                        .foregroundStyle(.msGray)
                     }
                 }
                 .padding()
@@ -107,12 +107,12 @@ struct InvoicePreviewView: View {
                         .strokeBorder(.black)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .leadingInfinity()
             
             Grid(alignment: .leading, horizontalSpacing: Constants.totalSpacing) {
-                totalGridRow(name: "Subtotal:", value: invoiceSale.subtotalPrice)
-                totalGridRow(name: "IVA:", value: invoiceSale.totalIva)
-                totalGridRow(name: "Total:", value: invoiceSale.totalPrice)
+                totalGridRow(name: localized(.subTotal), value: invoiceSale.subtotalPrice)
+                totalGridRow(name: localized(.IVA), value: invoiceSale.totalIva)
+                totalGridRow(name: localized(.total), value: invoiceSale.totalPrice)
             }
             .padding([.horizontal, .bottom])
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -125,20 +125,21 @@ struct InvoicePreviewView: View {
     
     private var headerView: some View {
         HStack {
-            Image(systemName: "xmark")
+            Image(systemName: Constants.previewIcon)
                 .resizable()
-                .scaledToFit()
-                .frame(width: Constants.logoSize)
+                .frame(square: Constants.logoSize)
             
             Spacer()
             
             VStack(alignment: .trailing, spacing: Constants.userSpacing) {
-                Text("Factura: ")
+                Text(localized(.bill))
                     .bold()
-                + Text(invoiceSale.id > .zero ? invoiceSale.id.description : "-")
+                +
+                Text(invoiceSale.id > .zero
+                     ? invoiceSale.id.description
+                     : Constants.dashSymbol)
                 
                 Text(invoiceSale.createAt)
-                    .foregroundStyle(.msGray)
             }
         }
     }
@@ -149,15 +150,52 @@ struct InvoicePreviewView: View {
         GridRow {
             Text(name)
                 .frame(maxWidth: .infinity, alignment: .trailing)
-            Text("$\(getDoubleFormat(for: value))")
+            
+            Text(localized(.currencyText(value)))
         }
     }
+}
+
+// MARK: - Localized
+
+extension InvoicePreviewView {
+    private enum LocalizedKey {
+        case ownerPhone
+        case ownerEmail
+        case ownerAddress
+        case clientData
+        case name
+        case identification
+        case invoiceDetail
+        case amount
+        case description
+        case unitPrice
+        case totalPrice
+        case subTotal
+        case IVA
+        case total
+        case bill
+        case currencyText(Double)
+    }
     
-    // MARK: - Get Double Format
-    
-    func getDoubleFormat(for value: Double) -> String {
-        return value.truncatingRemainder(dividingBy: 1) == .zero
-        ? String(format: "%.0f", value)
-        : String(format: "%.2f", value)
+    private func localized(_ key: LocalizedKey) -> String {
+        switch key {
+            case .ownerPhone: "+505 5730 1190"
+            case .ownerEmail: "lunajose6969@gmail.com"
+            case .ownerAddress: "San Jacinto, León - Nicaragua"
+            case .clientData: "Datos del cliente"
+            case .name: "Nombre: "
+            case .identification: "Identificación: "
+            case .invoiceDetail: "Detalles de factura"
+            case .amount: "Cantidad"
+            case .description: "Descripción"
+            case .unitPrice: "P. Unitario"
+            case .totalPrice: "P. Total"
+            case .subTotal: "Subtotal: "
+            case .IVA: "IVA: "
+            case .total: "Total: "
+            case .bill: "Factura: "
+            case .currencyText(let value): "$ \(value.numberFormatted)"
+        }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 private enum Constants {
-    static let ivaPercentage: Double = 0.15
+    static let IVAPercentage: Double = 0.15
     static let invalidDateText: String = "Fecha inválida"
 }
 
@@ -28,6 +28,6 @@ extension InvoiceSaleModel {
         }
     }
     
-    var totalIva: Double { subtotalPrice * Constants.ivaPercentage }
+    var totalIva: Double { subtotalPrice * Constants.IVAPercentage }
     var totalPrice: Double { subtotalPrice + totalIva }
 }

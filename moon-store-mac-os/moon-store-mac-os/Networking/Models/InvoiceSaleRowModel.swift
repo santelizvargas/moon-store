@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct InvoiceSaleRowModel: Hashable {
+struct InvoiceSaleRowModel: Hashable, Identifiable {
     var idString: String = UUID().uuidString
     var id: String = ""
     var name: String = ""
