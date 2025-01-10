@@ -25,14 +25,14 @@ extension Information {
             count: 203,
             iconName: "cart.fill",
             description: "Productos actualmente registrados en el inventario.",
-            color: .msGreen
+            color: .msPrimary
         ),
         Information(
             title: "Facturas",
             count: 1250,
             iconName: "doc.text.fill",
             description: "Facturas generadas y almacenadas en el sistema.",
-            color: .msPrimary
+            color: .msGreen
         ),
         Information(
             title: "Usuarios",

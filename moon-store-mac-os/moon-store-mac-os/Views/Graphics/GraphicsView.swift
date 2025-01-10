@@ -7,16 +7,39 @@
 
 import SwiftUI
 
+private enum Constants {
+    static let mainSpacing: CGFloat = 20
+}
+
 struct GraphicsView: View {
     var body: some View {
-        VStack {
+        VStack(spacing: Constants.mainSpacing) {
             HStack {
                 ForEach(Information.mockInfo) { info in
                     InformationCard(info: info)
                 }
             }
             
-            Spacer() // Remove this spacer when other views are added
+            BarChart(
+                title: "Productos mas vendidos",
+                data: ChartData.topSellingProducts,
+                color: .msPrimary,
+                titleAlignment: .center
+            )
+            
+            HStack(spacing: Constants.mainSpacing) {
+                AreaChart(
+                    title: "Productos Vendidos",
+                    data: ChartData.products,
+                    color: .msPrimary
+                )
+                
+                AreaChart(
+                    title: "Facturas Generadas",
+                    data: ChartData.invoices,
+                    color: .msGreen
+                )
+            }
         }
         .padding()
     }
