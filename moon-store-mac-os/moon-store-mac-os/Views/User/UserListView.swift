@@ -9,7 +9,8 @@ import SwiftUI
 
 struct UserListView: View {
     @StateObject private var viewModel: UserListViewModel = .init()
-    @State private var showModal: Bool = false
+    @State private var showInviteUserModal: Bool = false
+    @State private var showRegisterUserModal: Bool = false
     
     var body: some View {
         VStack(spacing: UserConstants.spacing) {
@@ -18,8 +19,14 @@ struct UserListView: View {
         }
         .frame(maxWidth: .infinity, alignment: .top)
         .padding()
-        .sheet(isPresented: $showModal) {
+        .showSpinner($viewModel.isLoading)
+        .sheet(isPresented: $showInviteUserModal) {
             InviteUserView()
+        }
+        .sheet(isPresented: $showRegisterUserModal) {
+            RegisterUserView { _ in
+                viewModel.getUsers()
+            }
         }
     }
     
@@ -27,28 +34,26 @@ struct UserListView: View {
     
     private var headerView: some View {
         HStack {
-            Text(localizedString(.user))
-                .font(.title3.bold())
-                .leadingInfinity()
-            
-            Button(
-                localizedString(.inviteUser),
-                systemImage: UserConstants.Button.plusIcon
-            ) {
-                showModal.toggle()
+            PrimaryButton(localizedString(.inviteUser)) {
+                showInviteUserModal.toggle()
             }
-            .buttonStyle(.plain)
-            .padding(UserConstants.padding)
-            .foregroundStyle(.msWhite)
-            .background(.msPrimary, in: .rect(cornerRadius: UserConstants.cornerRadius))
+            .frame(width: UserConstants.Button.width,
+                   height: UserConstants.Button.height)
+            
+            PrimaryButton(localizedString(.registerButton)) {
+                showRegisterUserModal.toggle()
+            }
+            .frame(width: UserConstants.Button.width,
+                   height: UserConstants.Button.height)
             
             ExporterButton(
-                title: "Exportar Usuarios",
-                fileName: "Usuarios",
+                title: localizedString(.exportButton),
+                fileName: UserConstants.userFileName,
                 collection: viewModel.userList
             )
             .disabled(viewModel.cannotExportList)
         }
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     // MARK: - Table View
@@ -83,9 +88,8 @@ struct UserListView: View {
                 ForEach(UserTableHeader.allCases) { header in
                     Text(header.title)
                         .padding(header.padding)
-                        .frame(
-                            maxWidth: header == .option ? UserConstants.UserRow.optionSize : .infinity,
-                            alignment: header.aligment
+                        .frame(maxWidth: .infinity,
+                               alignment: header.alignment
                         )
                         .foregroundStyle(.msBlack)
                         .font(.body.bold())
@@ -120,15 +124,13 @@ struct UserListView: View {
                     .lineLimit(UserConstants.UserRow.lineLimit)
                     .leadingInfinity()
                 
-                Text(user.roles.first?.name ?? "")
-                
-                Text(user.createdAt)
+                Text(localizedString(.dateText(user.createdAt)))
                     .frame(alignment: .leading)
             }
             .frame(maxWidth: .infinity)
             .foregroundStyle(.msDarkGray)
             
-            optionsView
+            optionsView(for: user)
         }
         .frame(height: UserConstants.UserRow.height)
         .background(isEvenRow ? .msLightGray : .msWhite)
@@ -136,32 +138,52 @@ struct UserListView: View {
     
     // MARK: - User options view
     
-    private var optionsView: some View {
+    private func optionsView(for user: UserModel) -> some View {
         HStack(spacing: UserConstants.UserRow.spacing) {
-            Text(localizedString(.edit))
-                .underline()
-                .foregroundStyle(.msPrimary)
+            Menu(Role.getRole(from: user.roles.first).title) {
+                ForEach(user.roles.first?.getRoles() ?? []) { role in
+                    Button(role.title) {
+                        viewModel.assignRole(role: role.name,
+                                             email: user.email,
+                                             revoke: user.roles.first?.id)
+                    }
+                }
+            }
             
-            Image(systemName: UserConstants.UserRow.trashIcon)
-                .resizable()
-                .frame(square: UserConstants.UserRow.iconSize)
-                .foregroundStyle(.red)
+            Button {
+                user.deletedAt == nil
+                ? viewModel.showDisableUserConfirmationAlert(for: user.id)
+                : viewModel.showEnableUserConfirmationAlert(for: user.id)
+            } label: {
+                Image(systemName: user.deletedAt == nil
+                      ? UserConstants.UserRow.trashIcon
+                      : UserConstants.UserRow.reloadIcon)
+                    .resizable()
+                    .frame(square: UserConstants.UserRow.iconSize)
+                    .foregroundStyle(.red)
+            }
+            .buttonStyle(.plain)
         }
-        .frame(width: UserConstants.UserRow.optionSize)
     }
 }
 
 extension UserListView {
     private enum TitleValue {
-        case header, user, inviteUser, edit
+        case header, inviteUser, edit, registerButton, exportButton, dateText(String?)
     }
     
     private func localizedString(_ key: TitleValue) -> String {
         switch key {
             case .header: "Vista General"
-            case .user: "Usuarios agregados"
             case .inviteUser: "Invitar usuarios"
-            case .edit: "Editar"
+            case .edit: "Editar Roles"
+            case .registerButton: "Registrar usuario"
+            case .exportButton: "Exportar"
+            case .dateText(let date): date?.formattedDate ?? "Fecha inválida"
         }
     }
+}
+
+#Preview {
+    UserListView()
 }

@@ -15,15 +15,18 @@ enum UserConstants {
     static let spacing: CGFloat = 15
     static let textFieldHeight: CGFloat = 40
     static let headerTableViewLeadingPadding: CGFloat = 25
+    static let userFileName: String = "Usuarios"
     
     enum Button {
-        static let plusIcon: String = "paperplane.fill"
+        static let width: CGFloat = 125
+        static let height: CGFloat = 35
     }
     
     enum UserRow {
         static let optionSize: CGFloat = 100
         static let spacing: CGFloat = 10
         static let trashIcon: String = "trash"
+        static let reloadIcon: String = "arrow.trianglehead.2.clockwise.rotate.90"
         static let iconSize: CGFloat = 20
         static let height: CGFloat = 50
         static let lineLimit: Int = 1

@@ -47,6 +47,7 @@ final class NetworkManager {
     
     // MARK: - HTTP POST
     
+    @discardableResult
     func postData(for endpoint: MSEndpoint,
                   with parameters: [String: Any] = [:]) async throws -> Data {
         components.path = endpoint.path
@@ -112,6 +113,7 @@ final class NetworkManager {
     
     // MARK: - HTTP DELETE
     
+    @discardableResult
     func deleteData(for endpoint: MSEndpoint,
                     with parameters: [String: Any]) async throws -> Data {
         components.path = endpoint.path
@@ -171,6 +173,20 @@ final class NetworkManager {
             return data
         } catch {
             throw MSError.networkConnection
+        }
+    }
+    
+    // MARK: - Convert To dictionary
+    
+    func dictionary<T: Codable>(from data: T) throws -> [String: Any] {
+        do {
+            let jsonData = try JSONEncoder().encode(data)
+            let parameters = try JSONSerialization.jsonObject(with: jsonData,
+                                                              options: .mutableContainers) as? [String: Any]
+            guard let parameters else { throw MSError.encodingError }
+            return parameters
+        } catch {
+            throw error
         }
     }
 }

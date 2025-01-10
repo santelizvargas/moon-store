@@ -11,13 +11,14 @@ private enum Constants {
     static let dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     static let eSIdentifier: String = "es_ES"
     static let uSIdentifier: String = "en_US_POSIX"
-    static let spanishFormat: String = "MMMM d yyyy"
+    static let spanishFormat: String = "EEEE d, yyyy"
 }
 
 extension String {
+    
     /// Formats an ISO 8601 date string (`yyyy-MM-dd'T'HH:mm:ss.SSSZ`)
     /// into a readable Spanish format (`MMMM d yyyy`).
-    /// Returns "Fecha inválida" if the input is not a valid date.
+    /// Returns "nil" if the input is not a valid date.
     var formattedDate: String? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
@@ -28,6 +29,7 @@ extension String {
         dateFormatter.locale = Locale(identifier: Constants.eSIdentifier)
         
         let stringFormattedDate = dateFormatter.string(from: date)
+        
         return stringFormattedDate.capitalized
     }
 }
