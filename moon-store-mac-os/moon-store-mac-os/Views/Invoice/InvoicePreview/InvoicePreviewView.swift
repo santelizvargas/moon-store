@@ -16,7 +16,7 @@ private enum Constants {
     static let cornerRadius: CGFloat = 10
     static let maxWidth: CGFloat = 700
     static let minHeight: CGFloat = 600
-    static let logoSize: CGFloat = 150
+    static let logoSize: CGFloat = 100
     static let ivaValue: CGFloat = 0.15
     static let previewIcon: String = "xmark"
     static let dashSymbol: String = "-"
@@ -71,7 +71,7 @@ struct InvoicePreviewView: View {
                     }
                 }
             }
-            leadingInfinity()
+            .leadingInfinity()
             
             VStack(alignment: .leading, spacing: Constants.userSpacing) {
                 Text(localized(.invoiceDetail))
@@ -128,6 +128,7 @@ struct InvoicePreviewView: View {
             Image(systemName: Constants.previewIcon)
                 .resizable()
                 .frame(square: Constants.logoSize)
+                .foregroundStyle(.msPrimary)
             
             Spacer()
             
@@ -198,4 +199,8 @@ extension InvoicePreviewView {
             case .currencyText(let value): "$ \(value.numberFormatted)"
         }
     }
+}
+
+#Preview {
+    InvoicePreviewView(invoiceSale: .init())
 }

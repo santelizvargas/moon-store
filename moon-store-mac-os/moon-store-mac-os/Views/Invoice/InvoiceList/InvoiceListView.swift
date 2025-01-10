@@ -30,11 +30,11 @@ struct InvoiceListView: View {
             )
             .disabled(viewModel.cannotExportInvoice)
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding()
             
             historyList
         }
         .showSpinner($viewModel.isLoading)
-        .padding()
         .frame(maxHeight: .infinity, alignment: .top)
         .toolbar {
             ToolbarItem(placement: .destructiveAction) {
