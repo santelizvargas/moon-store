@@ -26,4 +26,16 @@ final class FileFactory {
         
         return [header, formattedProducts].joined(separator: "\n")
     }
+    
+    static func makeInvoicesStringFormatted(invoices: [InvoiceModel]) -> String {
+        let header = "Cliente, Identificacion, Fecha de venta"
+        
+        let formattedInvoices = invoices.map { invoice in
+            let saleDate: String = invoice.createdAt.formattedDate ?? "-"
+            let dateFormatted = saleDate.replacingOccurrences(of: ",", with: " ")
+            return "\(invoice.customerName), \(invoice.customerIdentification), \(dateFormatted)"
+        }.joined(separator: "\n")
+        
+        return [header, formattedInvoices].joined(separator: "\n")
+    }
 }

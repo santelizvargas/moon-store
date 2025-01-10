@@ -39,7 +39,7 @@ struct ExporterButton<CollectionType: Collection>: View {
             contentType: .commaSeparatedText,
             defaultFilename: fileName
         ) { result in
-            handleExportResult(result)
+            handleExportResult(fileName: fileName, result)
         }
     }
     
@@ -49,14 +49,17 @@ struct ExporterButton<CollectionType: Collection>: View {
                 FileFactory.makeUserStringFormatted(users: users)
             } else if let products = collection as? [ProductModel] {
                 FileFactory.makeProductStringFormatted(products: products)
+            } else if let invoices = collection as? [InvoiceModel] {
+                FileFactory.makeInvoicesStringFormatted(invoices: invoices)
             } else { "Nothing" }
         }()
         return MSDocument(content: stringFormat)
     }
     
-    private func handleExportResult(_ result: Result<URL, Error>) {
+    private func handleExportResult(fileName: String, _ result: Result<URL, Error>) {
         switch result {
             case .success(let url):
+                AlertPresenter.showAlert("\(fileName) exportado correctamente!")
                 debugPrint("File exported to: \(url)")
             case .failure(let error):
                 AlertPresenter.showAlert(with: error)
