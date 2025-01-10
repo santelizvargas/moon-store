@@ -38,12 +38,12 @@ struct InformationCard: View {
                 Text(info.count.description)
                     .font(.title.bold())
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .leadingInfinity()
             
             Image(systemName: info.iconName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: Constants.iconSize, height: Constants.iconSize)
+                .frame(square: Constants.iconSize)
                 .padding(Constants.iconPadding)
                 .background(
                     LinearGradient(
@@ -51,7 +51,7 @@ struct InformationCard: View {
                         startPoint: .bottomLeading,
                         endPoint: .topTrailing
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+                    .clipShape(.rect(cornerRadius: Constants.cornerRadius))
                 )
                 .overlay {
                     RoundedRectangle(cornerRadius: Constants.cornerRadius)
