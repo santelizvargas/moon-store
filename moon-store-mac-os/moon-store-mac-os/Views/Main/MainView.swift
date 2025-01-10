@@ -49,6 +49,7 @@ struct MainView: View {
             case .users: UserListView()
             case .profile: ProfileView(user: user)
             case .backups: BackupView()
+            case .invoices: InvoiceListView()
             default: Text(screenSelection.rawValue)
         }
     }

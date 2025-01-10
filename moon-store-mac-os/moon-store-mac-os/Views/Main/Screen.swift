@@ -16,7 +16,7 @@ enum ScreenSection: String, Identifiable, CaseIterable {
         switch self {
             case .overview: [.charts, .users, .backups]
             case .inventory: [.products]
-            case .billing: [.newSale, .salesReport]
+            case .billing: [.newSale, .salesReport, .invoices]
         }
     }
     
@@ -39,6 +39,7 @@ enum Screen: String, Identifiable {
     case salesReport = "Reporte de Ventas"
     case profile = "Perfil"
     case backups = "Backups"
+    case invoices = "Historial de ventas"
     
     var id: String { rawValue }
     
@@ -50,6 +51,7 @@ enum Screen: String, Identifiable {
             case .newSale: "plus.circle"
             case .salesReport: "chart.line.uptrend.xyaxis"
             case .backups: "externaldrive.badge.icloud"
+            case .invoices: "paperplane"
         }
     }
 }
