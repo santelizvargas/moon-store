@@ -11,7 +11,7 @@ private enum Constants {
     static let dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     static let eSIdentifier: String = "es_ES"
     static let uSIdentifier: String = "en_US_POSIX"
-    static let spanishFormat: String = "EEEE d, yyyy"
+    static let spanishFormat: String = "EE, d MMM, yyyy"
 }
 
 extension String {

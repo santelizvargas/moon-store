@@ -126,11 +126,11 @@ struct UserListView: View {
                 
                 Text(localizedString(.dateText(user.createdAt)))
                     .frame(alignment: .leading)
+                
+                optionsView(for: user)
             }
             .frame(maxWidth: .infinity)
             .foregroundStyle(.msDarkGray)
-            
-            optionsView(for: user)
         }
         .frame(height: UserConstants.UserRow.height)
         .background(isEvenRow ? .msLightGray : .msWhite)
@@ -138,17 +138,24 @@ struct UserListView: View {
     
     // MARK: - User options view
     
+    @ViewBuilder
     private func optionsView(for user: UserModel) -> some View {
+        let currentRole = Role.getFromId(user.roles.first?.id)
+        
         HStack(spacing: UserConstants.UserRow.spacing) {
-            Menu(Role.getRole(from: user.roles.first).title) {
-                ForEach(user.roles.first?.getRoles() ?? []) { role in
+            Menu(currentRole.title) {
+                ForEach(currentRole.differentRoles) { role in
                     Button(role.title) {
-                        viewModel.assignRole(role: role.name,
-                                             email: user.email,
-                                             revoke: user.roles.first?.id)
+                        viewModel.assignRole(
+                            role: role.name,
+                            email: user.email,
+                            revoke: currentRole.id
+                        )
                     }
                 }
             }
+            .menuStyle(.borderedButton)
+            .frame(width: UserConstants.optionSize)
             
             Button {
                 user.deletedAt == nil

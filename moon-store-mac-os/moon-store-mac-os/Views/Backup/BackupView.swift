@@ -18,36 +18,30 @@ struct BackupView: View {
     
     var body: some View {
         VStack {
-            headerView
-            
-            if viewModel.shouldShowEmptyView {
-                MSEmptyListView {
-                    viewModel.getBackupList()
-                }
-            } else {
-                List(viewModel.backupList, id: \.self) { backup in
-                    Text("\(localizedString(.rowPrefix)) \(backup)")
-                        .frame(alignment: .center)
-                        .lineLimit(Constants.lineLimit)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
-            }
-        }
-        .padding()
-        .showSpinner($viewModel.isLoading)
-    }
-    
-    private var headerView: some View {
-        HStack {
-            Text(localizedString(.headerTitle))
-                .font(.title)
-                .leadingInfinity()
-            
             PrimaryButton(localizedString(.addBackupButton)) {
                 viewModel.showBackupConfirmationAlert()
             }
             .frame(width: Constants.buttonWidth)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            
+            if viewModel.backupList.isNotEmpty {
+                List(viewModel.backupList, id: \.self) { backup in
+                    Text("\(localizedString(.rowPrefix)) \(backup)")
+                        .lineLimit(Constants.lineLimit)
+                }
+                .clipShape(.rect(cornerRadius: Constants.cornerRadius))
+            }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding()
+        .background {
+            if viewModel.shouldShowEmptyView {
+                MSEmptyListView {
+                    viewModel.getBackupList()
+                }
+            }
+        }
+        .showSpinner($viewModel.isLoading)
     }
 }
 
