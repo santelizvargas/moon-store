@@ -16,7 +16,7 @@ struct InvoiceSaleModel {
     var id: Int = 0
     var clientName: String = ""
     var clientIdentification: String = ""
-    var createAt: String = "\(Date.now)".formattedDate ?? Constants.invalidDateText
+    var createAt: String = "\(Date.now.formatted())"
     var products: [InvoiceSaleRowModel] = [.init()]
 }
 

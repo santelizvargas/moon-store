@@ -11,15 +11,13 @@ private enum Constants {
     static let spacing: CGFloat = 20
     static let userSpacing: CGFloat = 8
     static let gridSpacing: CGFloat = 4
-    static let totalSpacing: CGFloat = 20
+    static let totalSpacing: CGFloat = 10
     static let productGridSpacing: CGFloat = 30
     static let cornerRadius: CGFloat = 10
-    static let maxWidth: CGFloat = 700
-    static let minHeight: CGFloat = 600
+    static let minWidth: CGFloat = 800
+    static let minHeight: CGFloat = 500
     static let logoSize: CGFloat = 100
-    static let ivaValue: CGFloat = 0.15
     static let previewIcon: String = "xmark"
-    static let dashSymbol: String = "-"
 }
 
 struct InvoicePreviewView: View {
@@ -31,93 +29,28 @@ struct InvoicePreviewView: View {
     
     var body: some View {
         ScrollView(showsIndicators: false) {
+            headerView
+            
             contentView
         }
-        .padding(.vertical)
-        .padding(.horizontal, Constants.productGridSpacing)
-        .frame(
-            minHeight: Constants.minHeight,
-            maxHeight: .infinity
+        .frame(minWidth: Constants.minWidth,
+               minHeight: Constants.minHeight)
+        .padding()
+        .background(
+            .msWhite,
+            in: .rect(cornerRadius: Constants.cornerRadius)
         )
-        .frame(width: Constants.maxWidth)
-        .background(.msWhite,
-                    in: .rect(cornerRadius: Constants.cornerRadius))
     }
     
     private var contentView: some View {
         VStack(spacing: Constants.spacing) {
-            headerView
+            ownerInformation
             
-            VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text(localized(.ownerPhone))
-                Text(localized(.ownerEmail))
-                Text(localized(.ownerAddress))
-            }
-            .leadingInfinity()
+            clientInformation
             
-            VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text(localized(.clientData))
-                    .font(.title3.bold())
-                
-                Grid(alignment: .leading, verticalSpacing: Constants.gridSpacing) {
-                    GridRow {
-                        Text(localized(.name))
-                        Text(invoiceSale.clientName)
-                    }
-                    
-                    GridRow {
-                        Text(localized(.identification))
-                        Text(invoiceSale.clientIdentification)
-                    }
-                }
-            }
-            .leadingInfinity()
+            invoiceInformation
             
-            VStack(alignment: .leading, spacing: Constants.userSpacing) {
-                Text(localized(.invoiceDetail))
-                    .font(.title3.bold())
-                
-                Grid(alignment: .leading,
-                     horizontalSpacing: Constants.productGridSpacing,
-                     verticalSpacing: Constants.totalSpacing) {
-                    GridRow {
-                        Text(localized(.amount))
-                        
-                        Text(localized(.description))
-                            .leadingInfinity()
-                        
-                        Text(localized(.unitPrice))
-                        
-                        Text(localized(.totalPrice))
-                    }
-                    .bold()
-                    
-                    ForEach(invoiceSale.products) { product in
-                        GridRow {
-                            Text(product.quantity.description)
-                            Text(product.name)
-                            Text(localized(.currencyText(Double(product.price) ?? 0)))
-                            Text(localized(.currencyText(Double(product.totalPrice) ?? 0)))
-                        }
-                    }
-                }
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                        .strokeBorder(.black)
-                }
-            }
-            .leadingInfinity()
-            
-            Grid(alignment: .leading, horizontalSpacing: Constants.totalSpacing) {
-                totalGridRow(name: localized(.subTotal), value: invoiceSale.subtotalPrice)
-                totalGridRow(name: localized(.IVA), value: invoiceSale.totalIva)
-                totalGridRow(name: localized(.total), value: invoiceSale.totalPrice)
-            }
-            .padding([.horizontal, .bottom])
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            
-            Spacer()
+            invoiceSummary
         }
     }
     
@@ -133,16 +66,110 @@ struct InvoicePreviewView: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: Constants.userSpacing) {
-                Text(localized(.bill))
-                    .bold()
-                +
-                Text(invoiceSale.id > .zero
-                     ? invoiceSale.id.description
-                     : Constants.dashSymbol)
+                HStack {
+                    Text(localized(.bill))
+                        .bold()
+                    
+                    Text(invoiceSale.id.description)
+                }
                 
                 Text(invoiceSale.createAt)
             }
         }
+    }
+    
+    // MARK: Invoice summary
+    
+    private var invoiceSummary: some View {
+        Grid(alignment: .leading, horizontalSpacing: Constants.totalSpacing) {
+            totalGridRow(name: localized(.subTotal),
+                         value: invoiceSale.subtotalPrice)
+            
+            totalGridRow(name: localized(.IVA),
+                         value: invoiceSale.totalIva)
+            
+            totalGridRow(name: localized(.total),
+                         value: invoiceSale.totalPrice)
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    
+    // MARK: - Client information
+    
+    private var clientInformation: some View {
+        VStack(alignment: .leading, spacing: Constants.userSpacing) {
+            Text(localized(.clientData))
+                .font(.title3.bold())
+            
+            Grid(alignment: .leading, verticalSpacing: Constants.gridSpacing) {
+                GridRow {
+                    Text(localized(.name))
+                    Text(invoiceSale.clientName)
+                }
+                
+                GridRow {
+                    Text(localized(.identification))
+                    Text(invoiceSale.clientIdentification)
+                }
+            }
+        }
+        .leadingInfinity()
+    }
+    
+    // MARK: Invoice information
+    
+    private var invoiceInformation: some View {
+        VStack(alignment: .leading, spacing: Constants.userSpacing) {
+            Text(localized(.invoiceDetail))
+                .font(.title3.bold())
+            
+            Grid(alignment: .leading,
+                 horizontalSpacing: Constants.productGridSpacing,
+                 verticalSpacing: Constants.totalSpacing) {
+                
+                GridRow {
+                    Text(localized(.amount))
+                    
+                    Text(localized(.description))
+                        .leadingInfinity()
+                    
+                    Text(localized(.unitPrice))
+                    
+                    Text(localized(.totalPrice))
+                }
+                .bold()
+                
+                ForEach(invoiceSale.products, id: \.idString) { product in
+                    MSDivider(color: .msBlack)
+                    
+                    GridRow {
+                        Text(product.quantity.description)
+                        Text(product.name)
+                        Text(localized(.currencyValue(Double(product.price) ?? .zero)))
+                        Text(localized(.currencyValue(Double(product.totalPrice) ?? .zero)))
+                    }
+                }
+            }
+            .padding()
+            .background {
+                RoundedRectangle(
+                    cornerRadius: Constants.cornerRadius
+                )
+                .strokeBorder(.msBlack)
+            }
+        }
+        .leadingInfinity()
+    }
+    
+    // MARK: - Owner information
+    
+    private var ownerInformation: some View {
+        VStack(alignment: .leading, spacing: Constants.userSpacing) {
+            Text(localized(.ownerPhone))
+            Text(localized(.ownerEmail))
+            Text(localized(.ownerAddress))
+        }
+        .leadingInfinity()
     }
     
     // MARK: - Total Grid Row
@@ -152,7 +179,7 @@ struct InvoicePreviewView: View {
             Text(name)
                 .frame(maxWidth: .infinity, alignment: .trailing)
             
-            Text(localized(.currencyText(value)))
+            Text(localized(.currencyValue(value)))
         }
     }
 }
@@ -176,7 +203,7 @@ extension InvoicePreviewView {
         case IVA
         case total
         case bill
-        case currencyText(Double)
+        case currencyValue(Double)
     }
     
     private func localized(_ key: LocalizedKey) -> String {
@@ -196,7 +223,7 @@ extension InvoicePreviewView {
             case .IVA: "IVA: "
             case .total: "Total: "
             case .bill: "Factura: "
-            case .currencyText(let value): "$ \(value.numberFormatted)"
+            case .currencyValue(let value): "$ \(value.numberFormatted)"
         }
     }
 }
