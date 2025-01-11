@@ -16,6 +16,7 @@ final class InvoiceListViewModel: ObservableObject {
     @Published var invoicePreviewList: [InvoiceSaleModel] = []
     @Published var isLoading: Bool = false
     @Published var selectedSale: InvoiceSaleModel?
+    @Published var invoiceCount: Int = 0
     
     var cannotExportInvoice: Bool {
         invoiceList.isEmpty
@@ -34,6 +35,7 @@ final class InvoiceListViewModel: ObservableObject {
     
     func getInvoices() {
         isLoading = true
+        invoiceList = []
         Task { @MainActor in
             defer { isLoading = false }
             
@@ -72,5 +74,19 @@ final class InvoiceListViewModel: ObservableObject {
         guard let invoice = invoicePreviewList.first(where: { $0.id == id })
         else { return }
         selectedSale = invoice
+    }
+    
+    func getInvoiceCount() {
+        isLoading = true
+        
+        Task { @MainActor in
+            defer { isLoading = false }
+            
+            do {
+                invoiceCount = try await invoiceManager.getInvoiceCount()
+            } catch {
+                AlertPresenter.showAlert(with: error)
+            }
+        }
     }
 }
