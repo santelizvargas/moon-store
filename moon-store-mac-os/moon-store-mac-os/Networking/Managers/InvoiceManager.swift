@@ -20,4 +20,20 @@ final class InvoiceManager {
             throw error
         }
     }
+    
+    func createInvoice(invoice: InvoiceSaleModel) async throws {
+        let parameters: [String: Any] = [
+            "customerName": invoice.clientName,
+            "customerIdentification": invoice.clientIdentification,
+            "totalAmount": invoice.totalPrice,
+            "products": invoice.products.map { $0.parameters }
+        ]
+        
+        do {
+            try await networkManager.postData(for: .invoices,
+                                                 with: parameters)
+        } catch {
+            throw error
+        }
+    }
 }
