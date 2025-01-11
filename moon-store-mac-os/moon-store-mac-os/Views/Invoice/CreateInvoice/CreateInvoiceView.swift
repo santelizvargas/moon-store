@@ -65,20 +65,35 @@ struct CreateInvoiceView: View {
                 ForEach(Array($viewModel.invoice.products.enumerated()),
                         id: \.offset) { index, $product in
                     GridRow {
-                        MSTextField(title: "Producto",
-                                    text: $product.name)
+                        VStack {
+                            Text("Producto")
+                            
+                            Menu(product.name) {
+                                ForEach(viewModel.products) { productForSelect in
+                                    Button(productForSelect.name) {
+                                        product.selectedProduct = productForSelect
+                                    }
+                                }
+                            }
+                            .frame(maxHeight: .infinity,
+                                   alignment: .center)
+                        }
+                        .frame(maxHeight: .infinity,
+                               alignment: .top)
                         
                         MSTextField(title: "Cantidad",
-                                    text: $product.quantity)
+                                    text: $product.quantity.allowOnlyNumbers)
                         
                         MSTextField(title: "Descripción",
                                     text: $product.description)
                         
                         MSTextField(title: "P. Unitario",
                                     text: $product.price)
+                        .disabled(true)
                         
                         MSTextField(title: "P. Total",
                                     text: .constant(product.totalPrice))
+                        .disabled(true)
                         
                         PrimaryButton("Borrar",
                                       backgroundColor: .msOrange) {

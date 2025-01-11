@@ -14,6 +14,15 @@ struct InvoiceSaleRowModel: Hashable, Identifiable {
     var description: String = ""
     var quantity: String = "1"
     var price: String = "0"
+    
+    var selectedProduct: ProductModel? = nil {
+        didSet {
+            id = (selectedProduct?.id)?.description ?? ""
+            name = selectedProduct?.name ?? ""
+            price = (selectedProduct?.salePrice)?.description ?? ""
+        }
+    }
+    
     var totalPrice: String {
         let quantity = Double(quantity) ?? .zero
         let price = Double(price) ?? .zero
