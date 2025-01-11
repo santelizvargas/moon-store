@@ -12,8 +12,12 @@ private enum Constants {
     static let cornerRadiusSize: CGFloat = 4
     static let createButtonWidth: CGFloat = 200
     static let crossIcon: String = "xmark"
+    static let descriptionHeight: CGFloat = 90
+    static let imageSpacing: CGFloat = 25
     static let modalMinHeight: CGFloat = 450
     static let modalMinWidth: CGFloat = 650
+    static let categoryHeight: CGFloat = 30
+    static let categoryPadding: CGFloat = 5
 }
 
 struct AddProductView: View {
@@ -21,26 +25,29 @@ struct AddProductView: View {
     @ObservedObject private var viewModel: AddProductViewModel = .init()
     
     var body: some View {
-        VStack {
+        VStack(alignment: .trailing) {
             modalHeader
             
-            HStack {
+            HStack(alignment: .top) {
                 MSImagePickerView(selectedImage: $viewModel.imageSelected)
+                    .padding(.top, Constants.imageSpacing)
                 
                 productInformationView
             }
-            .padding(.vertical)
             
             PrimaryButton(localizedString(.addProductButton)) {
                 viewModel.addProduct()
             }
             .disabled(!viewModel.canCreateProduct)
             .frame(width: Constants.createButtonWidth)
+            .padding(.top)
         }
         .padding()
-        .frame(minWidth: Constants.modalMinWidth,
-               minHeight: Constants.modalMinHeight,
-               alignment: .top)
+        .frame(
+            minWidth: Constants.modalMinWidth,
+            minHeight: Constants.modalMinHeight,
+            alignment: .top
+        )
         .background(.msWhite)
         .showSpinner($viewModel.isLoading)
         .onReceive(viewModel.$wasCreatedSuccessfully) { success in
@@ -72,18 +79,24 @@ struct AddProductView: View {
                 text: $viewModel.name
             )
             
-            MSTextField(
-                title: localizedString(.productPrice),
-                text: $viewModel.price.allowOnlyDecimalNumbers
-            )
+            HStack {
+                MSTextField(
+                    title: localizedString(.productPrice),
+                    text: $viewModel.price.allowOnlyDecimalNumbers
+                )
 
-            MSTextField(
-                title: localizedString(.productStock),
-                text: $viewModel.stock.allowOnlyNumbers
-            )
+                MSTextField(
+                    title: localizedString(.productStock),
+                    text: $viewModel.stock.allowOnlyNumbers
+                )
+            }
             
-            MSTextField(title: localizedString(.productDescription),
-                        text: $viewModel.description)
+            MSTextField(
+                title: localizedString(.productDescription),
+                text: $viewModel.description,
+                axis: .vertical,
+                height: Constants.descriptionHeight
+            )
             
             categoryButton
         }
@@ -102,7 +115,9 @@ struct AddProductView: View {
                     }
                 }
             }
-            .foregroundStyle(.msPrimary)
+            .menuStyle(.borderlessButton)
+            .frame(height: Constants.categoryHeight)
+            .padding(.horizontal, Constants.categoryPadding)
             .overlay {
                 RoundedRectangle(cornerRadius: Constants.cornerRadiusSize)
                     .stroke(.msGray)

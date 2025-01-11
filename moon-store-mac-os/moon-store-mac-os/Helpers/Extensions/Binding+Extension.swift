@@ -27,7 +27,7 @@ extension Binding where Value == String {
             if let match = wrappedValue.range(of: Constants.decimalNumbersRegex,
                                               options: .regularExpression) {
                 wrappedValue = String(wrappedValue[match])
-            } else if wrappedValue.last == "." || wrappedValue.last == " " {
+            } else {
                 wrappedValue.removeLast()
             }
         }
