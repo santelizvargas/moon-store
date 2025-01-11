@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreateInvoiceView: View {
     @StateObject private var viewModel: CreateInvoiceViewModel = .init()
+    @State private var showInvoicePreviewModal: Bool = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -19,26 +20,30 @@ struct CreateInvoiceView: View {
             PrimaryButton("Agregar fila") {
                 viewModel.addInvoiceRow()
             }
-            .frame(width: 100)
+            .frame(width: 100, height: 30)
             .frame(maxWidth: .infinity, alignment: .trailing)
             
             invoiceGridList
         }
         .padding()
+        .sheet(isPresented: $showInvoicePreviewModal) {
+            InvoicePreviewView(invoiceSale: viewModel.invoice)
+        }
     }
     
     private var headerActionButtons: some View {
         HStack {
             Group {
                 PrimaryButton("Preview") {
-                    
+                    showInvoicePreviewModal.toggle()
                 }
                 
                 PrimaryButton("Crear factura") {
-                    
+                    viewModel.createInvoice()
                 }
+                .disabled(true)
             }
-            .frame(width: 100)
+            .frame(width: 100, height: 30)
         }
         .frame(maxWidth: .infinity,
                alignment: .trailing)
@@ -47,10 +52,10 @@ struct CreateInvoiceView: View {
     private var clientInformation: some View {
         HStack {
             MSTextField(title: "Nombre del cliente",
-                        text: .constant(""))
+                        text: $viewModel.invoice.clientName)
             
             MSTextField(title: "Identificación del cliente",
-                        text: .constant(""))
+                        text: $viewModel.invoice.clientIdentification)
         }
     }
     
@@ -61,31 +66,32 @@ struct CreateInvoiceView: View {
                         id: \.offset) { index, $product in
                     GridRow {
                         MSTextField(title: "Producto",
-                                    text: .constant(""))
+                                    text: $product.name)
                         
                         MSTextField(title: "Cantidad",
-                                    text: .constant("").allowOnlyNumbers)
+                                    text: $product.quantity)
                         
                         MSTextField(title: "Descripción",
-                                    text: .constant(""))
+                                    text: $product.description)
                         
                         MSTextField(title: "P. Unitario",
-                                    text: .constant("").allowOnlyDecimalNumbers)
+                                    text: $product.price)
                         
                         MSTextField(title: "P. Total",
-                                    text: .constant("").allowOnlyDecimalNumbers)
+                                    text: .constant(product.totalPrice))
                         
-                        PrimaryButton("Borrar") {
+                        PrimaryButton("Borrar",
+                                      backgroundColor: .msOrange) {
                             viewModel.removeInvoiceRow(at: index)
                         }
                         .padding(.top, 24)
+                        .disabled(viewModel.cannotRemoveInvoiceRow)
                     }
                 }
             }
-            .foregroundStyle(.msWhite)
             .padding()
         }
-        .background(.msDarkGray, in: .rect(cornerRadius: 6))
+        .background(.msWhite, in: .rect(cornerRadius: 6))
     }
 }
 

@@ -96,8 +96,8 @@ struct InvoicePreviewView: View {
                         GridRow {
                             Text(product.quantity.description)
                             Text(product.name)
-                            Text(localized(.currencyText(product.price)))
-                            Text(localized(.currencyText(product.totalPrice)))
+                            Text(localized(.currencyText(Double(product.price) ?? 0)))
+                            Text(localized(.currencyText(Double(product.totalPrice) ?? 0)))
                         }
                     }
                 }

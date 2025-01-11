@@ -7,10 +7,18 @@
 
 import Foundation
 
+private enum Constants {
+    static let minRowCount: Int = 2
+}
+
 final class CreateInvoiceViewModel: ObservableObject {
     @Published var invoice: InvoiceSaleModel = .init()
     @Published var products: [ProductModel] = []
     @Published var isLoading: Bool = false
+    
+    var cannotRemoveInvoiceRow: Bool {
+        invoice.products.count < Constants.minRowCount
+    }
     
     private let invoiceManager: InvoiceManager = .init()
     private let productManager: ProductManager = .init()

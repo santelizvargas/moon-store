@@ -11,16 +11,23 @@ struct InvoiceSaleRowModel: Hashable, Identifiable {
     var idString: String = UUID().uuidString
     var id: String = ""
     var name: String = ""
+    var description: String = ""
     var quantity: String = "1"
-    var price: Double = 0
-    var totalPrice: Double = 0
+    var price: String = "0"
+    var totalPrice: String {
+        let quantity = Double(quantity) ?? .zero
+        let price = Double(price) ?? .zero
+        
+        return "\(quantity * price)"
+    }
     
     var parameters: [String: Any] {
         [
-            "id": Int(id) ?? 0,
+            "id": Int(id) ?? .zero,
             "name": name,
-            "quantity": Int(quantity) ?? 0,
-            "price": price
+            "description": description,
+            "quantity": Int(quantity) ?? .zero,
+            "price": Double(price) ?? .zero
         ]
     }
 }

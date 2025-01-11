@@ -53,8 +53,7 @@ final class InvoiceListViewModel: ObservableObject {
                     id: detail.id.description,
                     name: detail.productName,
                     quantity: detail.productQuantity.description,
-                    price: detail.productPrice,
-                    totalPrice: Double(detail.productQuantity) * detail.productPrice
+                    price: "\(detail.productPrice)"
                 )
             }
             

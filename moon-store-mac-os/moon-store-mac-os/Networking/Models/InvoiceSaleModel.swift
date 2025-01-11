@@ -23,7 +23,7 @@ struct InvoiceSaleModel {
 extension InvoiceSaleModel {
     var subtotalPrice: Double {
         products.reduce(.zero) { result, product in
-            let price = product.totalPrice
+            let price = Double(product.totalPrice) ?? .zero
             return result + price
         }
     }
