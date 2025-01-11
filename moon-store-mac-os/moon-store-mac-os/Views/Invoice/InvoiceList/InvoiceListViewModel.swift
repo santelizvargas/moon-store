@@ -27,6 +27,11 @@ final class InvoiceListViewModel: ObservableObject {
         !isLoading
     }
     
+    var canShowCounter: Bool {
+        invoiceList.isNotEmpty &&
+        !isLoading
+    }
+    
     private let invoiceManager: InvoiceManager = .init()
     
     init() {
@@ -42,6 +47,7 @@ final class InvoiceListViewModel: ObservableObject {
             do {
                 invoiceList = try await invoiceManager.getInvoices()
                 mapInvoicePreview()
+                getInvoiceCount()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -76,7 +82,7 @@ final class InvoiceListViewModel: ObservableObject {
         selectedSale = invoice
     }
     
-    func getInvoiceCount() {
+    private func getInvoiceCount() {
         isLoading = true
         
         Task { @MainActor in

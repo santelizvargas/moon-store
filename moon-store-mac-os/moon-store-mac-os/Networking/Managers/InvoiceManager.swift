@@ -23,8 +23,8 @@ final class InvoiceManager {
     
     func getInvoiceCount() async throws -> Int {
         do {
-            let data = try await networkManager.getData(for: .invoices)
-            let response = try decoder.decode(InvoiceCountModel.self, from: data)
+            let data = try await networkManager.getData(for: .invoicesCount)
+            let response = try decoder.decode(InvoiceCountResponse.self, from: data)
             return response.count
         } catch {
             throw error

@@ -19,6 +19,7 @@ enum MSEndpoint {
     case roles
     case usersChart
     case invoices
+    case invoicesCount
     case backupDatabase
     case restoreDatabase
     case listDatabase
@@ -42,6 +43,7 @@ enum MSEndpoint {
             case .disableUser: "/auth/disable"
             case .roles: "/rbac/roles"
             case .invoices: "/invoices"
+            case .invoicesCount: "/invoices/count"
             case .backupDatabase: "/database/backup"
             case .restoreDatabase: "/database/restore"
             case .listDatabase: "/database/list"

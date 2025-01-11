@@ -5,6 +5,6 @@
 //  Created by Jose Luna on 1/10/25.
 //
 
-struct InvoiceCountModel: Decodable {
+struct InvoiceCountResponse: Decodable {
     let count: Int
 }
