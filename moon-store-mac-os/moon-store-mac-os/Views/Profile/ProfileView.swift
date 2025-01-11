@@ -89,8 +89,8 @@ struct ProfileView: View {
     
     private var historyInformation: some View {
         cardContainer(title: "Historial") {
-            Text("Creado: ").font(.headline) + Text(user.createdAt)
-            Text("Actualizado: ").font(.headline) + Text(user.updatedAt ?? "-")
+            Text("Creado: ").font(.headline) + Text(user.createdAt.formattedDate ?? "")
+            Text("Actualizado: ").font(.headline) + Text(user.updatedAt?.formattedDate ?? "-")
         }
     }
     

@@ -30,10 +30,6 @@ final class RoleModel: Decodable {
         self.deletedAt = deletedAt
     }
     
-    func getRoles() -> [Role] {
-        Role.allCases.filter { $0.id != id }
-    }
-    
     // MARK: - Decoder
     
     private enum CodingKeys: String, CodingKey {

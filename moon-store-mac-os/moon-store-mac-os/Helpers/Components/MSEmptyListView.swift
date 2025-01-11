@@ -10,7 +10,7 @@ import SwiftUI
 private enum Constants {
     static let cornerRadius: CGFloat = 10
     static let defaultImageSize: CGFloat = 200
-    static let imageHeight: CGFloat = defaultImageSize * 0.7
+    static let mainSpacing: CGFloat = 15
     static let emptyListImage: String = "list.bullet.clipboard"
     static let buttonIcon: String = "repeat"
 }
@@ -26,11 +26,11 @@ struct MSEmptyListView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: Constants.mainSpacing) {
             Image(.msEmpty)
                 .resizable()
-                .frame(width: Constants.defaultImageSize,
-                       height: Constants.imageHeight)
+                .scaledToFit()
+                .frame(width: Constants.defaultImageSize)
                 .foregroundStyle(.msDarkGray)
             
             Text("No se encontraron elementos")
@@ -44,7 +44,8 @@ struct MSEmptyListView: View {
             .foregroundStyle(.msWhite)
             .background(
                 .msPrimary,
-                in: .rect(cornerRadius: Constants.cornerRadius))
+                in: .rect(cornerRadius: Constants.cornerRadius)
+            )
         }
     }
 }
