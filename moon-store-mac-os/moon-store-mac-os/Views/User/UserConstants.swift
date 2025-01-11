@@ -16,6 +16,7 @@ enum UserConstants {
     static let textFieldHeight: CGFloat = 40
     static let headerTableViewLeadingPadding: CGFloat = 25
     static let userFileName: String = "Usuarios"
+    static let optionSize: CGFloat = 130
     
     enum Button {
         static let width: CGFloat = 125

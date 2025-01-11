@@ -79,7 +79,14 @@ enum Role: Int, CaseIterable, Identifiable {
         }
     }
     
-    static func getRole(from role: RoleModel?) -> Role {
-        Role.allCases.first(where: { $0.id == role?.id }) ?? .supplier
+    var differentRoles: [Role] {
+        Role.allCases.filter { $0 != self }
+    }
+    
+    static func getFromId(_ roleId: Int?) -> Role {
+        guard let roleId,
+              let role = Role(rawValue: roleId)
+        else { return .supplier }
+        return role
     }
 }
