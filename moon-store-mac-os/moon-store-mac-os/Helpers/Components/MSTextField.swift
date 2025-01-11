@@ -22,15 +22,21 @@ struct MSTextField: View {
     private let title: String
     private let placeholder: String
     private let isSecure: Bool
+    private let axis: Axis
+    private let height: CGFloat
     
     init(title: String,
          placeholder: String = "",
          text: Binding<String>,
-         isSecure: Bool = false) {
+         isSecure: Bool = false,
+         axis: Axis = .horizontal,
+         height: CGFloat = Constants.height) {
         _text = text
         self.title = title
         self.placeholder = placeholder
         self.isSecure = isSecure
+        self.axis = axis
+        self.height = height
     }
     
     var body: some View {
@@ -39,7 +45,7 @@ struct MSTextField: View {
             
             textField
                 .textFieldStyle(.plain)
-                .frame(height: Constants.height)
+                .frame(height: height)
                 .overlay(alignment: .trailing) {
                     if isSecure { eyeButton }
                 }
@@ -58,7 +64,7 @@ struct MSTextField: View {
         if isSecure, !isShowingText {
             SecureField(placeholder, text: $text)
         } else {
-            TextField(placeholder, text: $text)
+            TextField(placeholder, text: $text, axis: axis)
         }
     }
     

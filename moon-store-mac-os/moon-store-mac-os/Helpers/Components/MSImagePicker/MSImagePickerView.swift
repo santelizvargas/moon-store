@@ -11,7 +11,6 @@ import PhotosUI
 private enum Constants {
     static let imageSize: CGFloat = 200
     static let cornerRadius: CGFloat = 6
-    static let strokeLineWidth: CGFloat = 2
 }
 
 struct MSImagePickerView: View {
@@ -26,36 +25,33 @@ struct MSImagePickerView: View {
     
     var body: some View {
         VStack {
+            loadedImage
+                .frame(maxSquare: Constants.imageSize)
+            
             PhotosPicker(
                 "Seleccionar imagen",
                 selection: $selectedItem,
                 matching: .images
             )
-            .buttonStyle(.borderedProminent)
             .foregroundStyle(.msPrimary)
             .task(id: selectedItem) {
                 guard let image = await viewModel.loadImage(from: selectedItem) else { return }
                 selectedImage = image
             }
-            
-            loadedImage
-                .frame(maxSquare: Constants.imageSize)
-                .foregroundStyle(.msPrimary)
         }
     }
     
     @ViewBuilder
     private var loadedImage: some View {
-        let rectangleBackground = RoundedRectangle(cornerRadius: Constants.cornerRadius)
-        
         if let image = selectedImage {
             image
                 .resizable()
                 .scaledToFit()
-                .clipShape(rectangleBackground)
+                .clipShape(.rect(cornerRadius: Constants.cornerRadius))
         } else {
-            rectangleBackground
-                .stroke(lineWidth: Constants.strokeLineWidth)
+            Image(systemName: "photo.artframe")
+                .resizable()
+                .foregroundStyle(.gray)
         }
     }
 }
