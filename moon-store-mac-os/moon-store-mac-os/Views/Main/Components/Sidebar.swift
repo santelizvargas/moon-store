@@ -20,7 +20,7 @@ struct Sidebar: View {
     
     var body: some View {
         VStack {
-            Text("LOGO")
+            Text("MS STORE")
                 .font(.largeTitle.bold())
                 .foregroundStyle(.msPrimary)
             
