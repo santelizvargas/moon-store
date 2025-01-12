@@ -16,14 +16,14 @@ struct InvoiceSaleModel {
     var id: Int = 0
     var clientName: String = ""
     var clientIdentification: String = ""
-    var createAt: String = "\(Date.now)".formattedDate ?? Constants.invalidDateText
+    var createAt: String = "\(Date.now.formatted(date: .abbreviated, time: .omitted))"
     var products: [InvoiceSaleRowModel] = [.init()]
 }
 
 extension InvoiceSaleModel {
     var subtotalPrice: Double {
         products.reduce(.zero) { result, product in
-            let price = product.totalPrice
+            let price = Double(product.totalPrice) ?? .zero
             return result + price
         }
     }

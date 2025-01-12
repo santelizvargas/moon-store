@@ -51,6 +51,7 @@ struct MainView: View {
             case .charts: GraphicsView()
             case .backups: BackupView()
             case .invoices: InvoiceListView()
+            case .createInvoice: CreateInvoiceView()
             default: Text(screenSelection.rawValue)
         }
     }
