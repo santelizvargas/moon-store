@@ -38,7 +38,7 @@ struct GraphicsView: View {
                 AreaChart(
                     title: localized(.mostCategoriesSold),
                     data: viewModel.mostCategoriesSold,
-                    color: .yellow
+                    color: .msOrange
                 )
             }
         }
