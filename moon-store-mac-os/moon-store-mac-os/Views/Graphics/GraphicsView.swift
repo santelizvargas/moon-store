@@ -15,7 +15,7 @@ struct GraphicsView: View {
     var body: some View {
         VStack(spacing: Constants.mainSpacing) {
             HStack {
-                ForEach(Information.mockInfo) { info in
+                ForEach(CardGraphicModel.mockInfo) { info in
                     InformationCard(info: info)
                 }
             }

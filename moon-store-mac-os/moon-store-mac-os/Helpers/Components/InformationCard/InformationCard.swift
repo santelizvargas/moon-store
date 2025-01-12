@@ -9,9 +9,9 @@ import SwiftUI
 
 struct InformationCard: View {
     private typealias Constants = InformationCardConstants
-    private let info: Information
+    private let info: CardGraphicModel
     
-    init(info: Information) {
+    init(info: CardGraphicModel) {
         self.info = info
     }
     
