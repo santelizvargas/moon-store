@@ -14,10 +14,14 @@ private enum Constants {
 
 struct PrimaryButton: View {
     private let title: String
+    private let backgroundColor: Color
     private let action: () -> Void
     
-    init(_ title: String, action: @escaping () -> Void) {
+    init(_ title: String,
+         backgroundColor: Color = .msPrimary,
+         action: @escaping () -> Void) {
         self.title = title
+        self.backgroundColor = backgroundColor
         self.action = action
     }
     
@@ -28,6 +32,7 @@ struct PrimaryButton: View {
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: Constants.maxHeight)
         .foregroundStyle(.msWhite)
-        .background(.msPrimary, in: .rect(cornerRadius: Constants.cornerRadius))
+        .background(backgroundColor,
+                    in: .rect(cornerRadius: Constants.cornerRadius))
     }
 }
