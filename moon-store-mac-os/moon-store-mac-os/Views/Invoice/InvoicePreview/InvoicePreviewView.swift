@@ -148,8 +148,8 @@ struct InvoicePreviewView: View {
                     GridRow {
                         Text(product.quantity.description)
                         Text(product.name)
-                        Text(localized(.currencyValue(Double(product.price) ?? .zero)))
-                        Text(localized(.currencyValue(Double(product.totalPrice) ?? .zero)))
+                        Text(localized(.currencyValue(Double(product.price))))
+                        Text(localized(.currencyValue(Double(product.totalPrice))))
                     }
                 }
             }
@@ -206,7 +206,7 @@ extension InvoicePreviewView {
         case IVA
         case total
         case bill
-        case currencyValue(Double)
+        case currencyValue(Double?)
     }
     
     private func localized(_ key: LocalizedKey) -> String {
@@ -226,7 +226,7 @@ extension InvoicePreviewView {
             case .IVA: "IVA: "
             case .total: "Total: "
             case .bill: "Factura: "
-            case .currencyValue(let value): "$ \(value.numberFormatted)"
+            case .currencyValue(let value): "$ \(value ?? .zero)"
         }
     }
 }

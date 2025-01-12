@@ -25,18 +25,18 @@ struct InvoiceSaleRowModel: Hashable, Identifiable {
     
     var totalPrice: String {
         let quantity = Double(quantity) ?? .zero
-        let price = Double(price) ?? .zero
+        let price = selectedProduct?.salePrice ?? .zero
         
         return "\(quantity * price)"
     }
     
     var parameters: [String: Any] {
         [
-            "id": Int(id) ?? .zero,
+            "id": selectedProduct?.id ?? .zero,
             "name": name,
             "description": description,
             "quantity": Int(quantity) ?? .zero,
-            "price": Double(price) ?? .zero
+            "price": selectedProduct?.salePrice ?? .zero
         ]
     }
 }

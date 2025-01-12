@@ -27,7 +27,7 @@ final class CreateInvoiceViewModel: ObservableObject {
     
     var cannotCreateInvoice: Bool {
         products.isEmpty ||
-        invoice.products.allSatisfy { $0.selectedProduct == nil } ||
+        !invoice.products.allSatisfy { $0.selectedProduct != nil } ||
         invoice.clientName.isEmpty ||
         invoice.clientIdentification.isEmpty
     }
