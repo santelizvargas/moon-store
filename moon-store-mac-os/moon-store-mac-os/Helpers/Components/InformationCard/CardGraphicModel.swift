@@ -21,7 +21,7 @@ enum CardGraphic {
     case invoices(Int)
     case users(Int)
     
-    var title: String {
+    private var title: String {
         switch self {
             case .products: return "Productos"
             case .invoices: return "Facturas"
@@ -29,7 +29,7 @@ enum CardGraphic {
         }
     }
     
-    var iconName: String {
+    private var iconName: String {
         switch self {
             case .products: return "cart.fill"
             case .invoices: return "doc.text.fill"
@@ -37,7 +37,7 @@ enum CardGraphic {
         }
     }
     
-    var description: String {
+    private var description: String {
         switch self {
             case .products: return "Productos actualmente registrados en el inventario."
             case .invoices: return "Facturas generadas y almacenadas en el sistema."
@@ -45,7 +45,7 @@ enum CardGraphic {
         }
     }
     
-    var color: Color {
+    private var color: Color {
         switch self {
             case .products: return .msPrimary
             case .invoices: return .msGreen
@@ -53,17 +53,16 @@ enum CardGraphic {
         }
     }
     
-    var model: CardGraphicModel {
-        
-        var count: Int {
-            switch self {
-                case .products(let count): count
-                case .invoices(let count): count
-                case .users(let count): count
-            }
+    private var count: Int {
+        switch self {
+            case .products(let count): count
+            case .invoices(let count): count
+            case .users(let count): count
         }
-        
-        return CardGraphicModel(
+    }
+    
+    var model: CardGraphicModel {
+        CardGraphicModel(
             title: title,
             count: count,
             iconName: iconName,
@@ -77,26 +76,8 @@ enum CardGraphic {
 
 extension CardGraphicModel {
     static let mockInfo = [
-        CardGraphicModel(
-            title: "Productos",
-            count: 203,
-            iconName: "cart.fill",
-            description: "Productos actualmente registrados en el inventario.",
-            color: .msPrimary
-        ),
-        CardGraphicModel(
-            title: "Facturas",
-            count: 1250,
-            iconName: "doc.text.fill",
-            description: "Facturas generadas y almacenadas en el sistema.",
-            color: .msGreen
-        ),
-        CardGraphicModel(
-            title: "Usuarios",
-            count: 87,
-            iconName: "person.2.fill",
-            description: "Usuarios activos registrados en la plataforma.",
-            color: .msOrange
-        )
+        CardGraphic.products(300).model,
+        CardGraphic.invoices(400).model,
+        CardGraphic.users(300).model,
     ]
 }

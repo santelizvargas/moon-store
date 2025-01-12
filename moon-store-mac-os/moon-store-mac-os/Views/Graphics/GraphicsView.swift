@@ -12,10 +12,12 @@ private enum Constants {
 }
 
 struct GraphicsView: View {
+    @StateObject private var viewModel: GraphicsViewModel = .init()
+    
     var body: some View {
         VStack(spacing: Constants.mainSpacing) {
             HStack {
-                ForEach(CardGraphicModel.mockInfo) { info in
+                ForEach(viewModel.cardGraphicModels) { info in
                     InformationCard(info: info)
                 }
             }
@@ -42,5 +44,6 @@ struct GraphicsView: View {
             }
         }
         .padding()
+        .showSpinner($viewModel.isLoading)
     }
 }
