@@ -89,8 +89,6 @@ final class GraphicsViewModel: ObservableObject {
             let chartData = ChartData(name: product.name, value: Double(salesCount))
             mostProductSold.append(chartData)
         }
-
-        mostProductSold.sort { $0.value > $1.value }
         
         self.mostProductsSold = mostProductSold
     }
