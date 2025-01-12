@@ -9,14 +9,14 @@ import Foundation
 
 private enum Constants {
     static let oneToPlus: Int = 1
-    static let weekdayOrder: [String] = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    static let weekdays: [String] = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
     static let zero: Int = .zero
 }
 
 final class GraphicsViewModel: ObservableObject {
     @Published var cardGraphicModels: [CardGraphicModel] = []
     @Published var mostProductsSold: [ChartData] = []
-    @Published var productsSoldByWeekday: [ChartData] = []
+    @Published var invoicesByWeekday: [ChartData] = []
     @Published var isLoading: Bool = false
     
     private var productsCount: Int = Constants.zero
@@ -53,7 +53,7 @@ final class GraphicsViewModel: ObservableObject {
                 
                 loadCardGraphicCounters()
                 loadMostProductsSold()
-                loadProductsSoldByWeekday()
+                loadInvoicesByWeekday()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -91,25 +91,24 @@ final class GraphicsViewModel: ObservableObject {
         self.mostProductsSold = mostProductSold
     }
     
-    private func loadProductsSoldByWeekday() {
-        var weeklySales = Dictionary(
-            uniqueKeysWithValues: Constants.weekdayOrder.map {
+    private func loadInvoicesByWeekday() {
+        var weeklyInvoices = Dictionary(
+            uniqueKeysWithValues: Constants.weekdays.map {
                 ($0, Constants.zero)
             }
         )
         
         for invoice in invoices {
-            guard let weekday = invoice.createdAt.weekday
-            else { continue }
+            guard let weekday = invoice.createdAt.weekday else { continue }
             
-            weeklySales[weekday, default: Constants.zero] += Constants.oneToPlus
+            weeklyInvoices[weekday, default: Constants.zero] += Constants.oneToPlus
         }
         
-        let productsSoldByWeekday: [ChartData] = Constants.weekdayOrder.compactMap { day in
-            guard let sales = weeklySales[day] else { return nil }
-            return ChartData(name: day, value: Double(sales))
+        let invoicesByWeekday: [ChartData] = Constants.weekdays.compactMap { day in
+            guard let invoiceCount = weeklyInvoices[day] else { return nil }
+            return ChartData(name: day, value: Double(invoiceCount))
         }
         
-        self.productsSoldByWeekday = productsSoldByWeekday
+        self.invoicesByWeekday = invoicesByWeekday
     }
 }

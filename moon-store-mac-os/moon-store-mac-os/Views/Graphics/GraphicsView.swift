@@ -25,23 +25,14 @@ struct GraphicsView: View {
             BarChart(
                 title: "Productos mas vendidos",
                 data: viewModel.mostProductsSold,
-                color: .msPrimary,
-                titleAlignment: .center
+                color: .msPrimary
             )
             
-            HStack(spacing: Constants.mainSpacing) {
-                AreaChart(
-                    title: "Productos Vendidos en la semana",
-                    data: viewModel.productsSoldByWeekday,
-                    color: .msPrimary
-                )
-                
-                AreaChart(
-                    title: "Facturas Generadas",
-                    data: ChartData.invoices,
-                    color: .msGreen
-                )
-            }
+            AreaChart(
+                title: "Facturas Generadas",
+                data: viewModel.invoicesByWeekday,
+                color: .msGreen
+            )
         }
         .padding()
         .showSpinner($viewModel.isLoading)

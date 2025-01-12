@@ -32,6 +32,7 @@ struct BarChart: View {
         VStack(alignment: titleAlignment) {
             if let title {
                 Text(title)
+                    .font(.title)
             }
             
             Chart {
