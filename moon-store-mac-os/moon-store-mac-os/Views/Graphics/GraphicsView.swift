@@ -23,20 +23,20 @@ struct GraphicsView: View {
             }
             
             BarChart(
-                title: "Productos mas vendidos",
+                title: localized(.mostProductsSold),
                 data: viewModel.mostProductsSold,
                 color: .msPrimary
             )
             
             HStack {
                 AreaChart(
-                    title: "Facturas Generadas",
+                    title: localized(.invoicesByWeekday),
                     data: viewModel.invoicesByWeekday,
                     color: .msGreen
                 )
                 
                 AreaChart(
-                    title: "Categorías mas vendidas",
+                    title: localized(.mostCategoriesSold),
                     data: viewModel.mostCategoriesSold,
                     color: .yellow
                 )
@@ -45,4 +45,28 @@ struct GraphicsView: View {
         .padding()
         .showSpinner($viewModel.isLoading)
     }
+}
+
+// MARK: - Localized
+
+extension GraphicsView {
+    private enum LocalizedKey {
+        case mostProductsSold
+        case invoicesByWeekday
+        case mostCategoriesSold
+    }
+    
+    private func localized(_ key: LocalizedKey) -> String {
+        switch key {
+            case .mostProductsSold: "Productos mas vendidos"
+            case .invoicesByWeekday: "Facturas Generadas"
+            case .mostCategoriesSold: "Categorías mas vendidas"
+        }
+    }
+}
+
+// MARK: Preview
+
+#Preview {
+    GraphicsView()
 }

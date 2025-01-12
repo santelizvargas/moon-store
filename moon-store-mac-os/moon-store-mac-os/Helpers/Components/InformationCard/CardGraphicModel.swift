@@ -77,13 +77,3 @@ enum CardGraphic {
         )
     }
 }
-
-// MARK: - Mock Data
-
-extension CardGraphicModel {
-    static let mockInfo = [
-        CardGraphic.products(300).model,
-        CardGraphic.invoices(400).model,
-        CardGraphic.activeUsers(300).model,
-    ]
-}
