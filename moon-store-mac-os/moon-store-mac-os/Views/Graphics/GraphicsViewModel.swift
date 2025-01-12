@@ -119,7 +119,7 @@ final class GraphicsViewModel: ObservableObject {
         
         for invoice in invoices {
             for product in invoice.products {
-                let category = product.category.rawValue
+                let category = product.category.title
                 
                 categorySalesCount[category, default: Constants.zero] += Constants.oneToPlus
             }
