@@ -66,8 +66,7 @@ final class GraphicsViewModel: ObservableObject {
         cardGraphicModels = [
             CardGraphic.products(productsCount).model,
             CardGraphic.invoices(invoicesCount).model,
-            CardGraphic.activeUsers(activeUsersCount).model,
-            CardGraphic.suspendedUsers(suspendedUsersCount).model,
+            CardGraphic.users(activeUsersCount).model
         ]
     }
     
@@ -84,6 +83,9 @@ final class GraphicsViewModel: ObservableObject {
         
         for product in products {
             let salesCount = productSalesCount[product.id, default: Constants.zero]
+            
+            guard salesCount > Constants.zero else { continue }
+            
             let chartData = ChartData(name: product.name, value: Double(salesCount))
             mostProductSold.append(chartData)
         }
@@ -106,8 +108,8 @@ final class GraphicsViewModel: ObservableObject {
             weeklyInvoices[weekday, default: Constants.zero] += Constants.oneToPlus
         }
         
-        let invoicesByWeekday: [ChartData] = Constants.weekdays.compactMap { day in
-            guard let invoiceCount = weeklyInvoices[day] else { return nil }
+        let invoicesByWeekday: [ChartData] = Constants.weekdays.map { day in
+            let invoiceCount = weeklyInvoices[day, default: Constants.zero]
             return ChartData(name: day, value: Double(invoiceCount))
         }
         
@@ -120,7 +122,6 @@ final class GraphicsViewModel: ObservableObject {
         for invoice in invoices {
             for product in invoice.products {
                 let category = product.category.title
-                
                 categorySalesCount[category, default: Constants.zero] += Constants.oneToPlus
             }
         }

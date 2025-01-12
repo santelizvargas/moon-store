@@ -19,15 +19,13 @@ struct CardGraphicModel: Identifiable {
 enum CardGraphic {
     case products(Int)
     case invoices(Int)
-    case activeUsers(Int)
-    case suspendedUsers(Int)
+    case users(Int)
     
     private var title: String {
         switch self {
             case .products: "Productos"
             case .invoices: "Facturas"
-            case .activeUsers: "Usuarios activos"
-            case .suspendedUsers: "Usuarios suspendidos"
+            case .users: "Usuarios"
         }
     }
     
@@ -35,8 +33,7 @@ enum CardGraphic {
         switch self {
             case .products: "cart.fill"
             case .invoices: "doc.text.fill"
-            case .activeUsers: "person.2.fill"
-            case .suspendedUsers: "person.fill.xmark"
+            case .users: "person.2.fill"
         }
     }
     
@@ -44,8 +41,7 @@ enum CardGraphic {
         switch self {
             case .products: "Productos actualmente registrados en el inventario."
             case .invoices: "Facturas generadas y almacenadas en el sistema."
-            case .activeUsers: "Usuarios activos registrados en la plataforma."
-            case .suspendedUsers: "Usuarios suspendidos registrados en la plataforma."
+            case .users: "Usuarios registrados en la plataforma."
         }
     }
     
@@ -53,8 +49,7 @@ enum CardGraphic {
         switch self {
             case .products: .msPrimary
             case .invoices: .msGreen
-            case .activeUsers: .msDarkBlue
-            case .suspendedUsers: .msOrange
+            case .users: .msDarkBlue
         }
     }
     
@@ -62,8 +57,7 @@ enum CardGraphic {
         switch self {
             case .products(let count): count
             case .invoices(let count): count
-            case .activeUsers(let count): count
-            case .suspendedUsers(let count): count
+            case .users(let count): count
         }
     }
     
