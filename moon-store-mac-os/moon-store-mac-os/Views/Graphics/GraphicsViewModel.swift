@@ -17,6 +17,7 @@ final class GraphicsViewModel: ObservableObject {
     @Published var cardGraphicModels: [CardGraphicModel] = []
     @Published var mostProductsSold: [ChartData] = []
     @Published var invoicesByWeekday: [ChartData] = []
+    @Published var mostCategoriesSold: [ChartData] = []
     @Published var isLoading: Bool = false
     
     private var productsCount: Int = Constants.zero
@@ -54,6 +55,7 @@ final class GraphicsViewModel: ObservableObject {
                 loadCardGraphicCounters()
                 loadMostProductsSold()
                 loadInvoicesByWeekday()
+                loadMostCategoriesSold()
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
@@ -110,5 +112,28 @@ final class GraphicsViewModel: ObservableObject {
         }
         
         self.invoicesByWeekday = invoicesByWeekday
+    }
+    
+    private func loadMostCategoriesSold() {
+        var categorySalesCount: [String: Int] = [:]
+        
+        for invoice in invoices {
+            for product in invoice.products {
+                let category = product.category.rawValue
+                
+                categorySalesCount[category, default: Constants.zero] += Constants.oneToPlus
+            }
+        }
+        
+        var mostCategoriesSold: [ChartData] = []
+        
+        for (category, salesCount) in categorySalesCount {
+            let chartData = ChartData(name: category, value: Double(salesCount))
+            mostCategoriesSold.append(chartData)
+        }
+        
+        mostCategoriesSold.sort { $0.value > $1.value }
+        
+        self.mostCategoriesSold = mostCategoriesSold
     }
 }

@@ -28,11 +28,19 @@ struct GraphicsView: View {
                 color: .msPrimary
             )
             
-            AreaChart(
-                title: "Facturas Generadas",
-                data: viewModel.invoicesByWeekday,
-                color: .msGreen
-            )
+            HStack {
+                AreaChart(
+                    title: "Facturas Generadas",
+                    data: viewModel.invoicesByWeekday,
+                    color: .msGreen
+                )
+                
+                AreaChart(
+                    title: "Categorías mas vendidas",
+                    data: viewModel.mostCategoriesSold,
+                    color: .yellow
+                )
+            }
         }
         .padding()
         .showSpinner($viewModel.isLoading)
