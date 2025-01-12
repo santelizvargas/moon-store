@@ -59,12 +59,8 @@ struct InvoicePreviewView: View {
     private var headerView: some View {
         HStack {
             
-            // TODO: - Add MS logo
-            
-            Image(systemName: Constants.previewIcon)
-                .resizable()
-                .frame(square: Constants.logoSize)
-                .foregroundStyle(.msPrimary)
+            MSLogo()
+                .leadingInfinity()
             
             Spacer()
             

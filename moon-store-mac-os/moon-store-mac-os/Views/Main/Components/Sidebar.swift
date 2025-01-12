@@ -20,9 +20,8 @@ struct Sidebar: View {
     
     var body: some View {
         VStack {
-            Text("MS STORE")
-                .font(.largeTitle.bold())
-                .foregroundStyle(.msPrimary)
+            MSLogo()
+                .leadingInfinity()
             
             List(availableSections) { section in
                 Section(section.id.uppercased()) {
