@@ -33,6 +33,10 @@ struct InvoiceListView: View {
             .padding()
             
             historyList
+            
+            if viewModel.canShowCounter {
+                TextCounterView(viewModel.invoiceCount)
+            }
         }
         .showSpinner($viewModel.isLoading)
         .frame(maxHeight: .infinity, alignment: .top)

@@ -20,7 +20,7 @@ final class InvoiceManager {
             throw error
         }
     }
-    
+
     func createInvoice(invoice: InvoiceSaleModel) async throws {
         let parameters: [String: Any] = [
             "customerName": invoice.clientName,
@@ -32,6 +32,16 @@ final class InvoiceManager {
         do {
             try await networkManager.postData(for: .invoices,
                                                  with: parameters)
+        } catch {
+            throw error
+        }
+    }
+    
+    func getInvoiceCount() async throws -> Int {
+        do {
+            let data = try await networkManager.getData(for: .invoicesCount)
+            let response = try decoder.decode(InvoiceCountResponse.self, from: data)
+            return response.count
         } catch {
             throw error
         }
