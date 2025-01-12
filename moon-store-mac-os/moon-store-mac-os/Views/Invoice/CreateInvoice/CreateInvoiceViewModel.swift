@@ -9,6 +9,7 @@ import Foundation
 
 private enum Constants {
     static let minRowCount: Int = 2
+    static let maxRowCount: Int = 10
 }
 
 final class CreateInvoiceViewModel: ObservableObject {
@@ -20,6 +21,17 @@ final class CreateInvoiceViewModel: ObservableObject {
         invoice.products.count < Constants.minRowCount
     }
     
+    var cannotAddInvoiceRow: Bool {
+        invoice.products.count >= Constants.maxRowCount
+    }
+    
+    var cannotCreateInvoice: Bool {
+        products.isEmpty ||
+        invoice.products.allSatisfy { $0.selectedProduct == nil } ||
+        invoice.clientName.isEmpty ||
+        invoice.clientIdentification.isEmpty
+    }
+    
     private let invoiceManager: InvoiceManager = .init()
     private let productManager: ProductManager = .init()
     
@@ -28,7 +40,9 @@ final class CreateInvoiceViewModel: ObservableObject {
     }
     
     func addInvoiceRow() {
-        invoice.products.append(.init())
+        cannotAddInvoiceRow
+        ? showMaxRowCountExceededAlert()
+        : invoice.products.append(.init())
     }
     
     func removeInvoiceRow(at index: Int) {
@@ -69,5 +83,11 @@ final class CreateInvoiceViewModel: ObservableObject {
     private func resetPropertiesToDefaultValue() {
         invoice = .init()
         products = []
+    }
+    
+    private func showMaxRowCountExceededAlert() {
+        AlertPresenter.showAlert(
+            "No se pueden agregar más de \(Constants.maxRowCount) productos por factura."
+        )
     }
 }

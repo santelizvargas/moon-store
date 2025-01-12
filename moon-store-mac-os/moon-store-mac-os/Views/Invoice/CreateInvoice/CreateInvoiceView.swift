@@ -41,7 +41,7 @@ struct CreateInvoiceView: View {
                 PrimaryButton("Crear factura") {
                     viewModel.createInvoice()
                 }
-                .disabled(true)
+                .disabled(viewModel.cannotCreateInvoice)
             }
             .frame(width: 100, height: 30)
         }
