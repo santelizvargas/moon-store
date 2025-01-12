@@ -124,4 +124,16 @@ final class UserManager {
             throw error
         }
     }
+    
+    // MARK: - Users chart
+    
+    func getUsersChart() async throws -> UserChartResponse {
+        do {
+            let data = try await networkManager.getData(for: .usersChart)
+            let response = try decoder.decode(UserChartResponse.self, from: data)
+            return response
+        } catch {
+            throw error
+        }
+    }
 }
