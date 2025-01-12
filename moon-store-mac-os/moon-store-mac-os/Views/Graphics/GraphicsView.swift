@@ -31,8 +31,8 @@ struct GraphicsView: View {
             
             HStack(spacing: Constants.mainSpacing) {
                 AreaChart(
-                    title: "Productos Vendidos",
-                    data: ChartData.products,
+                    title: "Productos Vendidos en la semana",
+                    data: viewModel.productsSoldByWeekday,
                     color: .msPrimary
                 )
                 
