@@ -26,7 +26,9 @@ struct CreateInvoiceView: View {
             clientInformation
             
             PrimaryButton(localized(.addRowButton)) {
-                viewModel.addInvoiceRow()
+                withAnimation(.bouncy) {
+                    viewModel.addInvoiceRow()
+                }
             }
             .frame(width: Constants.buttonWidth,
                    height: Constants.buttonHeight)
@@ -71,7 +73,7 @@ struct CreateInvoiceView: View {
     
     private var invoiceGridList: some View {
         ScrollView(showsIndicators: false) {
-            Grid {
+            Grid(verticalSpacing: Constants.viewSpacing) {
                 ForEach(Array($viewModel.invoice.products.enumerated()),
                         id: \.offset) { index, $product in
                     GridRow {
@@ -107,7 +109,9 @@ struct CreateInvoiceView: View {
                         
                         PrimaryButton(localized(.deleteRowButton),
                                       backgroundColor: .msOrange) {
-                            viewModel.removeInvoiceRow(at: index)
+                            withAnimation(.bouncy) {
+                                viewModel.removeInvoiceRow(at: index)
+                            }
                         }
                         .padding(.top, Constants.deleteButtonTopPadding)
                         .disabled(viewModel.cannotRemoveInvoiceRow)
@@ -115,8 +119,8 @@ struct CreateInvoiceView: View {
                 }
             }
             .padding()
+            .background(.msWhite, in: .rect(cornerRadius: Constants.gridListCornerRadius))
         }
-        .background(.msWhite, in: .rect(cornerRadius: Constants.gridListCornerRadius))
     }
 }
 
