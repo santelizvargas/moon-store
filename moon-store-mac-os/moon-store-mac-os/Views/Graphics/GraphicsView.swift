@@ -24,7 +24,7 @@ struct GraphicsView: View {
             
             BarChart(
                 title: "Productos mas vendidos",
-                data: ChartData.topSellingProducts,
+                data: viewModel.mostProductsSold,
                 color: .msPrimary,
                 titleAlignment: .center
             )
