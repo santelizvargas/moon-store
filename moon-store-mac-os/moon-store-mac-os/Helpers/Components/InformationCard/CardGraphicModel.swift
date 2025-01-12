@@ -19,37 +19,42 @@ struct CardGraphicModel: Identifiable {
 enum CardGraphic {
     case products(Int)
     case invoices(Int)
-    case users(Int)
+    case activeUsers(Int)
+    case suspendedUsers(Int)
     
     private var title: String {
         switch self {
-            case .products: return "Productos"
-            case .invoices: return "Facturas"
-            case .users: return "Usuarios"
+            case .products: "Productos"
+            case .invoices: "Facturas"
+            case .activeUsers: "Usuarios activos"
+            case .suspendedUsers: "Usuarios suspendidos"
         }
     }
     
     private var iconName: String {
         switch self {
-            case .products: return "cart.fill"
-            case .invoices: return "doc.text.fill"
-            case .users: return "person.2.fill"
+            case .products: "cart.fill"
+            case .invoices: "doc.text.fill"
+            case .activeUsers: "person.2.fill"
+            case .suspendedUsers: "person.fill.xmark"
         }
     }
     
     private var description: String {
         switch self {
-            case .products: return "Productos actualmente registrados en el inventario."
-            case .invoices: return "Facturas generadas y almacenadas en el sistema."
-            case .users: return "Usuarios activos registrados en la plataforma."
+            case .products: "Productos actualmente registrados en el inventario."
+            case .invoices: "Facturas generadas y almacenadas en el sistema."
+            case .activeUsers: "Usuarios activos registrados en la plataforma."
+            case .suspendedUsers: "Usuarios suspendidos registrados en la plataforma."
         }
     }
     
     private var color: Color {
         switch self {
-            case .products: return .msPrimary
-            case .invoices: return .msGreen
-            case .users: return .msOrange
+            case .products: .msPrimary
+            case .invoices: .msGreen
+            case .activeUsers: .msDarkBlue
+            case .suspendedUsers: .msOrange
         }
     }
     
@@ -57,7 +62,8 @@ enum CardGraphic {
         switch self {
             case .products(let count): count
             case .invoices(let count): count
-            case .users(let count): count
+            case .activeUsers(let count): count
+            case .suspendedUsers(let count): count
         }
     }
     
@@ -78,6 +84,6 @@ extension CardGraphicModel {
     static let mockInfo = [
         CardGraphic.products(300).model,
         CardGraphic.invoices(400).model,
-        CardGraphic.users(300).model,
+        CardGraphic.activeUsers(300).model,
     ]
 }

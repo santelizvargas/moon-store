@@ -13,7 +13,8 @@ final class GraphicsViewModel: ObservableObject {
     
     private var productsCount: Int = 0
     private var invoicesCount: Int = 0
-    private var usersCount: Int = 0
+    private var activeUsersCount: Int = 0
+    private var suspendedUsersCount: Int = 0
     
     private let productManager: ProductManager = .init()
     private let invoiceManager: InvoiceManager = .init()
@@ -32,7 +33,12 @@ final class GraphicsViewModel: ObservableObject {
             do {
                 productsCount = try await productManager.getProductCount()
                 invoicesCount = try await invoiceManager.getInvoiceCount()
-                usersCount = try await userManager.getUsers().count
+                
+                let userCharts = try await userManager.getUsersChart()
+                
+                activeUsersCount = userCharts.activeUsersCount
+                suspendedUsersCount = userCharts.suspendedUsersCount
+                
                 loadCardGraphicCounters()
             } catch {
                 AlertPresenter.showAlert(with: error)
@@ -44,7 +50,8 @@ final class GraphicsViewModel: ObservableObject {
         cardGraphicModels = [
             CardGraphic.products(productsCount).model,
             CardGraphic.invoices(invoicesCount).model,
-            CardGraphic.users(usersCount).model,
+            CardGraphic.activeUsers(activeUsersCount).model,
+            CardGraphic.suspendedUsers(suspendedUsersCount).model,
         ]
     }
 }
