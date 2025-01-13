@@ -22,13 +22,7 @@ final class GraphicsViewModel: ObservableObject {
     @Published var mostCategoriesSold: [ChartData] = []
     @Published var isLoading: Bool = false
     
-    private var productsCount: Int = Constants.zero
-    private var invoicesCount: Int = Constants.zero
-    private var activeUsersCount: Int = Constants.zero
-    private var suspendedUsersCount: Int = Constants.zero
-    private var products: [ProductModel] = []
     private var invoices: [InvoiceModel] = []
-    
     private let productManager: ProductManager = .init()
     private let invoiceManager: InvoiceManager = .init()
     private let userManager: UserManager = .init()
@@ -58,39 +52,36 @@ final class GraphicsViewModel: ObservableObject {
     }
 
     private func processFetchedData(_ data: AsyncData) {
-        let (products, invoices, userChart) = data
-        updateProductData(with: products)
+        let (products, invoices, users) = data
         updateInvoiceData(with: invoices)
-        activeUsersCount = userChart.activeUsersCount
+        updateProductData(with: products)
+        updateUsersData(with: users)
         loadStaticData()
     }
 
     private func updateProductData(with products: [ProductModel]) {
-        self.products = products
-        productsCount = products.count
+        loadMostProductsSold(with: products)
+        let cardModel = CardGraphic.products(products.count).model
+        cardGraphicModels.append(cardModel)
     }
 
     private func updateInvoiceData(with invoices: [InvoiceModel]) {
         self.invoices = invoices
-        invoicesCount = invoices.count
+        loadInvoicesByWeekday()
+        let cardModel = CardGraphic.invoices(invoices.count).model
+        cardGraphicModels.append(cardModel)
+    }
+    
+    private func updateUsersData(with users: UserChartResponse) {
+        let cardModel = CardGraphic.users(users.activeUsersCount).model
+        cardGraphicModels.append(cardModel)
     }
     
     private func loadStaticData() {
-        loadCardGraphicCounters()
-        loadMostProductsSold()
-        loadInvoicesByWeekday()
         loadMostCategoriesSold()
     }
     
-    private func loadCardGraphicCounters() {
-        cardGraphicModels = [
-            CardGraphic.products(productsCount).model,
-            CardGraphic.invoices(invoicesCount).model,
-            CardGraphic.users(activeUsersCount).model
-        ]
-    }
-    
-    private func loadMostProductsSold() {
+    private func loadMostProductsSold(with products: [ProductModel]) {
         let productSalesCount = invoices
             .flatMap { $0.products }
             .reduce(into: [Int: Int]()) { result, product in
@@ -106,25 +97,21 @@ final class GraphicsViewModel: ObservableObject {
     }
     
     private func loadInvoicesByWeekday() {
-        var weeklyInvoices = Dictionary(
-            uniqueKeysWithValues: Constants.weekdays.map {
-                ($0, Constants.zero)
-            }
-        )
-        
-        for invoice in invoices {
-            guard let weekday = invoice.createdAt.weekday else { continue }
-            
-            weeklyInvoices[weekday, default: Constants.zero] += Constants.oneToPlus
+        let weeklyInvoices = invoices.reduce(
+            into: Dictionary(
+                uniqueKeysWithValues: Constants.weekdays.map { ($0, Constants.zero) }
+            )
+        ) { result, invoice in
+            guard let weekday = invoice.createdAt.weekday else { return }
+            result[weekday, default: Constants.zero] += Constants.oneToPlus
         }
         
-        let invoicesByWeekday: [ChartData] = Constants.weekdays.map { day in
-            let invoiceCount = weeklyInvoices[day, default: Constants.zero]
-            return ChartData(name: day, value: Double(invoiceCount))
+        invoicesByWeekday = Constants.weekdays.map { day in
+            ChartData(name: day, value: Double(weeklyInvoices[day, default: Constants.zero]))
         }
-        
-        self.invoicesByWeekday = invoicesByWeekday
     }
+    
+    // TODO: - Replace this function for sale products per day
     
     private func loadMostCategoriesSold() {
         var categorySalesCount: [String: Int] = [:]
