@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		BDC396442CE8ECCD00616D81 /* moon-store-mac-os.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "moon-store-mac-os.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDC396442CE8ECCD00616D81 /* Moon Store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Moon Store.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		BDC396452CE8ECCD00616D81 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BDC396442CE8ECCD00616D81 /* moon-store-mac-os.app */,
+				BDC396442CE8ECCD00616D81 /* Moon Store.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BDC396432CE8ECCD00616D81 /* moon-store-mac-os */ = {
+		BDC396432CE8ECCD00616D81 /* Moon Store */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BDC396532CE8ECCE00616D81 /* Build configuration list for PBXNativeTarget "moon-store-mac-os" */;
+			buildConfigurationList = BDC396532CE8ECCE00616D81 /* Build configuration list for PBXNativeTarget "Moon Store" */;
 			buildPhases = (
 				BDC396402CE8ECCD00616D81 /* Sources */,
 				BDC396412CE8ECCD00616D81 /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				BDC396462CE8ECCD00616D81 /* moon-store-mac-os */,
 			);
-			name = "moon-store-mac-os";
+			name = "Moon Store";
 			packageProductDependencies = (
 			);
 			productName = "moon-store-mac-os";
-			productReference = BDC396442CE8ECCD00616D81 /* moon-store-mac-os.app */;
+			productReference = BDC396442CE8ECCD00616D81 /* Moon Store.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BDC396432CE8ECCD00616D81 /* moon-store-mac-os */,
+				BDC396432CE8ECCD00616D81 /* Moon Store */,
 			);
 		};
 /* End PBXProject section */
@@ -313,7 +313,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BDC396532CE8ECCE00616D81 /* Build configuration list for PBXNativeTarget "moon-store-mac-os" */ = {
+		BDC396532CE8ECCE00616D81 /* Build configuration list for PBXNativeTarget "Moon Store" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BDC396542CE8ECCE00616D81 /* Debug */,
