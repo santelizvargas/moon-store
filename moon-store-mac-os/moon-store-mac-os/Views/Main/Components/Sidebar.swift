@@ -23,7 +23,7 @@ struct Sidebar: View {
             Image(.msLogo)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 50)
+                .frame(height: Constants.logoSize)
             
             List(availableSections) { section in
                 Section(section.id.uppercased()) {
@@ -79,5 +79,6 @@ extension Sidebar {
         static let buttonRadius: CGFloat = 8
         static let buttonSize: CGFloat = 30
         static let horizontalPadding: CGFloat = 5
+        static let logoSize: CGFloat = 50
     }
 }
