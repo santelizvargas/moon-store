@@ -41,7 +41,7 @@ enum CardGraphic {
         switch self {
             case .products: "Productos actualmente registrados en el inventario."
             case .invoices: "Facturas generadas y almacenadas en el sistema."
-            case .users: "Usuarios registrados en la plataforma."
+            case .users: "Usuarios actualmente registrados en el sistema."
         }
     }
     
