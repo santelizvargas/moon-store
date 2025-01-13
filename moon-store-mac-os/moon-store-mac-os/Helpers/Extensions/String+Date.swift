@@ -1,5 +1,5 @@
 //
-//  Date+String.swift
+//  String+Date.swift
 //  moon-store-mac-os
 //
 //  Created by Diana Zeledon on 3/1/25.

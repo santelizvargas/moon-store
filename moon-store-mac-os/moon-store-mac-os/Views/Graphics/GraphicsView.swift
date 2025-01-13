@@ -9,6 +9,7 @@ import SwiftUI
 
 private enum Constants {
     static let mainSpacing: CGFloat = 20
+    static let pdfFileName: String = "MS Gráficos - "
 }
 
 struct GraphicsView: View {
@@ -44,6 +45,11 @@ struct GraphicsView: View {
         }
         .padding()
         .showSpinner($viewModel.isLoading)
+        .toolbar {
+            PDFExporterButton(fileName: localized(.pdfFileName)) {
+                self
+            }
+        }
     }
 }
 
@@ -54,6 +60,7 @@ extension GraphicsView {
         case mostProductsSold
         case invoicesByWeekday
         case mostCategoriesSold
+        case pdfFileName
     }
     
     private func localized(_ key: LocalizedKey) -> String {
@@ -61,6 +68,7 @@ extension GraphicsView {
             case .mostProductsSold: "Productos mas vendidos"
             case .invoicesByWeekday: "Facturas Generadas"
             case .mostCategoriesSold: "Categorías mas vendidas"
+            case .pdfFileName: "\(Constants.pdfFileName)\(Date.now)"
         }
     }
 }

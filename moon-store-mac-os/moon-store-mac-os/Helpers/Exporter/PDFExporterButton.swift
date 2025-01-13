@@ -12,7 +12,7 @@ private enum Constants {
     static let pdfExtension: String = ".pdf"
 }
 
-struct ExportPDFButton<Content: View>: View {
+struct PDFExporterButton<Content: View>: View {
     private let fileName: String
     private let content: Content
     
@@ -77,7 +77,7 @@ struct ExportPDFButton<Content: View>: View {
 
 // MARK: - Localized
 
-extension ExportPDFButton {
+extension PDFExporterButton {
     private enum LocalizedKey {
         case exportButton
         case pathComponent

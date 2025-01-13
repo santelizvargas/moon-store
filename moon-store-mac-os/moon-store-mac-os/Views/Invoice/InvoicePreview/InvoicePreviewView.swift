@@ -18,6 +18,7 @@ private enum Constants {
     static let minHeight: CGFloat = 500
     static let logoSize: CGFloat = 100
     static let previewIcon: String = "xmark"
+    static let invoiceString: String = "Factura:"
 }
 
 struct InvoicePreviewView: View {
@@ -40,6 +41,30 @@ struct InvoicePreviewView: View {
             .msWhite,
             in: .rect(cornerRadius: Constants.cornerRadius)
         )
+        .toolbar {
+            ToolbarItem {
+                PDFExporterButton(fileName: localized(.pdfFileName(invoiceSale.createAt))) {
+                    viewForPDF
+                }
+            }
+        }
+    }
+    
+    // MARK: - View for PDF
+    
+    private var viewForPDF: some View {
+        VStack {
+            headerView
+            
+            contentView
+            
+        }.frame(minWidth: Constants.minWidth,
+                minHeight: Constants.minHeight)
+         .padding()
+         .background(
+             .msWhite,
+             in: .rect(cornerRadius: Constants.cornerRadius)
+         )
     }
     
     private var contentView: some View {
@@ -203,6 +228,7 @@ extension InvoicePreviewView {
         case total
         case bill
         case currencyValue(Double?)
+        case pdfFileName(String)
     }
     
     private func localized(_ key: LocalizedKey) -> String {
@@ -223,6 +249,7 @@ extension InvoicePreviewView {
             case .total: "Total: "
             case .bill: "Factura: "
             case .currencyValue(let value): "$ \(value ?? .zero)"
+            case .pdfFileName(let date): "\(Constants.invoiceString)\(date)"
         }
     }
 }

@@ -52,8 +52,8 @@ struct CreateInvoiceView: View {
                 PrimaryButton(localized(.createInvoiceButton)) {
                     viewModel.createInvoice()
                 }
-                .disabled(viewModel.cannotCreateInvoice)
             }
+            .disabled(viewModel.cannotCreateInvoice)
             .frame(width: Constants.buttonWidth,
                    height: Constants.buttonHeight)
         }
