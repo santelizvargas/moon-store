@@ -12,7 +12,7 @@ private enum Constants {
     static let padding: CGFloat = 10
 }
 
-struct ExporterButton<CollectionType: Collection>: View {
+struct ExcelExporterButton<CollectionType: Collection>: View {
     @State private var isPresented = false
     
     private let title: String

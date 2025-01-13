@@ -42,7 +42,7 @@ struct ProductListView: View {
             SearchView(searchText: $viewModel.searchText)
                 .leadingInfinity()
             
-            ExporterButton(title: "Exportar",
+            ExcelExporterButton(title: "Exportar",
                            fileName: "Products",
                            collection: viewModel.productList)
             .disabled(viewModel.cannotExportProducts)

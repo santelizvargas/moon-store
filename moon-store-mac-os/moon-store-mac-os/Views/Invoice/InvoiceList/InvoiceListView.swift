@@ -23,7 +23,7 @@ struct InvoiceListView: View {
     
     var body: some View {
         VStack {
-            ExporterButton(
+            ExcelExporterButton(
                 title: localized(.exporterButton),
                 fileName: Constants.fileName,
                 collection: viewModel.invoiceList
