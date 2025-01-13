@@ -13,6 +13,8 @@ private enum Constants {
     static let zero: Int = .zero
 }
 
+private typealias AsyncData = ([ProductModel], [InvoiceModel], UserChartResponse)
+
 final class GraphicsViewModel: ObservableObject {
     @Published var cardGraphicModels: [CardGraphicModel] = []
     @Published var mostProductsSold: [ChartData] = []
@@ -37,29 +39,47 @@ final class GraphicsViewModel: ObservableObject {
     
     private func loadData() {
         isLoading = true
-        
         Task { @MainActor in
             defer { isLoading = false }
-            
             do {
-                productsCount = try await productManager.getProductCount()
-                invoicesCount = try await invoiceManager.getInvoiceCount()
-                products = try await productManager.getProducts()
-                invoices = try await invoiceManager.getInvoices()
-                
-                let userCharts = try await userManager.getUsersChart()
-                
-                activeUsersCount = userCharts.activeUsersCount
-                suspendedUsersCount = userCharts.suspendedUsersCount
-                
-                loadCardGraphicCounters()
-                loadMostProductsSold()
-                loadInvoicesByWeekday()
-                loadMostCategoriesSold()
+                let asyncData = try await fetchAsyncData()
+                processFetchedData(asyncData)
             } catch {
                 AlertPresenter.showAlert(with: error)
             }
         }
+    }
+
+    private func fetchAsyncData() async throws -> AsyncData {
+        async let products = productManager.getProducts()
+        async let invoices = invoiceManager.getInvoices()
+        async let users = userManager.getUsersChart()
+        return try await (products, invoices, users)
+    }
+
+    private func processFetchedData(_ data: AsyncData) {
+        let (products, invoices, userChart) = data
+        updateProductData(with: products)
+        updateInvoiceData(with: invoices)
+        activeUsersCount = userChart.activeUsersCount
+        loadStaticData()
+    }
+
+    private func updateProductData(with products: [ProductModel]) {
+        self.products = products
+        productsCount = products.count
+    }
+
+    private func updateInvoiceData(with invoices: [InvoiceModel]) {
+        self.invoices = invoices
+        invoicesCount = invoices.count
+    }
+    
+    private func loadStaticData() {
+        loadCardGraphicCounters()
+        loadMostProductsSold()
+        loadInvoicesByWeekday()
+        loadMostCategoriesSold()
     }
     
     private func loadCardGraphicCounters() {
@@ -71,26 +91,18 @@ final class GraphicsViewModel: ObservableObject {
     }
     
     private func loadMostProductsSold() {
-        var productSalesCount: [Int: Int] = [:]
-
-        for invoice in invoices {
-            for product in invoice.products {
-                productSalesCount[product.id, default: Constants.zero] += Constants.oneToPlus
+        let productSalesCount = invoices
+            .flatMap { $0.products }
+            .reduce(into: [Int: Int]()) { result, product in
+                result[product.id, default: .zero] += Constants.oneToPlus
             }
-        }
-
-        var mostProductSold: [ChartData] = []
         
-        for product in products {
-            let salesCount = productSalesCount[product.id, default: Constants.zero]
-            
-            guard salesCount > Constants.zero else { continue }
-            
-            let chartData = ChartData(name: product.name, value: Double(salesCount))
-            mostProductSold.append(chartData)
-        }
-        
-        self.mostProductsSold = mostProductSold
+        mostProductsSold = products
+            .compactMap { product in
+                guard let salesCount = productSalesCount[product.id], salesCount > .zero else { return nil }
+                return ChartData(name: product.name, value: Double(salesCount))
+            }
+            .sorted(by: { $0.value < $1.value })
     }
     
     private func loadInvoicesByWeekday() {

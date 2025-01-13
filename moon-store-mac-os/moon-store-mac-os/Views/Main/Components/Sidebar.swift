@@ -20,8 +20,10 @@ struct Sidebar: View {
     
     var body: some View {
         VStack {
-            MSLogo()
-                .leadingInfinity()
+            Image(.msLogo)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 50)
             
             List(availableSections) { section in
                 Section(section.id.uppercased()) {
