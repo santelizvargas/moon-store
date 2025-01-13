@@ -43,9 +43,7 @@ final class BackupManager {
         ]
         
         do {
-            let data = try await networkManager.postData(for: .restoreDatabase, with: parameters)
-            let response = try decoder.decode(BackupResponseModel.self, from: data)
-            debugPrint("Response: \(response.message)")
+            try await networkManager.postData(for: .restoreDatabase, with: parameters)
         } catch {
             throw error
         }

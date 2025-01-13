@@ -7,5 +7,5 @@
 
 struct BackupResponseModel: Decodable {
     let code: Int
-    let message: String
+    let message: String?
 }

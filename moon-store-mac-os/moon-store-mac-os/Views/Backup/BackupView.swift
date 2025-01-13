@@ -11,6 +11,8 @@ private enum Constants {
     static let lineLimit: Int = 1
     static let cornerRadius: CGFloat = 8
     static let buttonWidth: CGFloat = 200
+    static let restoreButtonWidth: CGFloat = 100
+    static let restoreButtonHeight: CGFloat = 20
 }
 
 struct BackupView: View {
@@ -26,8 +28,17 @@ struct BackupView: View {
             
             if viewModel.backupList.isNotEmpty {
                 List(viewModel.backupList, id: \.self) { backup in
-                    Text("\(localizedString(.rowPrefix)) \(backup)")
-                        .lineLimit(Constants.lineLimit)
+                    HStack {
+                        Text("\(localizedString(.rowPrefix)) \(backup)")
+                            .lineLimit(Constants.lineLimit)
+                        
+                        PrimaryButton(localizedString(.restoreButton)) {
+                            viewModel.restoreBackup(backup)
+                        }
+                        .frame(width: Constants.buttonWidth, height: Constants.restoreButtonHeight)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
+                    .padding(.vertical)
                 }
                 .clipShape(.rect(cornerRadius: Constants.cornerRadius))
             }
@@ -52,6 +63,7 @@ extension BackupView {
         case headerTitle
         case addBackupButton
         case rowPrefix
+        case restoreButton
     }
     
     private func localizedString(_ key: BackupViewKey) -> String {
@@ -59,6 +71,7 @@ extension BackupView {
             case .headerTitle: "Respaldo"
             case .addBackupButton: "Respaldar base de datos"
             case .rowPrefix: "Nombre del respaldo: "
+            case .restoreButton: "Restaurar"
         }
     }
 }
