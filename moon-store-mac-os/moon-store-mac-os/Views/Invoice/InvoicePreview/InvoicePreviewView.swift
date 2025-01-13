@@ -18,6 +18,7 @@ private enum Constants {
     static let minHeight: CGFloat = 500
     static let logoSize: CGFloat = 100
     static let previewIcon: String = "xmark"
+    static let pdfFileName: String = "MS Gráficos"
 }
 
 struct InvoicePreviewView: View {
@@ -40,6 +41,30 @@ struct InvoicePreviewView: View {
             .msWhite,
             in: .rect(cornerRadius: Constants.cornerRadius)
         )
+        .toolbar {
+            ToolbarItem {
+                PDFExporterButton(fileName: Constants.pdfFileName) {
+                    viewForPDF
+                }
+            }
+        }
+    }
+    
+    // MARK: - View for PDF
+    
+    private var viewForPDF: some View {
+        VStack {
+            headerView
+            
+            contentView
+            
+        }.frame(minWidth: Constants.minWidth,
+                minHeight: Constants.minHeight)
+         .padding()
+         .background(
+             .msWhite,
+             in: .rect(cornerRadius: Constants.cornerRadius)
+         )
     }
     
     private var contentView: some View {
