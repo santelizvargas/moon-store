@@ -20,7 +20,6 @@ private enum Constants {
 
 struct InvoiceListView: View {
     @ObservedObject private var viewModel: InvoiceListViewModel = .init()
-    @State private var showInvoicePreview: Bool = false
     
     var body: some View {
         VStack {
@@ -35,9 +34,7 @@ struct InvoiceListView: View {
             
             historyList
             
-            if viewModel.canShowCounter {
-                TextCounterView(viewModel.invoiceCount)
-            }
+            TextCounterView(viewModel.invoiceCount)
         }
         .showSpinner($viewModel.isLoading)
         .frame(maxHeight: .infinity, alignment: .top)
@@ -129,11 +126,7 @@ struct InvoiceListView: View {
                                     : .msWhite)
                     }
                 }
-                .onReceive(viewModel.$selectedSale) { sale in
-                    guard sale != nil else { return }
-                    showInvoicePreview.toggle()
-                }
-                .sheet(isPresented: $showInvoicePreview) {
+                .sheet(isPresented: $viewModel.showInvoicePreview) {
                     if let sale = viewModel.selectedSale {
                         InvoicePreviewView(invoiceSale: sale)
                     }

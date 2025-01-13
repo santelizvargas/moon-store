@@ -19,9 +19,11 @@ private enum Constants {
     static let minHeight: CGFloat = 500
     static let previewIcon: String = "xmark"
     static let invoiceString: String = "Factura:"
+    static let dismissButtonSize: CGFloat = 20
 }
 
 struct InvoicePreviewView: View {
+    @Environment(\.dismiss) private var dismiss
     private let invoiceSale: InvoiceSaleModel
     
     init(invoiceSale: InvoiceSaleModel) {
@@ -93,6 +95,16 @@ struct InvoicePreviewView: View {
                 )
             
             VStack(alignment: .trailing, spacing: Constants.userSpacing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .frame(square: Constants.dismissButtonSize)
+                        .foregroundStyle(.msPrimary)
+                }
+                .buttonStyle(.plain)
+                
                 Text(localized(.bill))
                     .bold() +
                 Text(invoiceSale.id.description)
