@@ -12,35 +12,61 @@ private enum Constants {
 }
 
 struct GraphicsView: View {
+    @StateObject private var viewModel: GraphicsViewModel = .init()
+    
     var body: some View {
         VStack(spacing: Constants.mainSpacing) {
             HStack {
-                ForEach(Information.mockInfo) { info in
+                ForEach(viewModel.cardGraphicModels) { info in
                     InformationCard(info: info)
                 }
             }
             
             BarChart(
-                title: "Productos mas vendidos",
-                data: ChartData.topSellingProducts,
-                color: .msPrimary,
-                titleAlignment: .center
+                title: localized(.mostProductsSold),
+                data: viewModel.mostProductsSold,
+                color: .msPrimary
             )
             
-            HStack(spacing: Constants.mainSpacing) {
+            HStack {
                 AreaChart(
-                    title: "Productos Vendidos",
-                    data: ChartData.products,
-                    color: .msPrimary
+                    title: localized(.invoicesByWeekday),
+                    data: viewModel.invoicesByWeekday,
+                    color: .msGreen
                 )
                 
                 AreaChart(
-                    title: "Facturas Generadas",
-                    data: ChartData.invoices,
-                    color: .msGreen
+                    title: localized(.mostCategoriesSold),
+                    data: viewModel.mostCategoriesSold,
+                    color: .msOrange
                 )
             }
         }
         .padding()
+        .showSpinner($viewModel.isLoading)
     }
+}
+
+// MARK: - Localized
+
+extension GraphicsView {
+    private enum LocalizedKey {
+        case mostProductsSold
+        case invoicesByWeekday
+        case mostCategoriesSold
+    }
+    
+    private func localized(_ key: LocalizedKey) -> String {
+        switch key {
+            case .mostProductsSold: "Productos mas vendidos"
+            case .invoicesByWeekday: "Facturas Generadas"
+            case .mostCategoriesSold: "Categorías mas vendidas"
+        }
+    }
+}
+
+// MARK: Preview
+
+#Preview {
+    GraphicsView()
 }

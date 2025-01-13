@@ -46,7 +46,7 @@ struct UserListView: View {
             .frame(width: UserConstants.Button.width,
                    height: UserConstants.Button.height)
             
-            ExporterButton(
+            ExcelExporterButton(
                 title: localizedString(.exportButton),
                 fileName: UserConstants.userFileName,
                 collection: viewModel.userList
